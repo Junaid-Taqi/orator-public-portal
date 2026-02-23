@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink, Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
@@ -33,22 +34,24 @@ const Header = () => {
 
                 {/* Navigation */}
                 <nav className={`nav ${menuOpen ? "show" : ""}`}>
-                    <a href="#" className="nav-link active">
+                    <NavLink to="/" end className={({isActive})=>"nav-link" + (isActive? " active":"")} onClick={()=>setMenuOpen(false)}>
                         <FontAwesomeIcon icon={faHouse} /> Home
-                    </a>
-                    <a href="#" className="nav-link">
+                    </NavLink>
+                    <NavLink to="/news" className={({isActive})=>"nav-link" + (isActive? " active":"")} onClick={()=>setMenuOpen(false)}>
                         <FontAwesomeIcon icon={faNewspaper} /> News & Updates
-                    </a>
-                    <a href="#" className="nav-link">
+                    </NavLink>
+                    <NavLink to="/report" className={({isActive})=>"nav-link" + (isActive? " active":"")} onClick={()=>setMenuOpen(false)}>
                         <FontAwesomeIcon icon={faTriangleExclamation} /> Report Problem
-                    </a>
+                    </NavLink>
                 </nav>
 
                 {/* Login Button */}
                 <div className="login-btn">
-                    <button>
-                        <FontAwesomeIcon icon={faRightToBracket} /> Log In
-                    </button>
+                    <Link to="/login">
+                      <button>
+                          <FontAwesomeIcon icon={faRightToBracket} /> Log In
+                      </button>
+                    </Link>
                 </div>
 
             </div>

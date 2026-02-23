@@ -80,19 +80,6 @@ const Home = () => {
                             </p>
                         </div>
                     </div>
-
-                    <div className="update-card">
-                        <div className="update-top">🚧</div>
-                        <div className="update-bottom">
-                            <div className="badge">Infrastructure</div>
-                            <h4>Road Maintenance Schedule</h4>
-                            <p>
-                                Planned road work for downtown area. Check dates and
-                                alternative routes.
-                            </p>
-                        </div>
-                    </div>
-
                 </div>
             </section>
 

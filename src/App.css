@@ -163,6 +163,7 @@
   text-align: center;
   transition: 0.3s ease;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hero-card:hover {
@@ -202,7 +203,7 @@
 .update-cards {
   margin-top: 30px;
   display: flex;
-  gap: 30px;
+  gap: 35px;
   flex-wrap: wrap;
 }
 
@@ -210,8 +211,9 @@
   background: rgba(255, 255, 255, 0.07);
   border-radius: 15px;
   overflow: hidden;
-  width: 320px;
+  width: 400px;
   transition: 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .update-card:hover {

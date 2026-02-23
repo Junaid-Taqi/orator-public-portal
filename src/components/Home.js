@@ -9,7 +9,7 @@ import {
 
 const Home = () => {
     return (
-        <div className="home container">
+        <div className="home">
 
             {/* Hero Section */}
             <section className="hero">

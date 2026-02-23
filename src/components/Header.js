@@ -20,7 +20,7 @@ const Header = () => {
                 {/* Logo */}
                 <div className="logo">
                     <span className="logo-main">ORATOR</span>
-                    <span className="logo-sub">Public Portal</span>
+                    <span className="logo-sub text-info">Public Portal</span>
                 </div>
 
                 {/* Hamburger */}

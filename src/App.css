@@ -3,7 +3,7 @@
 /* Header Background */
 .header {
     background: linear-gradient(to right, #3a4c6b, #3b6c8e);
-    padding: 10px 0;
+    padding: 15px 0;
     color: white;
 }
 
@@ -114,4 +114,227 @@
     .hamburger {
         display: flex;
     }
+}
+
+/****************** HomePage ****************** */
+
+/* Full Background Gradient */
+.home {
+  min-height: 100vh;
+  background: linear-gradient(to right, #243b55, #2d6a7a);
+  color: white;
+  padding-bottom: 60px;
+}
+
+/* HERO SECTION */
+.hero {
+  text-align: center;
+  padding: 80px 20px 40px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.hero p {
+  margin-top: 15px;
+  color: #cce7f2;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hero Cards */
+.hero-cards {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.hero-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  padding: 35px;
+  width: 340px;
+  border-radius: 15px;
+  text-align: center;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.hero-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hero-icon {
+  font-size: 30px;
+  color: #00e0ff;
+  margin-bottom: 15px;
+}
+
+/* UPDATES SECTION */
+.updates {
+  margin-top: 10px;
+  padding: 0 8%;
+}
+
+.updates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.updates-header h2 {
+  font-size: 26px;
+}
+
+.view-all {
+  color: #00e0ff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Update Cards */
+.update-cards {
+  margin-top: 30px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.update-card {
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 15px;
+  overflow: hidden;
+  width: 320px;
+  transition: 0.3s;
+}
+
+.update-card:hover {
+  transform: translateY(-5px);
+}
+
+.update-top {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.update-bottom {
+  padding: 20px;
+}
+
+.badge {
+  display: inline-block;
+  background: #00e0ff;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  color: #002b36;
+  font-weight: 600;
+}
+
+.update-bottom h4 {
+  margin: 8px 0;
+}
+
+.update-bottom p {
+  font-size: 14px;
+  color: #cce7f2;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .update-cards {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .update-card {
+    width: 100%;
+  }
+}
+
+/******* * Impact Section Pages *******************/
+
+/* Community Impact Section */
+.impact-section {
+  padding: 60px 8%;
+}
+
+.impact-card {
+  background: linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
+  padding: 40px 30px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.impact-card h2 {
+  margin: 0px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #e6f7ff;
+}
+
+.impact-stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.impact-item h3 {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.impact-item p {
+  font-size: 14px;
+  color: #cce7f2;
+}
+
+/* Number Colors */
+.impact-blue {
+  color: #00e0ff;
+}
+
+.impact-green {
+  color: #00ff99;
+}
+
+.impact-purple {
+  color: #d580ff;
+}
+
+.impact-orange {
+  color: #ff9f1c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .impact-stats {
+    flex-direction: column;
+    align-items: center;
+  }
 }

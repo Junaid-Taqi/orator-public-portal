@@ -1,38 +1,117 @@
-.App {
-  text-align: center;
+/****************** Header ****************** */
+
+/* Header Background */
+.header {
+    background: linear-gradient(to right, #3a4c6b, #3b6c8e);
+    padding: 10px 0;
+    color: white;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Container */
+.header-container {
+    width: 95%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.logo-main {
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: 1px;
 }
 
-.App-link {
-  color: #61dafb;
+.logo-sub {
+    font-size: 14px;
+    opacity: 0.8;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Navigation */
+.nav {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #d6e3f0;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+    background-color: #1fc8db;
+    color: white;
+}
+
+/* Login Button */
+.login-btn button {
+    background-color: #1fc8db;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.login-btn button:hover {
+    opacity: 0.8;
+}
+
+/* Hamburger */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: white;
+    border-radius: 3px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav {
+        position: absolute;
+        top: 60px;
+        right: 0;
+        background: linear-gradient(to bottom, #3a4c6b, #3b6c8e);
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        display: none;
+        padding: 15px 0;
+    }
+
+    .nav.show {
+        display: flex;
+    }
+
+    .login-btn {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
 }

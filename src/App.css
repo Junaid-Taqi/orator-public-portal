@@ -153,6 +153,10 @@
   gap: 30px;
   flex-wrap: wrap;
 }
+.hero-card {
+  text-decoration: none;
+  color: white;
+}
 
 .hero-card {
   background: rgba(255, 255, 255, 0.08);

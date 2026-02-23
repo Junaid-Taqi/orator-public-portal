@@ -6,7 +6,8 @@ import {
     faHouse, 
     faNewspaper, 
     faTriangleExclamation, 
-    faRightToBracket 
+    faRightToBracket, 
+    faCalendarAlt
 } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
@@ -39,6 +40,9 @@ const Header = () => {
                     </NavLink>
                     <NavLink to="/news" className={({isActive})=>"nav-link" + (isActive? " active":"")} onClick={()=>setMenuOpen(false)}>
                         <FontAwesomeIcon icon={faNewspaper} /> News & Updates
+                    </NavLink>
+                    <NavLink to="/calendar" className={({isActive})=>"nav-link" + (isActive? " active":"")} onClick={()=>setMenuOpen(false)}>
+                        <FontAwesomeIcon icon={faCalendarAlt} /> Event Calendar
                     </NavLink>
                     <NavLink to="/report" className={({isActive})=>"nav-link" + (isActive? " active":"")} onClick={()=>setMenuOpen(false)}>
                         <FontAwesomeIcon icon={faTriangleExclamation} /> Report Problem

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faArrowUpRightFromSquare,
@@ -19,20 +20,29 @@ const Home = () => {
                 </p>
 
                 <div className="hero-cards">
-                    <div className="hero-card">
-                        <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="hero-icon" />
+                    <Link to="/news" className="hero-card">
+                        <FontAwesomeIcon
+                            icon={faArrowUpRightFromSquare}
+                            className="hero-icon"
+                        />
                         <h3>View All News</h3>
-                    </div>
+                    </Link>
 
-                    <div className="hero-card">
-                        <FontAwesomeIcon icon={faLocationDot} className="hero-icon" />
+                    <Link to="/report" className="hero-card">
+                        <FontAwesomeIcon
+                            icon={faLocationDot}
+                            className="hero-icon"
+                        />
                         <h3>Report a Problem</h3>
-                    </div>
+                    </Link>
 
-                    <div className="hero-card">
-                        <FontAwesomeIcon icon={faCalendarDays} className="hero-icon" />
+                    <Link to="/calendar" className="hero-card">
+                        <FontAwesomeIcon
+                            icon={faCalendarDays}
+                            className="hero-icon"
+                        />
                         <h3>Event Calendar</h3>
-                    </div>
+                    </Link>
                 </div>
             </section>
 

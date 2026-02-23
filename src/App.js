@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Home from './components/Home';
 import News from './components/News';
 import Report from './components/Report';
+import EventCalendar from './components/EventCalendar';
 import { Routes, Route } from 'react-router-dom';
 
 
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/news" element={<News />} />
+          <Route path="/calendar" element={<EventCalendar />} />
           <Route path="/report" element={<Report />} />
           <Route path="/login" element={<Login />} />
         </Routes>

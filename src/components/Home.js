@@ -48,7 +48,10 @@ const Home = () => {
                     <div className="update-card">
                         <div className="update-top">🎉</div>
                         <div className="update-bottom">
-                            <div className="badge">Events</div>
+                            <div className="update-info-top">
+                                <div className="badge">Events</div>
+                                <div className="date">25 Feb 2026</div>
+                            </div>
                             <h4>Spring Festival 2026 - Save the Date!</h4>
                             <p>
                                 Join us for our annual Spring Festival on March 15th. Fun for
@@ -60,7 +63,10 @@ const Home = () => {
                     <div className="update-card">
                         <div className="update-top">🏢</div>
                         <div className="update-bottom">
-                            <div className="badge">Community</div>
+                            <div className="update-info-top">
+                                <div className="badge">Community</div>
+                                <div className="date">25 Feb 2026</div>
+                            </div>
                             <h4>New Community Center Opening</h4>
                             <p>
                                 State-of-the-art facility opens next month with sports,
@@ -72,7 +78,10 @@ const Home = () => {
                     <div className="update-card">
                         <div className="update-top">🚧</div>
                         <div className="update-bottom">
-                            <div className="badge">Infrastructure</div>
+                            <div className="update-info-top">
+                                <div className="badge">Infrastructure</div>
+                                <div className="date">25 Feb 2026</div>
+                            </div>
                             <h4>Road Maintenance Schedule</h4>
                             <p>
                                 Planned road work for downtown area. Check dates and

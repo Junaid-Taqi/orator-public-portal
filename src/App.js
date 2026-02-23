@@ -1,4 +1,5 @@
 import './App.css';
+import Footer from './components/Footer';
 import Header from './components/Header';
 import Home from './components/Home';
 import News from './components/News';
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<Login />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }

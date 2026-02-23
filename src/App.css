@@ -2,118 +2,118 @@
 
 /* Header Background */
 .header {
-    background: linear-gradient(to right, #3a4c6b, #3b6c8e);
-    padding: 15px 0;
-    color: white;
+  background: linear-gradient(to right, #3a4c6b, #3b6c8e);
+  padding: 15px 0;
+  color: white;
 }
 
 /* Container */
 .header-container {
-    width: 95%;
-    margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  width: 95%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* Logo */
 .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .logo-main {
-    font-weight: bold;
-    font-size: 20px;
-    letter-spacing: 1px;
+  font-weight: bold;
+  font-size: 20px;
+  letter-spacing: 1px;
 }
 
 .logo-sub {
-    font-size: 14px;
-    opacity: 0.8;
+  font-size: 14px;
+  opacity: 0.8;
 }
 
 /* Navigation */
 .nav {
-    display: flex;
-    gap: 25px;
+  display: flex;
+  gap: 25px;
 }
 
 .nav-link {
-    text-decoration: none;
-    color: #d6e3f0;
-    font-size: 14px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    transition: 0.3s;
+  text-decoration: none;
+  color: #d6e3f0;
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  transition: 0.3s;
 }
 
 .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-link.active {
-    background-color: #1fc8db;
-    color: white;
+  background-color: #1fc8db;
+  color: white;
 }
 
 /* Login Button */
 .login-btn button {
-    background-color: #1fc8db;
-    border: none;
-    padding: 8px 18px;
-    border-radius: 20px;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s;
+  background-color: #1fc8db;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
 }
 
 .login-btn button:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 /* Hamburger */
 .hamburger {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-    gap: 5px;
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 5px;
 }
 
 .hamburger span {
-    width: 25px;
-    height: 3px;
-    background: white;
-    border-radius: 3px;
+  width: 25px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .nav {
-        position: absolute;
-        top: 60px;
-        right: 0;
-        background: linear-gradient(to bottom, #3a4c6b, #3b6c8e);
-        flex-direction: column;
-        width: 100%;
-        text-align: center;
-        display: none;
-        padding: 15px 0;
-    }
+  .nav {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: linear-gradient(to bottom, #3a4c6b, #3b6c8e);
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    display: none;
+    padding: 15px 0;
+  }
 
-    .nav.show {
-        display: flex;
-    }
+  .nav.show {
+    display: flex;
+  }
 
-    .login-btn {
-        display: none;
-    }
+  .login-btn {
+    display: none;
+  }
 
-    .hamburger {
-        display: flex;
-    }
+  .hamburger {
+    display: flex;
+  }
 }
 
 /****************** HomePage ****************** */
@@ -192,6 +192,11 @@
 .updates-header h2 {
   font-size: 26px;
 }
+.update-info-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .view-all {
   color: #00e0ff;
@@ -228,6 +233,10 @@
   font-size: 50px;
   background: rgba(255, 255, 255, 0.1);
 }
+.date{
+  font-size: 12px;
+  color: #00e0ff;
+}
 
 .update-bottom {
   padding: 20px;
@@ -239,7 +248,6 @@
   padding: 4px 12px;
   font-size: 12px;
   border-radius: 20px;
-  margin-bottom: 10px;
   color: #002b36;
   font-weight: 600;
 }
@@ -283,12 +291,12 @@
 }
 
 .impact-card {
-  background: linear-gradient(to right, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.05));
   backdrop-filter: blur(10px);
   border-radius: 18px;
   padding: 40px 30px;
   text-align: center;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .impact-card h2 {
@@ -338,5 +346,82 @@
   .impact-stats {
     flex-direction: column;
     align-items: center;
+  }
+}
+
+/************ Footer ****************** */
+
+.footer {
+  background: linear-gradient(to right, #2c3e50, #2f7e8e);
+  color: #d6f0f7;
+  padding: 60px 8% 30px;
+}
+
+/* Container */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* Columns */
+.footer-col {
+  flex: 1;
+  min-width: 220px;
+}
+
+.footer-col h3,
+.footer-col h4 {
+  margin-bottom: 15px;
+  color: white;
+}
+
+.footer-col p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #cce7f2;
+}
+
+.footer-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-col ul li {
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #cce7f2;
+  transition: 0.3s;
+}
+
+.footer-col ul li:hover {
+  color: #00e0ff;
+}
+
+/* Divider */
+.footer-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 40px 0 20px;
+}
+
+/* Bottom */
+.footer-bottom {
+  text-align: center;
+  font-size: 14px;
+  color: #bde4ee;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-col {
+    margin-bottom: 30px;
   }
 }

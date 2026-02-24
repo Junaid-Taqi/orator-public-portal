@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from 'react';
 
 const EventCalendar = () => {
@@ -125,9 +127,9 @@ const EventCalendar = () => {
           </div>
           <div className="d-flex align-items-center gap-2">
              <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
-                <button className="btn btn-sm text-white-50 border-0">&lt;</button>
+                <button className="btn btn-sm text-white-50 border-0"><FontAwesomeIcon icon={faChevronLeft} /></button>
                 <button className="btn btn-sm text-white px-3 border-0 bg-opacity-10 rounded-pill mx-1">Today</button>
-                <button className="btn btn-sm text-white-50 border-0">&gt;</button>
+                <button className="btn btn-sm text-white-50 border-0"><FontAwesomeIcon icon={faChevronRight} /></button>
              </div>
              <span className="ms-2 text-white">
                {view === 'Year' ? '2026' : view === 'Week' ? 'Feb 22 - Feb 28, 2026' : view === 'Day' ? 'February 24, 2026' : 'February 2026'}

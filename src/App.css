@@ -482,9 +482,8 @@
     pointer-events: none; /* Taaki icon par click karne se input focus ho sake */
 }
 
-/* Input ki padding adjust karein taaki text icon ke upar na aaye */
 .search-input {
-    padding-left: 50px !important; /* Icon ki jagah chhodne ke liye */
+    padding-left: 50px !important;
     background: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     color: white !important;
@@ -569,6 +568,7 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 

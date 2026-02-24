@@ -8,7 +8,7 @@ const newsData = [
         category: "Events",
         date: "March 1, 2026",
         title: "Spring Festival 2026 - Save the Date!",
-        description: "Join us for our annual Spring Festival on March 15th. The festival will feature live music, local vendors, food trucks, and activities for all ages. Fun for the whole family!",
+        description: "Join us for our annual Spring Festival on March 15th our state-of-the-art community center next month. The festival will feature live music, local vendors, food trucks, and activities for all ages. Fun for the whole family!",
         author: "Events Team",
         icon: "🎉"
     },

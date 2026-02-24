@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 const categories = [
     "Street Lighting",
@@ -12,6 +12,7 @@ const categories = [
 ];
 
 const Report = () => {
+    const fileInputRef = useRef(null); // Hidden input ko control karne ke liye
     const [formData, setFormData] = useState({
         name: "",
         officialId: "",
@@ -19,6 +20,7 @@ const Report = () => {
         address: "",
         description: "",
         accept: false,
+        image: null, // Image store karne ke liye
     });
 
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -26,7 +28,6 @@ const Report = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-
         const newValue = type === "checkbox" ? checked : value;
 
         setFormData({
@@ -34,49 +35,30 @@ const Report = () => {
             [name]: newValue,
         });
 
-        // ✅ Remove error instantly when user types
         if (errors[name]) {
             setErrors((prev) => ({
                 ...prev,
                 [name]: "",
             }));
         }
+    };
 
-        // Special case for checkbox
-        if (name === "accept" && newValue) {
-            setErrors((prev) => ({
-                ...prev,
-                accept: "",
-            }));
+    // ✅ Image handling logic
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData({ ...formData, image: file });
         }
     };
 
     const validate = () => {
         let newErrors = {};
-
-        if (!formData.name.trim()) {
-            newErrors.name = "Name is required";
-        }
-
-        if (!formData.subject.trim()) {
-            newErrors.subject = "Subject is required";
-        }
-
-        if (!selectedCategory) {
-            newErrors.category = "Please select a category";
-        }
-
-        if (!formData.address.trim()) {
-            newErrors.address = "Address is required";
-        }
-
-        if (!formData.description.trim()) {
-            newErrors.description = "Description is required";
-        }
-
-        if (!formData.accept) {
-            newErrors.accept = "You must accept responsibility";
-        }
+        if (!formData.name.trim()) newErrors.name = "Name is required";
+        if (!formData.subject.trim()) newErrors.subject = "Subject is required";
+        if (!selectedCategory) newErrors.category = "Please select a category";
+        if (!formData.address.trim()) newErrors.address = "Address is required";
+        if (!formData.description.trim()) newErrors.description = "Description is required";
+        if (!formData.accept) newErrors.accept = "You must accept responsibility";
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -84,7 +66,6 @@ const Report = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
         if (validate()) {
             console.log("Form Submitted:", { ...formData, selectedCategory });
             alert("Report submitted successfully!");
@@ -97,7 +78,6 @@ const Report = () => {
                 <h2 className="report-title">Report a Problem</h2>
 
                 <form onSubmit={handleSubmit}>
-
                     {/* Name */}
                     <div className="form-group">
                         <label>Your Name *</label>
@@ -144,16 +124,11 @@ const Report = () => {
                                 <button
                                     key={cat}
                                     type="button"
-                                    className={`category-btn ${selectedCategory === cat ? "active" : ""
-                                        }`}
+                                    className={`category-btn ${selectedCategory === cat ? "active" : ""}`}
                                     onClick={() => {
                                         setSelectedCategory(cat);
-
                                         if (errors.category) {
-                                            setErrors((prev) => ({
-                                                ...prev,
-                                                category: "",
-                                            }));
+                                            setErrors((prev) => ({ ...prev, category: "" }));
                                         }
                                     }}
                                 >
@@ -161,9 +136,7 @@ const Report = () => {
                                 </button>
                             ))}
                         </div>
-                        {errors.category && (
-                            <span className="error">{errors.category}</span>
-                        )}
+                        {errors.category && <span className="error">{errors.category}</span>}
                     </div>
 
                     {/* Address */}
@@ -189,9 +162,36 @@ const Report = () => {
                             onChange={handleChange}
                             placeholder="Please provide details about the problem..."
                         />
-                        {errors.description && (
-                            <span className="error">{errors.description}</span>
-                        )}
+                        {errors.description && <span className="error">{errors.description}</span>}
+                    </div>
+
+                    {/* ✅ PHOTO UPLOAD SECTION (Based on your image) */}
+                    <div className="photo-upload-container">
+                        <label className="photo-label">Add Photo (Optional - Max 1)</label>
+                        <div className="upload-dropzone" onClick={() => fileInputRef.current.click()}>
+                            <div className="upload-ui">
+                                <div className="camera-icon-wrapper">
+                                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#00D2FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                        <circle cx="12" cy="13" r="4"></circle>
+                                    </svg>
+                                </div>
+                                <p className="upload-text">
+                                    {formData.image ? formData.image.name : "Upload a photo to help us understand the problem"}
+                                </p>
+                                <button type="button" className="choose-photo-button">
+                                    <span style={{fontSize: '18px', marginRight: '5px'}}>↑</span> Choose Photo
+                                </button>
+                                <input 
+                                    type="file" 
+                                    ref={fileInputRef} 
+                                    onChange={handleImageChange} 
+                                    accept="image/*" 
+                                    style={{ display: "none" }} 
+                                />
+                            </div>
+                        </div>
+                        <p className="upload-footer-text">Supported formats: JPG, PNG (Max 10MB, 1 photo limit)</p>
                     </div>
 
                     {/* Checkbox */}
@@ -213,7 +213,6 @@ const Report = () => {
                     <button type="submit" className="submit-btn">
                         Submit Report
                     </button>
-
                 </form>
             </div>
         </div>

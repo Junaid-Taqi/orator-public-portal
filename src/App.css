@@ -550,3 +550,151 @@
 .news-card .card-body{
   background: linear-gradient(135deg, #4e6ba8, #344d74);
 }
+
+/************** Report Page ****************** */
+
+.report-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #2d5168, #2f6f83);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.report-card {
+  width: 100%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 25px;
+  color: #fff;
+}
+
+.report-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  color: #76f1ff;
+  outline: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.category-btn {
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.category-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.category-btn.active {
+  background: #00c6ff;
+  color: #00394d;
+  font-weight: bold;
+}
+
+.pin-link {
+  font-size: 12px;
+  margin-top: 5px;
+  color: #00e0ff;
+  cursor: pointer;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 18px;
+}
+
+.upload-box {
+  border: 2px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 14px;
+  padding: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.upload-content p {
+  margin: 10px 0;
+}
+
+.camera-icon {
+  font-size: 30px;
+}
+
+.upload-btn {
+  display: inline-block;
+  background: #00c6ff;
+  color: #00394d;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin: 10px 0;
+  font-weight: 600;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 25px;
+  border: none;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background: #00c6ff;
+  color: #00394d;
+}
+.error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #76f1ff !important;
+  opacity: 1; /* important for some browsers */
+}

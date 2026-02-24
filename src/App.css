@@ -528,6 +528,9 @@
 .news-card:hover {
   transform: translateY(-5px);
 }
+input.form-control::placeholder {
+    color: #fff;
+}
 
 .card-image-top {
   height: 250px;

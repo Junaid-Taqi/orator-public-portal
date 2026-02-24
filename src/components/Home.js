@@ -25,7 +25,7 @@ const Home = () => {
                             icon={faArrowUpRightFromSquare}
                             className="hero-icon"
                         />
-                        <h3>View All News</h3>
+                        <h5>View All News</h5>
                     </Link>
 
                     <Link to="/report" className="hero-card">
@@ -33,7 +33,7 @@ const Home = () => {
                             icon={faLocationDot}
                             className="hero-icon"
                         />
-                        <h3>Report a Problem</h3>
+                        <h5>Report a Problem</h5>
                     </Link>
 
                     <Link to="/calendar" className="hero-card">
@@ -41,7 +41,7 @@ const Home = () => {
                             icon={faCalendarDays}
                             className="hero-icon"
                         />
-                        <h3>Event Calendar</h3>
+                        <h5>Event Calendar</h5>
                     </Link>
                 </div>
             </section>

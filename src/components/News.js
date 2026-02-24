@@ -1,114 +1,79 @@
 import React from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  Form,
-  InputGroup,
-  Badge
-} from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faCalendarDays } from "@fortawesome/free-solid-svg-icons";
+
+const newsData = [
+  {
+    id: 1,
+    category: "Events",
+    date: "March 1, 2026",
+    title: "Spring Festival 2026 - Save the Date!",
+    description: "Join us for our annual Spring Festival on March 15th. The festival will feature live music, local vendors, The festival will feature live music food trucks, and activities for all ages. Fun for the whole family!",
+    author: "Events Team",
+    icon: "🎉" // Aap yahan image tag bhi laga sakte hain
+  },
+  {
+    id: 2,
+    category: "Community",
+    date: "February 28, 2026",
+    title: "New Community Center Opening",
+    description: "We're excited to announce the grand opening of our state-of-the-art community center next month. The facility includes a gymnasium, art studios, computer lab, and meeting spaces.",
+    author: "Community Services",
+    icon: "🏢"
+  }
+];
 
 const News = () => {
   return (
-    <div className="news-wrapper text-white">
-      <Container className="py-5">
-
-        {/* Heading */}
-        <h1 className="fw-bold mb-2">News & Updates</h1>
-        <p className="subtitle">
-          Stay informed about what's happening in your community
-        </p>
-
-        {/* Search Box */}
-        <div className="search-glass p-3 mt-4 mb-5">
-          <Row className="align-items-center">
-            <Col md={9}>
-              <InputGroup>
-                <InputGroup.Text className="search-icon">
-                  <FontAwesomeIcon icon={faSearch} />
-                </InputGroup.Text>
-                <Form.Control
-                  placeholder="Search news..."
-                  className="search-input"
-                />
-              </InputGroup>
-            </Col>
-
-            <Col md={3} className="mt-3 mt-md-0">
-              <Form.Select className="search-select">
-                <option>All</option>
-                <option>Events</option>
-                <option>Community</option>
-              </Form.Select>
-            </Col>
-          </Row>
+    <div className="news-wrapper py-5 px-4">
+      <div className="container">
+        {/* Header Section */}
+        <div className="mb-4">
+          <h1 className="text-white fw-bold m-0">News & Updates</h1>
+          <p className="text-info opacity-75">Stay informed about what's happening in your community</p>
         </div>
 
-        {/* Cards */}
-        <Row className="g-4">
-          <Col md={6}>
-            <Card className="news-card border-0 text-white">
-              <div className="news-image">🎉</div>
+        {/* Search & Filter Bar */}
+        <div className="search-bar-container d-flex gap-2 mb-5 align-items-center">
+          <div className="position-relative flex-grow-1">
+            <i className="bi bi-search search-icon"></i>
+            <input type="text" className="form-control search-input" placeholder="Search news..." />
+          </div>
+          <button className="btn filter-btn"><i className="bi bi-funnel"></i></button>
+          <select className="form-select filter-select">
+            <option>All</option>
+          </select>
+        </div>
 
-              <Card.Body>
-                <div className="d-flex justify-content-between mb-2">
-                  <Badge className="badge-custom">Events</Badge>
-                  <small className="date-text">
-                    <FontAwesomeIcon icon={faCalendarDays} /> March 1, 2026
-                  </small>
+        {/* News Grid */}
+        <div className="row g-4">
+          {newsData.map((item) => (
+            <div className="col-md-6" key={item.id}>
+              <div className="news-card">
+                {/* Top Icon Area */}
+                <div className="card-image-top d-flex align-items-center justify-content-center">
+                  <span className="display-1">{item.icon}</span>
                 </div>
-
-                <Card.Title>
-                  Spring Festival 2026 - Save the Date!
-                </Card.Title>
-
-                <Card.Text className="card-desc">
-                  Join us for our annual Spring Festival on March 15th.
-                  Fun for the whole family!
-                </Card.Text>
-
-                <div className="d-flex justify-content-between mt-3">
-                  <small className="author-text">By Events Team</small>
-                  <span className="read-more">Read More →</span>
+                
+                {/* Content Area */}
+                <div className="card-body-custom">
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <span className="badge category-badge">{item.category}</span>
+                    <span className="news-date"><i className="bi bi-calendar3 me-1"></i> {item.date}</span>
+                  </div>
+                  <h4 className="news-title">{item.title}</h4>
+                  <p className="news-text">{item.description}</p>
+                  
+                  <hr className="divider" />
+                  
+                  <div className="d-flex justify-content-between align-items-center mt-3">
+                    <span className="author-name">By {item.author}</span>
+                    <a href="#" className="read-more">Read More →</a>
+                  </div>
                 </div>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={6}>
-            <Card className="news-card border-0 text-white">
-              <div className="news-image">🏢</div>
-
-              <Card.Body>
-                <div className="d-flex justify-content-between mb-2">
-                  <Badge className="badge-custom-2">Community</Badge>
-                  <small className="date-text">
-                    <FontAwesomeIcon icon={faCalendarDays} /> February 28, 2026
-                  </small>
-                </div>
-
-                <Card.Title>
-                  New Community Center Opening
-                </Card.Title>
-
-                <Card.Text className="card-desc">
-                  State-of-the-art facility opens next month with sports,
-                  arts, and education programs.
-                </Card.Text>
-
-                <div className="d-flex justify-content-between mt-3">
-                  <small className="author-text">By Community Services</small>
-                  <span className="read-more">Read More →</span>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
-      </Container>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

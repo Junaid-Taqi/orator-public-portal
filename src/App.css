@@ -465,52 +465,64 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Search Bar Styling */
-.search-bar-container {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Big Search Bar */
+/* Container ko relative rakhein */
+.position-relative {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
+/* Icon ki positioning */
+.search-icon-position {
+    position: absolute;
+    left: 20px;       /* Left se thoda andar */
+    color: #00d2ff;   /* Aapka blue color */
+    z-index: 5;       /* Input ke upar dikhne ke liye */
+    pointer-events: none; /* Taaki icon par click karne se input focus ho sake */
+}
+
+/* Input ki padding adjust karein taaki text icon ke upar na aaye */
 .search-input {
-  background: rgba(255, 255, 255, 0.1) !important;
-  border: none !important;
-  color: white !important;
-  padding-left: 40px;
-  border-radius: 8px;
+    padding-left: 50px !important; /* Icon ki jagah chhodne ke liye */
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    border-radius: 12px !important;
 }
 
-.search-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #00d2ff;
+.search-input:focus {
+  border-color: #00d2ff !important;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.2) !important;
 }
 
-.filter-btn {
-  background: transparent;
-  color: #00d2ff;
-  border: none;
-  font-size: 1.2rem;
-}
-
+/* Small Select Dropdown */
 .filter-select {
-  width: auto;
-  background: rgba(255, 255, 255, 0.1) !important;
+  width: 130px !important; /* Small width */
+  background-color: rgba(255, 255, 255, 0.08) !important;
   color: white !important;
-  border: none !important;
-  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 10px !important;
+  cursor: pointer;
+  padding: 10px !important;
 }
 
+.filter-select option {
+  background: #1e3a5a;
+  color: white;
+}
+
+.filter-group {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px 15px;
+    border-radius: 12px;
+}
 /* News Card Styling */
 .news-card {
-  background: #1e3a5a; /* Deep blue fallback */
   border-radius: 20px;
   overflow: hidden;
   height: 100%;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   transition: transform 0.3s ease;
 }
 
@@ -520,7 +532,7 @@
 
 .card-image-top {
   height: 250px;
-  background: linear-gradient(135deg, #334e68 0%, #102a43 100%);
+  background: linear-gradient(135deg, #334e68 0%, #2f697d 100%);
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -553,6 +565,11 @@
   color: #cbd5e1;
   line-height: 1.6;
   margin-bottom: 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .divider {

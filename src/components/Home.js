@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from '../i18n';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faArrowUpRightFromSquare,
@@ -8,16 +9,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Home = () => {
+    const { t } = useTranslation();
     return (
         <div className="home">
 
             {/* Hero Section */}
             <section className="hero">
-                <h1>Welcome to ORATOR</h1>
-                <p>
-                    Stay connected with your community. Access news, updates, and report
-                    issues directly to your municipality.
-                </p>
+                <h1>{t('home.welcome')}</h1>
+                <p>{t('home.intro')}</p>
 
                 <div className="hero-cards">
                     <Link to="/news" className="hero-card">
@@ -25,7 +24,7 @@ const Home = () => {
                             icon={faArrowUpRightFromSquare}
                             className="hero-icon"
                         />
-                        <h5>View All News</h5>
+                        <h5>{t('home.viewAllNews')}</h5>
                     </Link>
 
                     <Link to="/report" className="hero-card">
@@ -33,7 +32,7 @@ const Home = () => {
                             icon={faLocationDot}
                             className="hero-icon"
                         />
-                        <h5>Report a Problem</h5>
+                        <h5>{t('home.reportProblem')}</h5>
                     </Link>
 
                     <Link to="/calendar" className="hero-card">
@@ -41,7 +40,7 @@ const Home = () => {
                             icon={faCalendarDays}
                             className="hero-icon"
                         />
-                        <h5>Event Calendar</h5>
+                        <h5>{t('home.eventCalendar')}</h5>
                     </Link>
                 </div>
             </section>
@@ -49,8 +48,8 @@ const Home = () => {
             {/* Latest Updates */}
             <section className="updates">
                 <div className="updates-header">
-                    <h2>Latest Updates</h2>
-                    <span className="view-all">View All →</span>
+                    <h2>{t('home.latestUpdates')}</h2>
+                    <span className="view-all">{t('home.viewAll')}</span>
                 </div>
 
                 <div className="update-cards">
@@ -105,27 +104,27 @@ const Home = () => {
             {/* Community Impact Section */}
             <section className="impact-section">
                 <div className="impact-card">
-                    <h2>Community Impact</h2>
+                    <h2>{t('home.communityImpact')}</h2>
 
                     <div className="impact-stats">
                         <div className="impact-item">
                             <h3 className="impact-blue">342</h3>
-                            <p>Active Citizens</p>
+                            <p>{t('home.activeCitizens')}</p>
                         </div>
 
                         <div className="impact-item">
                             <h3 className="impact-green">156</h3>
-                            <p>Problems Resolved</p>
+                            <p>{t('home.problemsResolved')}</p>
                         </div>
 
                         <div className="impact-item">
                             <h3 className="impact-purple">89</h3>
-                            <p>News Updates</p>
+                            <p>{t('home.newsUpdates')}</p>
                         </div>
 
                         <div className="impact-item">
                             <h3 className="impact-orange">12</h3>
-                            <p>Upcoming Events</p>
+                            <p>{t('home.upcomingEvents')}</p>
                         </div>
                     </div>
                 </div>

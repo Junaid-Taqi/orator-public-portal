@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useTranslation } from '../i18n';
 
 const categories = [
     "Street Lighting",
@@ -12,6 +13,7 @@ const categories = [
 ];
 
 const Report = () => {
+    const { t } = useTranslation();
     const fileInputRef = useRef(null); // Hidden input ko control karne ke liye
     const [formData, setFormData] = useState({
         name: "",
@@ -53,12 +55,12 @@ const Report = () => {
 
     const validate = () => {
         let newErrors = {};
-        if (!formData.name.trim()) newErrors.name = "Name is required";
-        if (!formData.subject.trim()) newErrors.subject = "Subject is required";
-        if (!selectedCategory) newErrors.category = "Please select a category";
-        if (!formData.address.trim()) newErrors.address = "Address is required";
-        if (!formData.description.trim()) newErrors.description = "Description is required";
-        if (!formData.accept) newErrors.accept = "You must accept responsibility";
+        if (!formData.name.trim()) newErrors.name = t('reportForm.errors.name');
+        if (!formData.subject.trim()) newErrors.subject = t('reportForm.errors.subject');
+        if (!selectedCategory) newErrors.category = t('reportForm.errors.category');
+        if (!formData.address.trim()) newErrors.address = t('reportForm.errors.address');
+        if (!formData.description.trim()) newErrors.description = t('reportForm.errors.description');
+        if (!formData.accept) newErrors.accept = t('reportForm.errors.accept');
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -75,50 +77,50 @@ const Report = () => {
     return (
         <div className="report-wrapper">
             <div className="report-card">
-                <h2 className="report-title">Report a Problem</h2>
+                <h2 className="report-title">{t('reportForm.title')}</h2>
 
                 <form onSubmit={handleSubmit}>
                     {/* Name */}
                     <div className="form-group">
-                        <label>Your Name *</label>
+                        <label>{t('reportForm.name')}</label>
                         <input
                             type="text"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="Enter your full name"
+                            placeholder={t('reportForm.namePlaceholder')}
                         />
                         {errors.name && <span className="error">{errors.name}</span>}
                     </div>
 
                     {/* Official ID */}
                     <div className="form-group">
-                        <label>Official ID (Optional)</label>
+                        <label>{t('reportForm.officialId')}</label>
                         <input
                             type="text"
                             name="officialId"
                             value={formData.officialId}
                             onChange={handleChange}
-                            placeholder="Enter your official ID"
+                            placeholder={t('reportForm.officialIdPlaceholder')}
                         />
                     </div>
 
                     {/* Subject */}
                     <div className="form-group">
-                        <label>Subject *</label>
+                        <label>{t('reportForm.subject')}</label>
                         <input
                             type="text"
                             name="subject"
                             value={formData.subject}
                             onChange={handleChange}
-                            placeholder="Brief description of the issue"
+                            placeholder={t('reportForm.subjectPlaceholder')}
                         />
                         {errors.subject && <span className="error">{errors.subject}</span>}
                     </div>
 
                     {/* Category */}
                     <div className="form-group">
-                        <label>Problem Category *</label>
+                        <label>{t('reportForm.category')}</label>
                         <div className="category-grid">
                             {categories.map((cat) => (
                                 <button
@@ -141,33 +143,33 @@ const Report = () => {
 
                     {/* Address */}
                     <div className="form-group">
-                        <label>Address / Location *</label>
+                        <label>{t('reportForm.address')}</label>
                         <input
                             type="text"
                             name="address"
                             value={formData.address}
                             onChange={handleChange}
-                            placeholder="Enter address or intersection"
+                            placeholder={t('reportForm.addressPlaceholder')}
                         />
                         {errors.address && <span className="error">{errors.address}</span>}
                     </div>
 
                     {/* Description */}
                     <div className="form-group">
-                        <label>Detailed Description *</label>
+                        <label>{t('reportForm.description')}</label>
                         <textarea
                             rows="4"
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            placeholder="Please provide details about the problem..."
+                            placeholder={t('reportForm.descriptionPlaceholder')}
                         />
                         {errors.description && <span className="error">{errors.description}</span>}
                     </div>
 
                     {/* ✅ PHOTO UPLOAD SECTION (Based on your image) */}
                     <div className="photo-upload-container">
-                        <label className="photo-label">Add Photo (Optional - Max 1)</label>
+                        <label className="photo-label">{t('reportForm.uploadLabel')}</label>
                         <div className="upload-dropzone" onClick={() => fileInputRef.current.click()}>
                             <div className="upload-ui">
                                 <div className="camera-icon-wrapper">
@@ -177,10 +179,10 @@ const Report = () => {
                                     </svg>
                                 </div>
                                 <p className="upload-text">
-                                    {formData.image ? formData.image.name : "Upload a photo to help us understand the problem"}
+                                    {formData.image ? formData.image.name : t('reportForm.uploadTextDefault')}
                                 </p>
                                 <button type="button" className="choose-photo-button">
-                                    <span style={{fontSize: '18px', marginRight: '5px'}}>↑</span> Choose Photo
+                                    <span style={{fontSize: '18px', marginRight: '5px'}}>↑</span> {t('reportForm.uploadChoose')}
                                 </button>
                                 <input 
                                     type="file" 
@@ -191,7 +193,7 @@ const Report = () => {
                                 />
                             </div>
                         </div>
-                        <p className="upload-footer-text">Supported formats: JPG, PNG (Max 10MB, 1 photo limit)</p>
+                        <p className="upload-footer-text">{t('reportForm.uploadFooter')}</p>
                     </div>
 
                     {/* Checkbox */}
@@ -204,14 +206,14 @@ const Report = () => {
                             onChange={handleChange}
                         />
                         <label htmlFor="accept">
-                            I accept responsibility for the accuracy of this report
+                            {t('reportForm.acceptText')}
                         </label>
                     </div>
                     {errors.accept && <span className="error">{errors.accept}</span>}
 
                     {/* Submit */}
                     <button type="submit" className="submit-btn">
-                        Submit Report
+                        {t('reportForm.submit')}
                     </button>
                 </form>
             </div>

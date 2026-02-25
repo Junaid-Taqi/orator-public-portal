@@ -1,9 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from 'react';
+import { useTranslation } from '../i18n';
 
 const EventCalendar = () => {
   const [view, setView] = useState('Month'); 
+  const { t } = useTranslation();
 
   const containerStyle = {
     background: 'linear-gradient(135deg, #112235 0%, #0f2d3e 40%, #155e75 100%)',
@@ -15,6 +17,10 @@ const EventCalendar = () => {
   const glassPanel = "bg-opacity-5 border border-white border-opacity-10 rounded-4 shadow-sm p-3 mb-3";
   const activeBtn = "btn btn-info text-dark  rounded-pill px-3 shadow-sm";
   const inactiveBtn = "btn text-white-50 rounded-pill px-3 border-0 hover-light";
+
+  const CalendarViewButton = ({ v, view, setView }) => (
+    <button key={v} onClick={() => setView(v)} className={view === v ? activeBtn : inactiveBtn}>{t(`calendar.${v}`) || v}</button>
+  );
 
   // --- NEW YEAR VIEW COMPONENT ---
   const YearView = () => {
@@ -64,7 +70,7 @@ const EventCalendar = () => {
             <span className="badge rounded-pill bg-info bg-opacity-20 border border-info border-opacity-25 px-3">Government</span>
             <span className="badge rounded-pill bg-info bg-opacity-20 border border-info border-opacity-25 px-3">Public Meeting</span>
           </div>
-          <button className="btn btn-link text-info p-0 mt-3 text-decoration-none ">View Details →</button>
+          <button className="btn btn-link text-info p-0 mt-3 text-decoration-none ">{t('myReport.viewDetails')} →</button>
         </div>
       </div>
     </div>
@@ -122,13 +128,13 @@ const EventCalendar = () => {
         <div className="d-flex justify-content-between align-items-center">
           <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
             {['Day', 'Week', 'Month', 'Year'].map(v => (
-              <button key={v} onClick={() => setView(v)} className={view === v ? activeBtn : inactiveBtn}>{v}</button>
+              <CalendarViewButton key={v} v={v} view={view} setView={setView} />
             ))}
           </div>
           <div className="d-flex align-items-center gap-2">
              <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
                 <button className="btn btn-sm text-white-50 border-0"><FontAwesomeIcon icon={faChevronLeft} /></button>
-                <button className="btn btn-sm text-white px-3 border-0 bg-opacity-10 rounded-pill mx-1">Today</button>
+                <button className="btn btn-sm text-white px-3 border-0 bg-opacity-10 rounded-pill mx-1">{t('calendar.today')}</button>
                 <button className="btn btn-sm text-white-50 border-0"><FontAwesomeIcon icon={faChevronRight} /></button>
              </div>
              <span className="ms-2 text-white">
@@ -140,7 +146,7 @@ const EventCalendar = () => {
 
       <div className={glassPanel}>
         <div className="d-flex gap-2 flex-wrap">
-          {['All Municipalities', 'Downtown District', 'Central Park District', 'North Valley', 'East Harbor', 'West Springs', 'South Ridge'].map((m, i) => (
+          {[t('calendar.allMunicipalities'), 'Downtown District', 'Central Park District', 'North Valley', 'East Harbor', 'West Springs', 'South Ridge'].map((m, i) => (
             <button key={m} className={i === 0 ? activeBtn : "btn btn-sm bg-opacity-10 text-white-50 rounded-pill border-0 px-3"}>{m}</button>
           ))}
         </div>

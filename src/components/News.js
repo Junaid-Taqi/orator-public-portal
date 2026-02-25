@@ -1,6 +1,7 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { useTranslation } from '../i18n';
 
 const newsData = [
     {
@@ -24,6 +25,7 @@ const newsData = [
 ];
 
 const News = () => {
+    const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -41,8 +43,8 @@ const News = () => {
             <div className="container">
                 {/* Header Section */}
                 <div className="mb-4">
-                    <h2 className="text-white m-0">News & Updates</h2>
-                    <p className="text-info opacity-75">Stay informed about what's happening in your community</p>
+                    <h2 className="text-white m-0">{t('news.title')}</h2>
+                    <p className="text-info opacity-75">{t('news.subtitle')}</p>
                 </div>
 
                 {/* ✅ Search & Filter Bar (Functional) */}
@@ -57,7 +59,7 @@ const News = () => {
                         <input
                             type="text"
                             className="form-control search-input py-3"
-                            placeholder="Search news..."
+                            placeholder={t('news.searchPlaceholder')}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -71,7 +73,7 @@ const News = () => {
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
                         >
-                            <option value="All">All</option>
+                            <option value="All">{t('news.all')}</option>
                             <option value="Events">Events</option>
                             <option value="Community">Community</option>
                         </select>
@@ -108,7 +110,7 @@ const News = () => {
                         ))
                     ) : (
                         <div className="col-12 text-center py-5">
-                            <h5 className="text-muted">No news found matching "{searchTerm}"</h5>
+                            <h5 className="text-muted">{t('news.noResults')} "{searchTerm}"</h5>
                         </div>
                     )}
                 </div>

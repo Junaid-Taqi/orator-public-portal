@@ -1,6 +1,7 @@
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
+import { useTranslation } from './i18n';
 import Home from './components/Home';
 import News from './components/News';
 import Report from './components/Report';
@@ -10,9 +11,10 @@ import MyReport from './components/MyReport';
 
 
 function Login() {
+  const { t } = useTranslation();
   return (
     <div className="page">
-      <h1>Log In</h1>
+      <h1>{t('login.title')}</h1>
     </div>
   );
 }

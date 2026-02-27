@@ -1,34 +1,136 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from '../i18n';
-import {
-    faEye
-} from "@fortawesome/free-solid-svg-icons";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
-const MyReport = () => {
+const parseJsonSafely = (raw) => {
+  if (!raw) return null;
+  if (typeof raw === 'object') return raw;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+};
+
+const statusLabel = (status) => {
+  if (status === 1) return 'Pending';
+  if (status === 2) return 'In Progress';
+  if (status === 3) return 'Resolved';
+  if (status === 4) return 'Rejected';
+  return 'Unknown';
+};
+
+const statusClass = (status) => {
+  if (status === 1) return 'bg-warning text-dark';
+  if (status === 2) return 'bg-info text-dark';
+  if (status === 3) return 'bg-success';
+  if (status === 4) return 'bg-danger';
+  return 'bg-secondary';
+};
+
+const formatDate = (value) => {
+  if (!value) return '-';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '-';
+  return date.toLocaleDateString();
+};
+
+const MyReport = ({ user }) => {
   const { t } = useTranslation();
-  const stats = [
-    { label: 'Total Reports', value: 4, color: 'text-white' },
-    { label: 'Not Authorized', value: 1, color: 'text-warning' },
-    { label: 'Accepted', value: 1, color: 'text-info' },
-    { label: 'In Progress', value: 1, color: 'text-primary' },
-    { label: 'Finished', value: 1, color: 'text-success' },
-  ];
+  const [statusFilter, setStatusFilter] = useState('');
+  const [reports, setReports] = useState([]);
+  const [counters, setCounters] = useState({
+    total: 0,
+    pending: 0,
+    inProgress: 0,
+    resolved: 0,
+    rejected: 0,
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const groupId = user?.groups?.[0]?.id;
+  const userId = user?.userId;
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      if (!groupId || !userId) {
+        setError('Missing user/group context. Please login again.');
+        return;
+      }
+
+      setLoading(true);
+      setError('');
+
+      try {
+        const token = sessionStorage.getItem('token');
+        const payload = {
+          groupId: String(groupId),
+          userId: String(userId),
+        };
+        if (statusFilter) {
+          payload.status = Number(statusFilter);
+        }
+
+        const response = await fetch(`${API_BASE_URL}/o/endUserCitizen/getMyReports`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const raw = await response.text();
+        const data = parseJsonSafely(raw);
+
+        if (!response.ok || !data?.success) {
+          throw new Error(data?.message || 'Failed to load reports.');
+        }
+
+        setReports(data?.data || []);
+        setCounters(
+          data?.counters || {
+            total: 0,
+            pending: 0,
+            inProgress: 0,
+            resolved: 0,
+            rejected: 0,
+          }
+        );
+      } catch (fetchError) {
+        setError(fetchError.message || 'Failed to load reports.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, [groupId, userId, statusFilter]);
+
+  const stats = useMemo(
+    () => [
+      { label: 'Total Reports', value: counters.total, color: 'text-white' },
+      { label: 'Pending', value: counters.pending, color: 'text-warning' },
+      { label: 'In Progress', value: counters.inProgress, color: 'text-info' },
+      { label: 'Resolved', value: counters.resolved, color: 'text-success' },
+      { label: 'Rejected', value: counters.rejected, color: 'text-danger' },
+    ],
+    [counters]
+  );
 
   return (
     <div className="report-dashboard py-5">
       <div className="container">
-        {/* Header */}
         <header className="mb-4">
           <h2 className="text-white">{t('myReport.title')}</h2>
           <p className="text-info opacity-75">{t('myReport.subtitle')}</p>
         </header>
 
-        {/* Stats Row */}
         <div className="row g-3 mb-4">
-          {stats.map((stat, i) => (
-            <div key={i} className="col">
+          {stats.map((stat) => (
+            <div key={stat.label} className="col">
               <div className="glass-card p-3 h-100">
                 <small className="d-block text-white-50 mb-2" style={{ fontSize: '0.7rem' }}>
                   {stat.label.toUpperCase()}
@@ -39,60 +141,71 @@ const MyReport = () => {
           ))}
         </div>
 
-        {/* Filter Bar */}
         <div className="glass-card p-2 mb-4 d-flex align-items-center">
           <div className="px-3 border-end border-white-10">
             <span className="text-info">{t('myReport.filter')}</span>
           </div>
-          <select className="form-select bg-transparent border-0 text-white-50 shadow-none">
-            <option>{t('myReport.allReports')}</option>
+          <select
+            className="form-select bg-transparent border-0 text-white-50 shadow-none"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="">{t('myReport.allReports')}</option>
+            <option value="1">Pending</option>
+            <option value="2">In Progress</option>
+            <option value="3">Resolved</option>
+            <option value="4">Rejected</option>
           </select>
         </div>
 
-        {/* Main Report Detail */}
-        <div className="glass-card p-4 shadow-lg border-0">
-          <div className="d-flex justify-content-between align-items-start mb-3">
-            <div>
-              <span className="badge rounded-pill bg-purple-soft me-2">Street Lighting</span>
-              <span className="badge rounded-pill bg-success-soft text-success border border-success">✓ {t('myReport.resolvedNote')}</span>
-            </div>
-            <div className="text-end">
-              <small className="d-block text-info opacity-50">RPT-45782</small>
-              <a href="#" className="text-info text-decoration-none small"><FontAwesomeIcon icon="faEye" className="me-1" /> {t('myReport.viewDetails')}</a>
-            </div>
+        {loading && (
+          <div className="glass-card p-4 text-white-50">
+            Loading reports...
           </div>
+        )}
 
-          <h4 className="text-white mb-2">Broken Street Light on Main St</h4>
-          <p className="text-white-50 small mb-4">
-            The street light near 123 Main Street has been out for 3 days, creating a safety hazard for pedestrians at night.
-          </p>
-
-          <div className="d-flex gap-4 mb-4 text-white-50 small">
-            <span>📍 123 Main Street</span>
-            <span>🕒 February 15, 2026</span>
+        {!loading && !!error && (
+          <div className="glass-card p-4 text-danger">
+            {error}
           </div>
+        )}
 
-          <p className="text-white-50 fst-italic mb-5 border-top border-white-10 pt-3">{t('myReport.resolvedNote')}</p>
+        {!loading && !error && reports.length === 0 && (
+          <div className="glass-card p-4 text-white-50">
+            No reports found.
+          </div>
+        )}
 
-          {/* Status History Timeline */}
-          <h6 className="text-white mb-4 text-uppercase small tracking-widest">{t('myReport.statusHistory')}</h6>
-          <div className="timeline-container ps-3">
-            <div className="timeline-item mb-4 pb-2">
-              <div className="d-flex align-items-center gap-2">
-                <span className="text-white">{t('myReport.reportSubmitted')}</span>
-                <span className="badge bg-warning text-dark x-small">NOT AUTHORIZED</span>
+        {!loading && !error && reports.map((report) => (
+          <div key={report.reportId} className="glass-card p-4 shadow-lg border-0 mb-3">
+            <div className="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <span className="badge rounded-pill bg-purple-soft me-2">{report.category || 'N/A'}</span>
+                <span className={`badge rounded-pill ${statusClass(report.status)}`}>
+                  {statusLabel(report.status)}
+                </span>
               </div>
-              <small className="text-muted d-block">February 15, 2026</small>
-            </div>
-            <div className="timeline-item mb-4 pb-2">
-              <div className="d-flex align-items-center gap-2">
-                <span className="text-white">{t('myReport.reportAuthorized')}</span>
-                <span className="badge bg-info text-dark x-small">ACCEPTED</span>
+              <div className="text-end">
+                <small className="d-block text-info opacity-50">RPT-{report.reportId}</small>
               </div>
-              <small className="text-muted d-block">February 16, 2026</small>
+            </div>
+
+            <h4 className="text-white mb-2">{report.title || '-'}</h4>
+            <p className="text-white-50 small mb-3">{report.description || '-'}</p>
+
+            <div className="d-flex gap-4 mb-3 text-white-50 small">
+              <span>Location: {report.locationText || '-'}</span>
+              <span>Date: {formatDate(report.createDate)}</span>
+            </div>
+
+            <div className="text-white-50 small border-top border-white-10 pt-3 d-flex gap-4 flex-wrap">
+              <span>Attachments: {report.attachmentCount || 0}</span>
+              <span>Validation: {report.validationStatus === 1 ? 'Validated' : 'Unvalidated'}</span>
+              {report.validationRemarks ? <span>Remarks: {report.validationRemarks}</span> : null}
+              {report.rejectionReason ? <span>Rejection: {report.rejectionReason}</span> : null}
             </div>
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );

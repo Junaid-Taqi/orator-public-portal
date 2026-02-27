@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
@@ -52,6 +53,7 @@ const MyReport = ({ user }) => {
 
   const groupId = user?.groups?.[0]?.id;
   const userId = user?.userId;
+  const hasLiferayUser = !!user;
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -119,6 +121,23 @@ const MyReport = ({ user }) => {
     ],
     [counters]
   );
+
+  if (!hasLiferayUser) {
+    return (
+      <div className="report-dashboard py-5">
+        <div className="container">
+          <div className="auth-popup-card auth-popup-card-wide">
+            <h3>Login Required</h3>
+            <p>Register or login to see your reports.</p>
+            <div className="auth-popup-actions">
+              <a href="/web/guest/login" className="auth-popup-btn">Login</a>
+              <Link to="/register" className="auth-popup-btn secondary">Register</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="report-dashboard py-5">

@@ -39,19 +39,11 @@ function App() {
     }
     return null;
   }, []);
+  const hasLiferayUser = !!user;
 
-  const fallbackUser = {
-    "userId": "24608",
-    "fullName": "admin lahore",
-    "email": "admin@lahore.com",
-    "groups": [
-      {
-        "id": "24593",
-        "name": "Municipility One"
-      }
-    ]
+  const handleLogout = () => {
+    window.location.href = '/c/portal/logout';
   };
-  const resolvedUser = user || fallbackUser;
 
   const fetchToken = async () => {
     setStatus('loading');
@@ -122,16 +114,16 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <Header hasLiferayUser={hasLiferayUser} onLogout={handleLogout} />
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/news" element={<News />} />
           <Route path="/calendar" element={<EventCalendar />} />
-          <Route path="/report" element={<Report user={resolvedUser} />} />
+          <Route path="/report" element={<Report user={user} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterCitizen />} />
-          <Route path="/my-report" element={<MyReport user={resolvedUser} />} />
+          <Route path="/my-report" element={<MyReport user={user} />} />
         </Routes>
       </main>
       <Footer />

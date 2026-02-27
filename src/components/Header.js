@@ -16,10 +16,9 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import { useTranslation } from '../i18n';
 
-const Header = () => {
+const Header = ({ hasLiferayUser, onLogout }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { t, lang, setLang } = useTranslation();
-    
     
     return (
         <header className="header">
@@ -70,13 +69,23 @@ const Header = () => {
                         <option value="hr">Croatian</option>
                     </select>
 
-                    <a href="/web/guest/login" className="header-action-btn">
-                        <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
-                    </a>
+                    {!hasLiferayUser && (
+                        <>
+                            <a href="/web/guest/login" className="header-action-btn">
+                                <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
+                            </a>
 
-                    <Link to="/register" className="header-action-btn">
-                        <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
-                    </Link>
+                            <Link to="/register" className="header-action-btn">
+                                <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
+                            </Link>
+                        </>
+                    )}
+
+                    {hasLiferayUser && (
+                        <button type="button" className="header-action-btn" onClick={onLogout}>
+                            <FontAwesomeIcon icon={faRightToBracket} /> {t('header.logout')}
+                        </button>
+                    )}
 
                     <a href="partnership" rel="noopener noreferrer" className="header-action-btn">
                         <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}

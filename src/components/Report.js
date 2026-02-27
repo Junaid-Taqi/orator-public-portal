@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
 
 const categories = [
@@ -41,6 +42,22 @@ const Report = ({ user }) => {
 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [errors, setErrors] = useState({});
+  const hasLiferayUser = !!user;
+
+  if (!hasLiferayUser) {
+    return (
+      <div className="report-wrapper">
+        <div className="auth-popup-card">
+          <h3>Login Required</h3>
+          <p>Register or log in to report a problem.</p>
+          <div className="auth-popup-actions">
+            <a href="/web/guest/login" className="auth-popup-btn">Login</a>
+            <Link to="/register" className="auth-popup-btn secondary">Register</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

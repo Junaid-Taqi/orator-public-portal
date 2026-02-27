@@ -904,6 +904,61 @@ input.form-control::placeholder {
   border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+.auth-popup-card {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  padding: 28px 24px;
+  text-align: center;
+  color: #e2e8f0;
+  box-shadow: 0 14px 30px rgba(8, 25, 40, 0.35);
+}
+
+.auth-popup-card h3 {
+  margin: 0 0 10px;
+  color: #f8fafc;
+}
+
+.auth-popup-card p {
+  margin: 0 0 18px;
+  color: #cbd5e1;
+}
+
+.auth-popup-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.auth-popup-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  border-radius: 24px;
+  padding: 10px 18px;
+  text-decoration: none;
+  border: 1px solid rgba(0, 210, 255, 0.6);
+  background: #00c6ff;
+  color: #00394d;
+  font-weight: 700;
+}
+
+.auth-popup-btn.secondary {
+  background: rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.auth-popup-card-wide {
+  margin: 0 auto;
+}
+
 
 .portlet {
   margin: 0 !important;

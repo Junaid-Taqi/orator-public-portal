@@ -15,26 +15,79 @@ const parseJsonSafely = (raw) => {
 };
 
 const statusLabel = (status) => {
-  if (status === 1) return 'Pending';
+  if (status === 1) return 'Not Authorized';
   if (status === 2) return 'In Progress';
-  if (status === 3) return 'Resolved';
+  if (status === 3) return 'Finished';
   if (status === 4) return 'Rejected';
   return 'Unknown';
 };
 
-const statusClass = (status) => {
-  if (status === 1) return 'bg-warning text-dark';
-  if (status === 2) return 'bg-info text-dark';
-  if (status === 3) return 'bg-success';
-  if (status === 4) return 'bg-danger';
-  return 'bg-secondary';
+const statusPillClass = (status) => {
+  if (status === 1) return 'status-pill status-not-authorized';
+  if (status === 2) return 'status-pill status-in-progress';
+  if (status === 3) return 'status-pill status-finished';
+  if (status === 4) return 'status-pill status-rejected';
+  return 'status-pill status-unknown';
 };
 
 const formatDate = (value) => {
   if (!value) return '-';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return '-';
-  return date.toLocaleDateString();
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
+};
+
+const getHistoryItems = (report) => {
+  const items = [
+    {
+      text: 'Report submitted',
+      badge: 'Not Authorized',
+      badgeClass: 'status-not-authorized',
+      date: formatDate(report.createDate),
+    },
+  ];
+
+  if (report.validationStatus === 1) {
+    items.push({
+      text: 'Report authorized by municipality',
+      badge: 'Accepted',
+      badgeClass: 'status-accepted',
+      date: formatDate(report.modifiedDate || report.createDate),
+    });
+  }
+
+  if (report.status >= 2) {
+    items.push({
+      text: report.assignedToUserName ? `Assigned to ${report.assignedToUserName}` : 'Assigned to Public Works team',
+      badge: 'In Progress',
+      badgeClass: 'status-in-progress',
+      date: formatDate(report.modifiedDate || report.createDate),
+    });
+  }
+
+  if (report.status === 3) {
+    items.push({
+      text: 'Street light repaired and tested',
+      badge: 'Finished',
+      badgeClass: 'status-finished',
+      date: formatDate(report.resolvedDate || report.closedDate || report.modifiedDate),
+    });
+  }
+
+  if (report.status === 4) {
+    items.push({
+      text: report.rejectionReason || 'Report rejected by municipality',
+      badge: 'Rejected',
+      badgeClass: 'status-rejected',
+      date: formatDate(report.modifiedDate),
+    });
+  }
+
+  return items;
 };
 
 const MyReport = ({ user }) => {
@@ -72,7 +125,7 @@ const MyReport = ({ user }) => {
           userId: String(userId),
         };
         if (statusFilter) {
-          payload.status = Number(statusFilter);
+          payload.status = String(statusFilter);
         }
 
         const response = await fetch(`${API_BASE_URL}/o/endUserCitizen/getMyReports`, {
@@ -124,15 +177,13 @@ const MyReport = ({ user }) => {
 
   if (!hasLiferayUser) {
     return (
-      <div className="report-dashboard py-5">
-        <div className="container">
-          <div className="auth-popup-card auth-popup-card-wide">
-            <h3>Login Required</h3>
-            <p>Register or login to see your reports.</p>
-            <div className="auth-popup-actions">
-              <a href="/web/guest/login" className="auth-popup-btn">Login</a>
-              <Link to="/register" className="auth-popup-btn secondary">Register</Link>
-            </div>
+      <div className="report-wrapper">
+        <div className="auth-popup-card">
+          <h3>Login Required</h3>
+          <p>Register or login to see your reports.</p>
+          <div className="auth-popup-actions">
+            <a href="/web/guest/login" className="auth-popup-btn">Login</a>
+            <Link to="/register" className="auth-popup-btn secondary">Register</Link>
           </div>
         </div>
       </div>
@@ -195,36 +246,52 @@ const MyReport = ({ user }) => {
           </div>
         )}
 
-        {!loading && !error && reports.map((report) => (
-          <div key={report.reportId} className="glass-card p-4 shadow-lg border-0 mb-3">
-            <div className="d-flex justify-content-between align-items-start mb-3">
-              <div>
-                <span className="badge rounded-pill bg-purple-soft me-2">{report.category || 'N/A'}</span>
-                <span className={`badge rounded-pill ${statusClass(report.status)}`}>
-                  {statusLabel(report.status)}
-                </span>
+        {!loading && !error && reports.map((report) => {
+          const history = getHistoryItems(report);
+          return (
+          <div key={report.reportId} className="my-report-card mb-3">
+            <div className="my-report-top-row">
+              <div className="my-report-top-left">
+                <span className="report-chip report-chip-category">{report.category || 'N/A'}</span>
+                <span className={statusPillClass(report.status)}>{statusLabel(report.status)}</span>
               </div>
-              <div className="text-end">
-                <small className="d-block text-info opacity-50">RPT-{report.reportId}</small>
+              <div className="my-report-top-right">
+                <small className="report-code">RPT-{report.reportId}</small>
+                <a href="#" className="report-details-link">View Details</a>
               </div>
             </div>
 
-            <h4 className="text-white mb-2">{report.title || '-'}</h4>
-            <p className="text-white-50 small mb-3">{report.description || '-'}</p>
+            <h4 className="my-report-title">{report.title || '-'}</h4>
+            <p className="my-report-description">{report.description || '-'}</p>
 
-            <div className="d-flex gap-4 mb-3 text-white-50 small">
+            <div className="my-report-meta">
               <span>Location: {report.locationText || '-'}</span>
-              <span>Date: {formatDate(report.createDate)}</span>
+              <span>{formatDate(report.createDate)}</span>
             </div>
 
-            <div className="text-white-50 small border-top border-white-10 pt-3 d-flex gap-4 flex-wrap">
-              <span>Attachments: {report.attachmentCount || 0}</span>
-              <span>Validation: {report.validationStatus === 1 ? 'Validated' : 'Unvalidated'}</span>
-              {report.validationRemarks ? <span>Remarks: {report.validationRemarks}</span> : null}
-              {report.rejectionReason ? <span>Rejection: {report.rejectionReason}</span> : null}
+            <div className="my-report-note">
+              {report.status === 3 ? 'This issue has been resolved.' : 'A team is actively working on resolving this issue.'}
+            </div>
+
+            <div className="my-report-divider" />
+
+            <h6 className="my-report-history-title">Status History</h6>
+            <div className="my-report-history-list">
+              {history.map((item, index) => (
+                <div className="my-report-history-item" key={`${report.reportId}-${index}`}>
+                  <div className="history-dot" />
+                  <div className="history-content">
+                    <div className="history-line-main">
+                      <span>{item.text}</span>
+                      <span className={`history-badge ${item.badgeClass}`}>{item.badge}</span>
+                    </div>
+                    <small className="history-date">{item.date}</small>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
+        )})}
       </div>
     </div>
   );

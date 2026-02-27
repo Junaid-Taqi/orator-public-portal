@@ -19,8 +19,8 @@ import { useTranslation } from '../i18n';
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { t, lang, setLang } = useTranslation();
-    const partnershipUrl = process.env.REACT_APP_PARTNERSHIP_URL || 'https://example.com/partnership';
-
+    
+    
     return (
         <header className="header">
             <div className="header-container">
@@ -78,7 +78,7 @@ const Header = () => {
                         <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
                     </Link>
 
-                    <a href={partnershipUrl} target="_blank" rel="noopener noreferrer" className="header-action-btn">
+                    <a href="web/guest/partnership" rel="noopener noreferrer" className="header-action-btn">
                         <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}
                     </a>
                 </div>

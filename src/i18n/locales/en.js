@@ -8,6 +8,8 @@ const en = {
     report: 'Report Problem',
     myReport: 'My Report',
     login: 'Log In',
+    register: 'Register',
+    partnership: 'Partnership',
     language: 'Language'
   },
   footer: {

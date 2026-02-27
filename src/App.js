@@ -8,7 +8,7 @@ import Report from './components/Report';
 import EventCalendar from './components/EventCalendar';
 import { Routes, Route } from 'react-router-dom';
 import MyReport from './components/MyReport';
-
+import RegisterCitizen from './components/RegisterCitizen';
 
 function Login() {
   const { t } = useTranslation();
@@ -30,6 +30,7 @@ function App() {
           <Route path="/calendar" element={<EventCalendar />} />
           <Route path="/report" element={<Report />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<RegisterCitizen />} />
           <Route path="/my-report" element={<MyReport />} />
         </Routes>
       </main>

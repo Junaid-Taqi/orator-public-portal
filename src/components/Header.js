@@ -7,8 +7,9 @@ import {
     faNewspaper,
     faTriangleExclamation,
     faRightToBracket,
+    faUserPlus,
+    faHandshake,
     faCalendarAlt,
-    faFile,
     faFileAlt
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -18,6 +19,7 @@ import { useTranslation } from '../i18n';
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { t, lang, setLang } = useTranslation();
+    const partnershipUrl = process.env.REACT_APP_PARTNERSHIP_URL || 'https://example.com/partnership';
 
     return (
         <header className="header">
@@ -58,34 +60,27 @@ const Header = () => {
                     </NavLink>
                 </nav>
 
-                {/* Login Button */}
-                <div className="login-btn d-flex align-items-center gap-2">
+                <div className="header-actions">
+                    <select
+                        className="form-select form-select-sm header-lang-select"
+                        value={lang}
+                        onChange={(e) => setLang(e.target.value)}
+                    >
+                        <option value="en">English</option>
+                        <option value="hr">Croatian</option>
+                    </select>
 
-                    {/* Language Dropdown */}
-                    <div className="dropdown">
-
-                        <div className="login-btn d-flex align-items-center gap-2">
-
-                            {/* Language Dropdown */}
-                            <select
-                                className="form-select form-select-sm"
-                                value={lang}
-                                onChange={(e) => setLang(e.target.value)}
-                                style={{ width: "120px" }}
-                            >
-                                <option value="en">English</option>
-                                <option value="hr">Croatian</option>
-                            </select>   
-                        </div>
-                    </div>
-
-                    {/* Login Button */}
-                    <Link to="/login">
-                        <button>
-                            <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
-                        </button>
+                    <Link to="/login" className="header-action-btn">
+                        <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
                     </Link>
 
+                    <Link to="/register" className="header-action-btn">
+                        <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
+                    </Link>
+
+                    <a href={partnershipUrl} target="_blank" rel="noopener noreferrer" className="header-action-btn">
+                        <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}
+                    </a>
                 </div>
 
             </div>

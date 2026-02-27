@@ -8,6 +8,8 @@ const hr = {
     report: 'Prijavi Problem',
     myReport: 'Moji Izvještaji',
     login: 'Prijava',
+    register: 'Registracija',
+    partnership: 'Partnerstvo',
     language: 'Jezik'
   },
   footer: {

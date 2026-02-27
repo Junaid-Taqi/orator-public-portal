@@ -70,9 +70,9 @@ const Header = () => {
                         <option value="hr">Croatian</option>
                     </select>
 
-                    <Link to="/login" className="header-action-btn">
+                    <a href="/web/guest/login" className="header-action-btn">
                         <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
-                    </Link>
+                    </a>
 
                     <Link to="/register" className="header-action-btn">
                         <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}

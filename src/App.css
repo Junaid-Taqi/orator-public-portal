@@ -166,6 +166,7 @@
   gap: 30px;
   flex-wrap: wrap;
 }
+
 .hero-card {
   text-decoration: none;
   color: white;
@@ -209,7 +210,8 @@
 .updates-header h2 {
   font-size: 26px;
 }
-.update-info-top{
+
+.update-info-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -266,7 +268,7 @@
   background: linear-gradient(135deg, #1fc8db 0%, #3b7c8f 50%, #1f6b7a 100%);
 }
 
-.date{
+.date {
   font-size: 12px;
   color: #00e0ff;
 }
@@ -471,6 +473,7 @@
     margin-bottom: 30px;
   }
 }
+
 /***************** News Page ****************** */
 
 /* Background Gradient */
@@ -484,26 +487,30 @@
 /* Big Search Bar */
 /* Container ko relative rakhein */
 .position-relative {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 /* Icon ki positioning */
 .search-icon-position {
-    position: absolute;
-    left: 20px;       /* Left se thoda andar */
-    color: #00d2ff;   /* Aapka blue color */
-    z-index: 5;       /* Input ke upar dikhne ke liye */
-    pointer-events: none; /* Taaki icon par click karne se input focus ho sake */
+  position: absolute;
+  left: 20px;
+  /* Left se thoda andar */
+  color: #00d2ff;
+  /* Aapka blue color */
+  z-index: 5;
+  /* Input ke upar dikhne ke liye */
+  pointer-events: none;
+  /* Taaki icon par click karne se input focus ho sake */
 }
 
 .search-input {
-    padding-left: 50px !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: white !important;
-    border-radius: 12px !important;
+  padding-left: 50px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border-radius: 12px !important;
 }
 
 .search-input:focus {
@@ -513,7 +520,8 @@
 
 /* Small Select Dropdown */
 .filter-select {
-  width: 130px !important; /* Small width */
+  width: 130px !important;
+  /* Small width */
   background-color: rgba(255, 255, 255, 0.08) !important;
   color: white !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -528,10 +536,11 @@
 }
 
 .filter-group {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 5px 15px;
-    border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px 15px;
+  border-radius: 12px;
 }
+
 /* News Card Styling */
 .news-card {
   border-radius: 20px;
@@ -544,8 +553,9 @@
 .news-card:hover {
   transform: translateY(-5px);
 }
+
 input.form-control::placeholder {
-    color: #fff;
+  color: #fff;
 }
 
 .card-image-top {
@@ -751,86 +761,89 @@ input.form-control::placeholder {
   background: #00c6ff;
   color: #00394d;
 }
+
 .error {
   color: #ff6b6b;
   font-size: 12px;
   margin-top: 4px;
 }
+
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: #76f1ff !important;
-  opacity: 1; /* important for some browsers */
+  opacity: 1;
+  /* important for some browsers */
 }
 
 
 /* ✅ Photo Upload Section Styles */
 .photo-upload-container {
-    margin: 20px 0;
+  margin: 20px 0;
 }
 
 .photo-label {
-    display: block;
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .upload-dropzone {
-    border: 2px dashed rgba(0, 210, 255, 0.3);
-    border-radius: 20px;
-    padding: 30px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  border: 2px dashed rgba(0, 210, 255, 0.3);
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .upload-dropzone:hover {
-    border-color: #00D2FF;
-    background: linear-gradient(135deg, #1b4b58 0%, #143640 100%);
+  border-color: #00D2FF;
+  background: linear-gradient(135deg, #1b4b58 0%, #143640 100%);
 }
 
 .camera-icon-wrapper {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .upload-text {
-    font-size: 14px;
-    color: #cbd5e1;
-    margin-bottom: 20px;
+  font-size: 14px;
+  color: #cbd5e1;
+  margin-bottom: 20px;
 }
 
 .choose-photo-button {
-    background-color: #00D2FF;
-    color: white;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 30px;
-    font-weight: bold;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
+  background-color: #00D2FF;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 }
 
 .upload-footer-text {
-    font-size: 11px;
-    color: #94a3b8;
-    text-align: center;
-    margin-top: 10px;
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: center;
+  margin-top: 10px;
 }
 
 /* Checkbox alignment */
 .checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .error {
-    color: #f87171;
-    font-size: 12px;
-    margin-top: 5px;
-    display: block;
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
 }
 
 /************* My Report Page ****************** */
@@ -873,7 +886,45 @@ input.form-control::placeholder {
 }
 
 /* Custom Badges */
-.bg-purple-soft { background-color: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
-.bg-success-soft { background-color: rgba(34, 197, 94, 0.2); }
-.x-small { font-size: 0.65rem; padding: 2px 6px; }
-.border-white-10 { border-color: rgba(255, 255, 255, 0.1) !important; }
+.bg-purple-soft {
+  background-color: rgba(168, 85, 247, 0.2);
+  color: #d8b4fe;
+}
+
+.bg-success-soft {
+  background-color: rgba(34, 197, 94, 0.2);
+}
+
+.x-small {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+}
+
+.border-white-10 {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+
+.portlet {
+  margin: 0 !important;
+}
+
+.portlet-layout .portlet-header {
+  display: none !important;
+}
+
+.portlet-borderless .portlet-content {
+  padding: 0 !important;
+}
+
+.portlet-layout {
+  margin: 0 !important;
+}
+
+.col-md-12.portlet-column.portlet-column-only {
+  padding: 0 !important;
+}
+
+#content{
+  width: 100% !important;
+}

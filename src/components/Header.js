@@ -78,7 +78,7 @@ const Header = () => {
                         <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
                     </Link>
 
-                    <a href="web/guest/partnership" rel="noopener noreferrer" className="header-action-btn">
+                    <a href="partnership" rel="noopener noreferrer" className="header-action-btn">
                         <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}
                     </a>
                 </div>

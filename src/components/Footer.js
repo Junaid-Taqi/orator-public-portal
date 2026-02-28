@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
 
 const Footer = () => {
@@ -17,9 +18,9 @@ const Footer = () => {
         <div className="footer-col">
           <h4>{t('footer.quickLinks')}</h4>
           <ul>
-            <li>{t('footer.news')}</li>
-            <li>{t('footer.report')}</li>
-            <li>{t('footer.admin')}</li>
+            <li><Link to="/news">{t('footer.news')}</Link></li>
+            <li><Link to="/report">{t('footer.report')}</Link></li>
+            <li><a href="/web/guest/login">{t('footer.admin')}</a></li>
           </ul>
         </div>
 

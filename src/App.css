@@ -448,6 +448,11 @@
   color: #00e0ff;
 }
 
+.footer-col ul li a {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* Divider */
 .footer-divider {
   height: 1px;

@@ -27,7 +27,7 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                 {/* Logo */}
                 <div className="logo">
                     <span className="logo-main">{t('header.title')}</span>
-                    <span className="logo-sub text-info">{t('header.subTitle')}</span>
+                    <span className="logo-sub text-info text-nowrap">{t('header.subTitle')}</span>
                 </div>
 
                 {/* Hamburger */}

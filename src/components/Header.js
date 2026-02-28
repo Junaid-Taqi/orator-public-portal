@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,6 +19,9 @@ import { useTranslation } from '../i18n';
 const Header = ({ hasLiferayUser, onLogout }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { t, lang, setLang } = useTranslation();
+    const { pathname } = useLocation();
+
+    const isCurrentPath = (path) => pathname === path;
     
     return (
         <header className="header">
@@ -42,21 +45,31 @@ const Header = ({ hasLiferayUser, onLogout }) => {
 
                 {/* Navigation */}
                 <nav className={`nav ${menuOpen ? "show" : ""}`}>
-                    <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                        <FontAwesomeIcon icon={faHouse} /> {t('header.home')}
-                    </NavLink>
-                    <NavLink to="/news" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                        <FontAwesomeIcon icon={faNewspaper} /> {t('header.news')}
-                    </NavLink>
-                    <NavLink to="/calendar" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                        <FontAwesomeIcon icon={faCalendarAlt} /> {t('header.calendar')}
-                    </NavLink>
-                    <NavLink to="/report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                        <FontAwesomeIcon icon={faTriangleExclamation} /> {t('header.report')}
-                    </NavLink>
-                    <NavLink to="/my-report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                        <FontAwesomeIcon icon={faFileAlt} /> {t('header.myReport')}
-                    </NavLink>
+                    {!isCurrentPath('/') && (
+                        <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                            <FontAwesomeIcon icon={faHouse} /> {t('header.home')}
+                        </NavLink>
+                    )}
+                    {!isCurrentPath('/news') && (
+                        <NavLink to="/news" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                            <FontAwesomeIcon icon={faNewspaper} /> {t('header.news')}
+                        </NavLink>
+                    )}
+                    {!isCurrentPath('/calendar') && (
+                        <NavLink to="/calendar" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                            <FontAwesomeIcon icon={faCalendarAlt} /> {t('header.calendar')}
+                        </NavLink>
+                    )}
+                    {!isCurrentPath('/report') && (
+                        <NavLink to="/report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                            <FontAwesomeIcon icon={faTriangleExclamation} /> {t('header.report')}
+                        </NavLink>
+                    )}
+                    {!isCurrentPath('/my-report') && (
+                        <NavLink to="/my-report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                            <FontAwesomeIcon icon={faFileAlt} /> {t('header.myReport')}
+                        </NavLink>
+                    )}
                 </nav>
 
                 <div className="header-actions">
@@ -75,9 +88,11 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                                 <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
                             </a>
 
-                            <Link to="/register" className="header-action-btn">
-                                <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
-                            </Link>
+                            {!isCurrentPath('/register') && (
+                                <Link to="/register" className="header-action-btn">
+                                    <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
+                                </Link>
+                            )}
                         </>
                     )}
 

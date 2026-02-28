@@ -9,11 +9,12 @@
 
 /* Container */
 .header-container {
-  width: 95%;
+  width: 100%;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 15px;
 }
 
 /* Logo */
@@ -37,7 +38,7 @@
 /* Navigation */
 .nav {
   display: flex;
-  gap: 25px;
+  gap: 5px !important;
 }
 
 .nav-link {

@@ -278,11 +278,11 @@ const MyReport = ({ user }) => {
               </div>
             </div>
 
-            <h4 className="my-report-title">{report.title || '-'}</h4>
+            <h4 className="my-report-title text-capitalize">{report.title || '-'}</h4>
             <p className="my-report-description">{report.description || '-'}</p>
 
             <div className="my-report-meta">
-              <span>Location: {report.locationText || '-'}</span>
+              <span className='text-capitalize'>Location: {report.locationText || '-'}</span>
               <span>{formatDate(report.createDate)}</span>
             </div>
 

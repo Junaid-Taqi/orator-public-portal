@@ -22,7 +22,7 @@ const Header = ({ hasLiferayUser, onLogout }) => {
     const { pathname } = useLocation();
 
     const isCurrentPath = (path) => pathname === path;
-    
+
     return (
         <header className="header">
             <div className="header-container">
@@ -93,6 +93,9 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                                     <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
                                 </Link>
                             )}
+                            <a href="partnership" rel="noopener noreferrer" className="header-action-btn">
+                                <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}
+                            </a>
                         </>
                     )}
 
@@ -101,10 +104,6 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                             <FontAwesomeIcon icon={faRightToBracket} /> {t('header.logout')}
                         </button>
                     )}
-
-                    <a href="partnership" rel="noopener noreferrer" className="header-action-btn">
-                        <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}
-                    </a>
                 </div>
 
             </div>

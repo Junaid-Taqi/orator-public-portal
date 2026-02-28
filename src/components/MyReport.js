@@ -104,6 +104,7 @@ const MyReport = ({ user }) => {
   const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState('');
   const [reports, setReports] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(5);
   const [counters, setCounters] = useState({
     total: 0,
     pending: 0,
@@ -155,6 +156,7 @@ const MyReport = ({ user }) => {
         }
 
         setReports(data?.data || []);
+        setVisibleCount(5);
         setCounters(
           data?.counters || {
             total: 0,
@@ -256,59 +258,72 @@ const MyReport = ({ user }) => {
           </div>
         )}
 
-        {!loading && !error && reports.map((report) => {
+        {!loading && !error && reports.slice(0, visibleCount).map((report) => {
           const history = Array.isArray(report.statusHistory) && report.statusHistory.length > 0
             ? report.statusHistory.map((row) => ({
-                text: row?.text || 'Report updated',
-                badge: row?.badge || 'Updated',
-                badgeClass: badgeTypeToClass(row?.badgeType, row?.badge),
-                date: formatDate(row?.date),
-              }))
+              text: row?.text || 'Report updated',
+              badge: row?.badge || 'Updated',
+              badgeClass: badgeTypeToClass(row?.badgeType, row?.badge),
+              date: formatDate(row?.date),
+            }))
             : getFallbackHistoryItems(report);
           const topStatus = topStatusFromReport(report);
           return (
-          <div key={report.reportId} className="my-report-card mb-3">
-            <div className="my-report-top-row">
-              <div className="my-report-top-left">
-                <span className="report-chip report-chip-category">{report.category || 'N/A'}</span>
-                <span className={topStatus.className}>{topStatus.label}</span>
-              </div>
-              <div className="my-report-top-right">
-                <small className="report-code">RPT-{report.reportId}</small>
-              </div>
-            </div>
-
-            <h4 className="my-report-title text-capitalize">{report.title || '-'}</h4>
-            <p className="my-report-description">{report.description || '-'}</p>
-
-            <div className="my-report-meta">
-              <span className='text-capitalize'>Location: {report.locationText || '-'}</span>
-              <span>{formatDate(report.createDate)}</span>
-            </div>
-
-            <div className="my-report-note">
-              {report.status === 3 ? 'This issue has been resolved.' : 'A team is actively working on resolving this issue.'}
-            </div>
-
-            <div className="my-report-divider" />
-
-            <h6 className="my-report-history-title">Status History</h6>
-            <div className="my-report-history-list">
-              {history.map((item, index) => (
-                <div className="my-report-history-item" key={`${report.reportId}-${index}`}>
-                  <div className="history-dot" />
-                  <div className="history-content">
-                    <div className="history-line-main">
-                      <span>{item.text}</span>
-                      <span className={`history-badge ${item.badgeClass}`}>{item.badge}</span>
-                    </div>
-                    <small className="history-date">{item.date}</small>
-                  </div>
+            <div key={report.reportId} className="my-report-card mb-3">
+              <div className="my-report-top-row">
+                <div className="my-report-top-left">
+                  <span className="report-chip report-chip-category">{report.category || 'N/A'}</span>
+                  <span className={topStatus.className}>{topStatus.label}</span>
                 </div>
-              ))}
+                <div className="my-report-top-right">
+                  <small className="report-code">RPT-{report.reportId}</small>
+                </div>
+              </div>
+
+              <h4 className="my-report-title text-capitalize">{report.title || '-'}</h4>
+              <p className="my-report-description">{report.description || '-'}</p>
+
+              <div className="my-report-meta">
+                <span className='text-capitalize'>Location: {report.locationText || '-'}</span>
+                <span>{formatDate(report.createDate)}</span>
+              </div>
+
+              <div className="my-report-note">
+                {report.status === 3 ? 'This issue has been resolved.' : 'A team is actively working on resolving this issue.'}
+              </div>
+
+              <div className="my-report-divider" />
+
+              <h6 className="my-report-history-title">Status History</h6>
+              <div className="my-report-history-list">
+                {history.map((item, index) => (
+                  <div className="my-report-history-item" key={`${report.reportId}-${index}`}>
+                    <div className="history-dot" />
+                    <div className="history-content">
+                      <div className="history-line-main">
+                        <span>{item.text}</span>
+                        <span className={`history-badge ${item.badgeClass}`}>{item.badge}</span>
+                      </div>
+                      <small className="history-date">{item.date}</small>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
+          )
+        })}
+
+        {!loading && !error && visibleCount < reports.length && (
+          <div className="text-center mt-4">
+            <button
+              className="btn btn-outline-info px-4 py-2 rounded-pill"
+              onClick={() => setVisibleCount(prev => prev + 5)}
+              style={{ fontWeight: 500, letterSpacing: '0.5px' }}
+            >
+              Load More Reports
+            </button>
           </div>
-        )})}
+        )}
       </div>
     </div>
   );

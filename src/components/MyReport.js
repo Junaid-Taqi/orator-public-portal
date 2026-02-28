@@ -14,20 +14,13 @@ const parseJsonSafely = (raw) => {
   }
 };
 
-const statusLabel = (status) => {
-  if (status === 1) return 'Not Authorized';
-  if (status === 2) return 'In Progress';
-  if (status === 3) return 'Finished';
-  if (status === 4) return 'Rejected';
-  return 'Unknown';
-};
-
-const statusPillClass = (status) => {
-  if (status === 1) return 'status-pill status-not-authorized';
-  if (status === 2) return 'status-pill status-in-progress';
-  if (status === 3) return 'status-pill status-finished';
-  if (status === 4) return 'status-pill status-rejected';
-  return 'status-pill status-unknown';
+const topStatusFromReport = (report) => {
+  if (report?.status === 4) return { label: 'Rejected', className: 'status-pill status-rejected' };
+  if (report?.status === 3) return { label: 'Finished', className: 'status-pill status-finished' };
+  if (report?.status === 2) return { label: 'In Progress', className: 'status-pill status-in-progress' };
+  if (report?.validationStatus === 1) return { label: 'Accepted', className: 'status-pill status-accepted' };
+  if (report?.status === 1) return { label: 'Not Authorized', className: 'status-pill status-not-authorized' };
+  return { label: 'Unknown', className: 'status-pill status-unknown' };
 };
 
 const formatDate = (value) => {
@@ -41,7 +34,7 @@ const formatDate = (value) => {
   });
 };
 
-const getHistoryItems = (report) => {
+const getFallbackHistoryItems = (report) => {
   const items = [
     {
       text: 'Report submitted',
@@ -88,6 +81,23 @@ const getHistoryItems = (report) => {
   }
 
   return items;
+};
+
+const badgeTypeToClass = (badgeType, badgeLabel) => {
+  const normalized = String(badgeType || '').toLowerCase();
+  if (normalized === 'accepted') return 'status-accepted';
+  if (normalized === 'not_authorized') return 'status-not-authorized';
+  if (normalized === 'in_progress') return 'status-in-progress';
+  if (normalized === 'finished') return 'status-finished';
+  if (normalized === 'rejected') return 'status-rejected';
+
+  const byLabel = String(badgeLabel || '').toLowerCase();
+  if (byLabel.includes('accept')) return 'status-accepted';
+  if (byLabel.includes('not authorized')) return 'status-not-authorized';
+  if (byLabel.includes('in progress')) return 'status-in-progress';
+  if (byLabel.includes('finish')) return 'status-finished';
+  if (byLabel.includes('reject')) return 'status-rejected';
+  return 'status-unknown';
 };
 
 const MyReport = ({ user }) => {
@@ -247,13 +257,21 @@ const MyReport = ({ user }) => {
         )}
 
         {!loading && !error && reports.map((report) => {
-          const history = getHistoryItems(report);
+          const history = Array.isArray(report.statusHistory) && report.statusHistory.length > 0
+            ? report.statusHistory.map((row) => ({
+                text: row?.text || 'Report updated',
+                badge: row?.badge || 'Updated',
+                badgeClass: badgeTypeToClass(row?.badgeType, row?.badge),
+                date: formatDate(row?.date),
+              }))
+            : getFallbackHistoryItems(report);
+          const topStatus = topStatusFromReport(report);
           return (
           <div key={report.reportId} className="my-report-card mb-3">
             <div className="my-report-top-row">
               <div className="my-report-top-left">
                 <span className="report-chip report-chip-category">{report.category || 'N/A'}</span>
-                <span className={statusPillClass(report.status)}>{statusLabel(report.status)}</span>
+                <span className={topStatus.className}>{topStatus.label}</span>
               </div>
               <div className="my-report-top-right">
                 <small className="report-code">RPT-{report.reportId}</small>

@@ -51,8 +51,8 @@ function App() {
     try {
       const body = new URLSearchParams({
         grant_type: 'client_credentials',
-        client_id: 'id-92c229e9-f2e3-c271-b92f-cd6aa8e7073',
-        client_secret: 'secret-43ce33b8-3c7f-9bfa-d288-21ce8052f',
+        client_id: 'id-e52ebee1-08f1-daa5-cb3d-76e4510ce',
+        client_secret: 'secret-569fe0f4-fe5b-92de-428f-cfba2add3ed',
       }).toString();
 
       const response = await fetch(`${serverUrl}/o/oauth2/token`, {

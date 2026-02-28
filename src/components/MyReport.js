@@ -275,7 +275,6 @@ const MyReport = ({ user }) => {
               </div>
               <div className="my-report-top-right">
                 <small className="report-code">RPT-{report.reportId}</small>
-                <a href="#" className="report-details-link">View Details</a>
               </div>
             </div>
 

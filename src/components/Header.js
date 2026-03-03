@@ -10,7 +10,8 @@ import {
     faUserPlus,
     faHandshake,
     faCalendarAlt,
-    faFileAlt
+    faFileAlt,
+    faGlobe
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
@@ -90,14 +91,17 @@ const Header = ({ hasLiferayUser, onLogout }) => {
 
                     {/* Mobile-only actions inside the dropdown */}
                     <div className="mobile-actions">
-                        <select
-                            className="form-select form-select-sm header-lang-select"
-                            value={lang}
-                            onChange={(e) => setLang(e.target.value)}
-                        >
-                            <option value="en">English</option>
-                            <option value="hr">Croatian</option>
-                        </select>
+                        <div className="lang-select-wrapper">
+                            <FontAwesomeIcon icon={faGlobe} className="lang-icon" />
+                            <select
+                                className="header-lang-select"
+                                value={lang}
+                                onChange={(e) => setLang(e.target.value)}
+                            >
+                                <option value="en">English</option>
+                                <option value="hr">Croatian</option>
+                            </select>
+                        </div>
 
                         {!hasLiferayUser && (
                             <>
@@ -125,14 +129,17 @@ const Header = ({ hasLiferayUser, onLogout }) => {
 
                 {/* Desktop-only actions */}
                 <div className="header-actions">
-                    <select
-                        className="form-select form-select-sm header-lang-select"
-                        value={lang}
-                        onChange={(e) => setLang(e.target.value)}
-                    >
-                        <option value="en">English</option>
-                        <option value="hr">Croatian</option>
-                    </select>
+                    <div className="lang-select-wrapper">
+                        <FontAwesomeIcon icon={faGlobe} className="lang-icon" />
+                        <select
+                            className="header-lang-select"
+                            value={lang}
+                            onChange={(e) => setLang(e.target.value)}
+                        >
+                            <option value="en">English</option>
+                            <option value="hr">Croatian</option>
+                        </select>
+                    </div>
 
                     {!hasLiferayUser && (
                         <>

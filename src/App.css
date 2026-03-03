@@ -70,7 +70,49 @@
 }
 
 .header-lang-select {
-  width: 120px;
+  width: 70px;
+}
+
+/* Language Selector Pill */
+.lang-select-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 5px 12px;
+  transition: border-color 0.3s, background 0.3s;
+  cursor: pointer;
+}
+
+.lang-select-wrapper:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #1fc8db;
+}
+
+.lang-icon {
+  color: #1fc8db;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.header-lang-select {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
+}
+
+.header-lang-select option {
+  background: #2d4a6b;
+  color: white;
 }
 
 .header-action-btn {

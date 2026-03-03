@@ -45,7 +45,8 @@
 .nav-link {
   color: #d6e3f0 !important;
   border-radius: 20px;
-  transition: 0.3s;
+  transition: 0.3s !important;
+  padding: 10px !important;
 }
 
 .nav-link:hover {

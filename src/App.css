@@ -309,7 +309,7 @@
 .update-cards {
   margin-top: 30px;
   display: flex;
-  gap: 35px;
+  justify-content: space-between;
   flex-wrap: wrap;
 }
 
@@ -317,9 +317,10 @@
   background: rgba(255, 255, 255, 0.07);
   border-radius: 15px;
   overflow: hidden;
-  width: calc(50% - 18px);
+  width: 32%;
   transition: 0.3s;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 30px;
 }
 
 .update-card:hover {

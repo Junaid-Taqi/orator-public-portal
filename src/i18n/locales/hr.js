@@ -3,7 +3,7 @@ const hr = {
     title: 'ORATOR',
     subTitle: 'Javni Portal',
     home: 'Početna',
-    news: 'Novosti i Ažuriranja',
+    news: 'Novosti i Obavijet',
     calendar: 'Kalendar Događaja',
     report: 'Prijavi Problem',
     myReport: 'Moji Izvještaji',
@@ -17,7 +17,7 @@ const hr = {
     brandTitle: 'ORATOR',
     brandDesc: 'Vaša digitalna veza s gradskim uslugama i informacijama zajednice.',
     quickLinks: 'Brze poveznice',
-    news: 'Novosti i Ažuriranja',
+    news: 'Novosti i Obavijet',
     report: 'Prijavi Problem',
     admin: 'Admin Portal',
     contact: 'Kontakt',
@@ -31,12 +31,12 @@ const hr = {
     viewAllNews: 'Prikaži sve vijesti',
     reportProblem: 'Prijavi Problem',
     eventCalendar: 'Kalendar Događaja',
-    latestUpdates: 'Najnovija Ažuriranja',
+    latestUpdates: 'Najnovija Obavijet',
     viewAll: 'Prikaži sve →',
     communityImpact: 'Utjecaj Zajednice',
     activeCitizens: 'Aktivni Građani',
     problemsResolved: 'Riješeni Problemi',
-    newsUpdates: 'Ažuriranja Vijesti',
+    newsUpdates: 'Obavijet Vijesti',
     upcomingEvents: 'Nadolazeći Događaji'
   },
   calendar: {
@@ -61,7 +61,7 @@ const hr = {
     resolvedNote: 'Ovaj problem je riješen.'
   },
   news: {
-    title: 'Novosti i Ažuriranja',
+    title: 'Novosti i Obavijet',
     subtitle: 'Budite informirani o onome što se događa u vašoj zajednici',
     searchPlaceholder: 'Pretraži vijesti...',
     all: 'Sve',

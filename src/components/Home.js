@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from '../i18n';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,9 +7,50 @@ import {
     faLocationDot,
     faCalendarDays,
 } from "@fortawesome/free-solid-svg-icons";
+import { serverUrl } from "../Services/Constants/Constants";
 
 const Home = () => {
     const { t } = useTranslation();
+    const [latestUpdates, setLatestUpdates] = useState([]);
+
+    useEffect(() => {
+        const fetchLatestUpdates = async () => {
+            try {
+                const response = await fetch(`${serverUrl}/o/externalApis/getLatestPublishedSlidePerPool`, {
+                    method: "GET",
+                });
+
+                const data = await response.json();
+                if (response.ok && data?.success && Array.isArray(data?.data)) {
+                    setLatestUpdates(data.data);
+                }
+            } catch (error) {}
+        };
+
+        fetchLatestUpdates();
+    }, []);
+
+    const formatDate = (value) => {
+        if (!value) return "";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        return date.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
+
+    const apiCards = latestUpdates.map((item, index) => ({
+        id: `api-${index}`,
+        icon: (item.poolName || "U").slice(0, 1).toUpperCase(),
+        badge: item.poolName || "Updates",
+        date: formatDate(item.publishDate),
+        title: item.title || "",
+        subtitle: item.subtitle || "",
+        description: item.webDescription || item.subtitle || "",
+    }));
+
     return (
         <div className="home">
 
@@ -49,55 +90,23 @@ const Home = () => {
             <section className="updates">
                 <div className="updates-header">
                     <h2>{t('home.latestUpdates')}</h2>
-                    <span className="view-all">{t('home.viewAll')}</span>
+                    <Link to="/news" className="view-all">{t('home.viewAll')}</Link>
                 </div>
 
                 <div className="update-cards">
-
-                    <div className="update-card">
-                        <div className="update-top">🎉</div>
-                        <div className="update-bottom">
-                            <div className="update-info-top">
-                                <div className="badge">Events</div>
-                                <div className="date">25 Feb 2026</div>
+                    {apiCards.map((card) => (
+                        <div key={card.id} className="update-card">
+                            <div className="update-top">{card.icon}</div>
+                            <div className="update-bottom">
+                                <div className="update-info-top">
+                                    <div className="badge">{card.badge}</div>
+                                    <div className="date">{card.date}</div>
+                                </div>
+                                <h4>{card.title}</h4>
+                                <p>{card.subtitle}</p>
                             </div>
-                            <h4>Spring Festival 2026 - Save the Date!</h4>
-                            <p>
-                                Join us for our annual Spring Festival on March 15th. Fun for
-                                the whole family!
-                            </p>
                         </div>
-                    </div>
-
-                    <div className="update-card">
-                        <div className="update-top">🏢</div>
-                        <div className="update-bottom">
-                            <div className="update-info-top">
-                                <div className="badge">Community</div>
-                                <div className="date">25 Feb 2026</div>
-                            </div>
-                            <h4>New Community Center Opening</h4>
-                            <p>
-                                State-of-the-art facility opens next month with sports,
-                                arts, and education programs.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="update-card">
-                        <div className="update-top">🚧</div>
-                        <div className="update-bottom">
-                            <div className="update-info-top">
-                                <div className="badge">Infrastructure</div>
-                                <div className="date">25 Feb 2026</div>
-                            </div>
-                            <h4>Road Maintenance Schedule</h4>
-                            <p>
-                                Planned road work for downtown area. Check dates and
-                                alternative routes.
-                            </p>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </section>
 

@@ -5,6 +5,7 @@ import Header from './components/Header';
 import { useTranslation } from './i18n';
 import Home from './components/Home';
 import News from './components/News';
+import NewsDetails from './components/NewsDetails';
 import Report from './components/Report';
 import EventCalendar from './components/EventCalendar';
 import { Routes, Route } from 'react-router-dom';
@@ -119,6 +120,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/news" element={<News />} />
+          <Route path="/news/:newsId" element={<NewsDetails />} />
           <Route path="/calendar" element={<EventCalendar />} />
           <Route path="/report" element={<Report user={user} />} />
           <Route path="/login" element={<Login />} />

@@ -1,108 +1,142 @@
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import { useTranslation } from '../i18n';
-
-const newsData = [
-    {
-        id: 1,
-        category: "Events",
-        date: "March 1, 2026",
-        title: "Spring Festival 2026 - Save the Date!",
-        description: "Join us for our annual Spring Festival on March 15th our state-of-the-art community center next month. The festival will feature live music, local vendors, food trucks, and activities for all ages. Fun for the whole family!",
-        author: "Events Team",
-        icon: "🎉"
-    },
-    {
-        id: 2,
-        category: "Community",
-        date: "February 28, 2026",
-        title: "New Community Center Opening",
-        description: "We're excited to announce the grand opening of our state-of-the-art community center next month. The facility includes a gymnasium, art studios, computer lab, and meeting spaces.",
-        author: "Community Services",
-        icon: "🏢"
-    }
-];
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useTranslation } from "../i18n";
+import { serverUrl } from "../Services/Constants/Constants";
 
 const News = () => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [selectedPoolId, setSelectedPoolId] = useState("All");
+    const [contentPools, setContentPools] = useState([]);
+    const [newsItems, setNewsItems] = useState([]);
 
-    // ✅ Search aur Filter Logic
-    const filteredNews = newsData.filter((item) => {
-        const matchesSearch = item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.description.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
+    useEffect(() => {
+        const fetchActiveContentPools = async () => {
+            try {
+                const token = sessionStorage.getItem("token");
+                const response = await fetch(`${serverUrl}/o/externalApis/getActiveContentPools`, {
+                    method: "GET",
+                    headers: token ? { Authorization: `Bearer ${token}` } : {},
+                });
+                const data = await response.json();
+                if (response.ok && data?.success && Array.isArray(data?.data)) {
+                    setContentPools(data.data);
+                }
+            } catch (error) {}
+        };
 
-        return matchesSearch && matchesCategory;
+        fetchActiveContentPools();
+    }, []);
+
+    useEffect(() => {
+        const fetchPublishedSlides = async () => {
+            try {
+                const endpoint = selectedPoolId === "All"
+                    ? `${serverUrl}/o/externalApis/getAllPublishedSlides`
+                    : `${serverUrl}/o/externalApis/getAllPublishedSlides?contentPoolId=${encodeURIComponent(selectedPoolId)}`;
+
+                const response = await fetch(endpoint, {
+                    method: "GET",
+                });
+
+                const data = await response.json();
+                if (response.ok && data?.success && Array.isArray(data?.data)) {
+                    setNewsItems(data.data);
+                } else {
+                    setNewsItems([]);
+                }
+            } catch (error) {
+                setNewsItems([]);
+            }
+        };
+
+        fetchPublishedSlides();
+    }, [selectedPoolId]);
+
+    const formatDate = (value) => {
+        if (!value) return "";
+        const parsed = new Date(value);
+        if (Number.isNaN(parsed.getTime())) return "";
+        return parsed.toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
+
+    const filteredNews = newsItems.filter((item) => {
+        const title = (item?.title || "").toLowerCase();
+        const subtitle = (item?.subtitle || "").toLowerCase();
+        const query = searchTerm.toLowerCase();
+        return title.includes(query) || subtitle.includes(query);
     });
 
     return (
         <div className="news-wrapper py-5 px-4">
             <div className="container">
-                {/* Header Section */}
                 <div className="mb-4">
-                    <h2 className="text-white m-0">{t('news.title')}</h2>
-                    <p className="text-info opacity-75">{t('news.subtitle')}</p>
+                    <h2 className="text-white m-0">{t("news.title")}</h2>
+                    <p className="text-info opacity-75">{t("news.subtitle")}</p>
                 </div>
 
-                {/* ✅ Search & Filter Bar (Functional) */}
                 <div className="search-bar-container d-flex gap-3 mb-5 align-items-center filter-group p-3">
-                    {/* Big Search Input */}
                     <div className="position-relative flex-grow-1">
-                        {/* Icon ko input ke upar rakha gaya hai */}
-                        <FontAwesomeIcon
-                            icon={faSearch}
-                            className="search-icon-position"
-                        />
+                        <FontAwesomeIcon icon={faSearch} className="search-icon-position" />
                         <input
                             type="text"
                             className="form-control search-input py-3"
-                            placeholder={t('news.searchPlaceholder')}
+                            placeholder={t("news.searchPlaceholder")}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
 
-                    {/* Small Filter & Dropdown */}
                     <div className="d-flex align-items-center gap-2">
                         <i className="fas fa-filter text-info"></i>
                         <select
                             className="form-select filter-select"
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            value={selectedPoolId}
+                            onChange={(e) => setSelectedPoolId(e.target.value)}
                         >
-                            <option value="All">{t('news.all')}</option>
-                            <option value="Events">Events</option>
-                            <option value="Community">Community</option>
+                            <option value="All">{t("news.all")}</option>
+                            {contentPools.map((pool) => (
+                                <option key={pool.id} value={String(pool.id)}>
+                                    {pool.name}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </div>
 
-                {/* News Grid */}
                 <div className="row g-4">
                     {filteredNews.length > 0 ? (
-                        filteredNews.map((item) => (
-                            <div className="col-md-6" key={item.id}>
+                        filteredNews.map((item, index) => (
+                            <div className="col-md-6" key={`${item.title || "news"}-${index}`}>
                                 <div className="news-card">
                                     <div className="card-image-top d-flex align-items-center justify-content-center">
-                                        <span className="display-1">{item.icon}</span>
+                                        <span className="display-1">{(item.poolName || "N").slice(0, 1).toUpperCase()}</span>
                                     </div>
 
                                     <div className="card-body-custom">
                                         <div className="d-flex justify-content-between align-items-center mb-3">
-                                            <span className="badge category-badge">{item.category}</span>
+                                            <span className="badge category-badge text-capitalize">{item.poolName || "Updates"}</span>
                                             <span className="news-date">
-                                                <i className="far fa-calendar-alt me-1"></i> {item.date}
+                                                <i className="far fa-calendar-alt me-1"></i> {formatDate(item.publishDate)}
                                             </span>
                                         </div>
-                                        <h4 className="news-title">{item.title}</h4>
-                                        <p className="news-text">{item.description}</p>
+                                        <h4 className="news-title text-capitalize">{item.title}</h4>
+                                        <p className="news-text text-capitalize">{item.subtitle || ""}</p>
                                         <hr className="divider" />
                                         <div className="d-flex justify-content-between align-items-center mt-3">
-                                            <span className="author-name">By {item.author}</span>
-                                            <a href="#" className="read-more">Read More →</a>
+                                            <Link
+                                                to={`/news/${index}`}
+                                                state={{ item }}
+                                                className="read-more"
+                                            >
+                                                Read More ->
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +144,7 @@ const News = () => {
                         ))
                     ) : (
                         <div className="col-12 text-center py-5">
-                            <h5 className="text-muted">{t('news.noResults')} "{searchTerm}"</h5>
+                            <h5 className="text-muted">{t("news.noResults")}{searchTerm ? ` \"${searchTerm}\"` : ""}</h5>
                         </div>
                     )}
                 </div>

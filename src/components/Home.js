@@ -99,11 +99,11 @@ const Home = () => {
                             <div className="update-top">{card.icon}</div>
                             <div className="update-bottom">
                                 <div className="update-info-top">
-                                    <div className="badge">{card.badge}</div>
+                                    <div className="badge text-capitalize">{card.badge}</div>
                                     <div className="date">{card.date}</div>
                                 </div>
-                                <h4>{card.title}</h4>
-                                <p>{card.subtitle}</p>
+                                <h4 className="text-capitalize">{card.title}</h4>
+                                <p className="text-capitalize">{card.subtitle}</p>
                             </div>
                         </div>
                     ))}

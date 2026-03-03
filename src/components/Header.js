@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink, Link, useLocation } from 'react-router-dom';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,11 +20,28 @@ const Header = ({ hasLiferayUser, onLogout }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const { t, lang, setLang } = useTranslation();
     const { pathname } = useLocation();
+    const headerRef = useRef(null);
 
     const isCurrentPath = (path) => pathname === path;
 
+    // Close menu when clicking outside the header
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (headerRef.current && !headerRef.current.contains(e.target)) {
+                setMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Close menu on route change
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [pathname]);
+
     return (
-        <header className="header">
+        <header className="header" ref={headerRef}>
             <div className="header-container">
 
                 {/* Logo */}
@@ -33,18 +50,18 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                     <span className="logo-sub text-info text-nowrap">{t('header.subTitle')}</span>
                 </div>
 
-                {/* Hamburger */}
+                {/* Hamburger - toggles open/close */}
                 <div
                     className={`hamburger ${menuOpen ? "active" : ""}`}
-                    onClick={() => setMenuOpen(!menuOpen)}
+                    onClick={() => setMenuOpen(prev => !prev)}
                 >
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
 
-                {/* Navigation */}
-                <nav className={`nav ${menuOpen ? "show" : ""}`}>
+                {/* Navigation — uses .header-nav (not .nav) to avoid Bootstrap conflict */}
+                <nav className={`header-nav ${menuOpen ? "show" : ""}`}>
                     {!isCurrentPath('/') && (
                         <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
                             <FontAwesomeIcon icon={faHouse} /> {t('header.home')}
@@ -70,8 +87,43 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                             <FontAwesomeIcon icon={faFileAlt} /> {t('header.myReport')}
                         </NavLink>
                     )}
+
+                    {/* Mobile-only actions inside the dropdown */}
+                    <div className="mobile-actions">
+                        <select
+                            className="form-select form-select-sm header-lang-select"
+                            value={lang}
+                            onChange={(e) => setLang(e.target.value)}
+                        >
+                            <option value="en">English</option>
+                            <option value="hr">Croatian</option>
+                        </select>
+
+                        {!hasLiferayUser && (
+                            <>
+                                <a href="/web/guest/login" className="header-action-btn" onClick={() => setMenuOpen(false)}>
+                                    <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
+                                </a>
+                                {!isCurrentPath('/register') && (
+                                    <a href="/register" className="header-action-btn" onClick={() => setMenuOpen(false)}>
+                                        <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
+                                    </a>
+                                )}
+                                <a href="partnership" rel="noopener noreferrer" className="header-action-btn" onClick={() => setMenuOpen(false)}>
+                                    <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}
+                                </a>
+                            </>
+                        )}
+
+                        {hasLiferayUser && (
+                            <button type="button" className="header-action-btn" onClick={() => { onLogout(); setMenuOpen(false); }}>
+                                <FontAwesomeIcon icon={faRightToBracket} /> {t('header.logout')}
+                            </button>
+                        )}
+                    </div>
                 </nav>
 
+                {/* Desktop-only actions */}
                 <div className="header-actions">
                     <select
                         className="form-select form-select-sm header-lang-select"
@@ -87,7 +139,6 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                             <a href="/web/guest/login" className="header-action-btn">
                                 <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
                             </a>
-
                             {!isCurrentPath('/register') && (
                                 <Link to="/register" className="header-action-btn">
                                     <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}

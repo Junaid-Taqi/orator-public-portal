@@ -148,9 +148,6 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                                     <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
                                 </Link>
                             )}
-                            <a href="partnership" rel="noopener noreferrer" className="header-action-btn">
-                                <FontAwesomeIcon icon={faHandshake} /> {t('header.partnership')}
-                            </a>
                         </>
                     )}
 

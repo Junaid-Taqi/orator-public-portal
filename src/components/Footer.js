@@ -21,6 +21,7 @@ const Footer = () => {
             <li><Link to="/news">{t('footer.news')}</Link></li>
             <li><Link to="/report">{t('footer.report')}</Link></li>
             <li><a href="/web/guest/login">{t('footer.admin')}</a></li>
+            <li><a href="partnership">{t('header.partnership')}</a></li>
           </ul>
         </div>
 

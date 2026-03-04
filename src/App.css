@@ -618,6 +618,10 @@
   padding: 10px !important;
 }
 
+.news-select-filter{
+  width: 260px !important;
+}
+
 .filter-select option {
   background: #1e3a5a;
   color: white;

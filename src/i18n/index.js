@@ -11,7 +11,7 @@ const LanguageContext = createContext();
 export const LanguageProvider = ({ children }) => {
   const [lang, setLang] = useState(() => {
     try {
-      const stored = localStorage.getItem(LOCALE_KEY);
+      const stored = sessionStorage.getItem(LOCALE_KEY);
       return stored || 'hr'; // default Croatian
     } catch (e) {
       return 'hr';
@@ -19,7 +19,7 @@ export const LanguageProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    try { localStorage.setItem(LOCALE_KEY, lang); } catch (e) {}
+    try { sessionStorage.setItem(LOCALE_KEY, lang); } catch (e) {}
   }, [lang]);
 
   const t = (key) => {

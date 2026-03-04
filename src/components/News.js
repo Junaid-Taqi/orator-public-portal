@@ -168,8 +168,8 @@ const News = () => {
 
                 <div className="row g-4">
                     {filteredNews.length > 0 ? (
-                        filteredNews.map((item, index) => (
-                            <div className="col-md-6" key={`${item.title || "news"}-${index}`}>
+                        filteredNews.map((item) => (
+                            <div className="col-md-6" key={String(item.id || item.mediaId)}>
                                 <div className="news-card">
                                     <div className="card-image-top d-flex align-items-center justify-content-center">
                                         <span className="display-1">{(item.poolName || "N").slice(0, 1).toUpperCase()}</span>
@@ -187,7 +187,7 @@ const News = () => {
                                         <hr className="divider" />
                                         <div className="d-flex justify-content-between align-items-center mt-3">
                                             <Link
-                                                to={`/news/${index}`}
+                                                to={`/news/${item.id || item.mediaId}`}
                                                 state={{ item }}
                                                 className="read-more"
                                             >

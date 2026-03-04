@@ -41,8 +41,9 @@ const Home = () => {
         });
     };
 
-    const apiCards = latestUpdates.map((item, index) => ({
-        id: `api-${index}`,
+    const apiCards = latestUpdates.map((item) => ({
+        id: item.id || item.mediaId,
+        item,
         icon: (item.poolName || "U").slice(0, 1).toUpperCase(),
         badge: item.poolName || "Updates",
         date: formatDate(item.publishDate),
@@ -104,6 +105,15 @@ const Home = () => {
                                 </div>
                                 <h4 className="text-capitalize">{card.title}</h4>
                                 <p className="text-capitalize">{card.subtitle}</p>
+                                <div className="d-flex justify-content-between align-items-center mt-3">
+                                    <Link
+                                        to={`/news/${card.id}`}
+                                        state={{ item: card.item }}
+                                        className="read-more"
+                                    >
+                                        Read More
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     ))}

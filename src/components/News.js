@@ -15,10 +15,8 @@ const News = () => {
     useEffect(() => {
         const fetchActiveContentPools = async () => {
             try {
-                const token = sessionStorage.getItem("token");
                 const response = await fetch(`${serverUrl}/o/externalApis/getActiveContentPools`, {
                     method: "GET",
-                    headers: token ? { Authorization: `Bearer ${token}` } : {},
                 });
                 const data = await response.json();
                 if (response.ok && data?.success && Array.isArray(data?.data)) {

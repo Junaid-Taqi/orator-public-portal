@@ -64,7 +64,7 @@ const hr = {
     title: 'Novosti i Obavijet',
     subtitle: 'Budite informirani o onome što se događa u vašoj zajednici',
     searchPlaceholder: 'Pretraži vijesti...',
-    all: 'Sve',
+    all: 'Sve kategorije',
     readMore: 'Pročitaj više →',
     noResults: 'Nema vijesti za upit'
   },

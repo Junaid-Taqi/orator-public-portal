@@ -64,7 +64,7 @@ const en = {
     title: 'News & Updates',
     subtitle: "Stay informed about what's happening in your community",
     searchPlaceholder: 'Search news...',
-    all: 'All',
+    all: 'All Categories',
     readMore: 'Read More →',
     noResults: 'No news found matching'
   },

@@ -113,7 +113,7 @@ const Home = () => {
             {/* Community Impact Section */}
             <section className="impact-section">
                 <div className="impact-card">
-                    <h2>{t('home.communityImpact')}</h2>
+                    <h2 className="mb-4">{t('home.communityImpact')}</h2>
 
                     <div className="impact-stats">
                         <div className="impact-item">

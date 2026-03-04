@@ -135,7 +135,7 @@ const News = () => {
                                                 state={{ item }}
                                                 className="read-more"
                                             >
-                                                Read More ->
+                                                Read More 
                                             </Link>
                                         </div>
                                     </div>

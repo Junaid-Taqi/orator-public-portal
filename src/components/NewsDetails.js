@@ -82,7 +82,7 @@ const NewsDetails = () => {
                 <div className="container">
                     <h2 className="text-white m-0">News Details</h2>
                     <p className="text-info opacity-75">{error || "No article data found."}</p>
-                    <Link to="/news" className="read-more">&lt;- Back to News</Link>
+                    <Link to="/news" className="read-more">Back to News</Link>
                 </div>
             </div>
         );
@@ -110,7 +110,7 @@ const NewsDetails = () => {
                         />
                     )}
                     <p className="news-text">{item.webDescription || item.subtitle || ""}</p>
-                    <Link to="/news" className="read-more">&lt;- Back to News</Link>
+                    <Link to="/news" className="read-more btn btn-outline-light text-decoration-none"> Back to News</Link>
                 </div>
             </div>
         </div>

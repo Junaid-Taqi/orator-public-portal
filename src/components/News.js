@@ -125,7 +125,7 @@ const News = () => {
                     <p className="text-info opacity-75">{t("news.subtitle")}</p>
                 </div>
 
-                <div className="search-bar-container d-flex gap-3 mb-5 align-items-center filter-group p-3">
+                <div className="search-bar-container d-flex flex-wrap gap-3 mb-5 align-items-center filter-group p-3">
                     <div className="position-relative flex-grow-1">
                         <FontAwesomeIcon icon={faSearch} className="search-icon-position" />
                         <input
@@ -137,7 +137,7 @@ const News = () => {
                         />
                     </div>
 
-                    <div className="d-flex align-items-center gap-2">
+                    <div className="d-flex align-items-center gap-2 flex-wrap">
                         <i className="fas fa-filter text-info"></i>
                         <select
                             className="form-select filter-select news-select-filter"

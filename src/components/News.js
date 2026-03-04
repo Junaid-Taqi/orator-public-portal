@@ -8,34 +8,78 @@ import { serverUrl } from "../Services/Constants/Constants";
 const News = () => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState("");
+    const [municipalities, setMunicipalities] = useState([]);
+    const [selectedMunicipalityId, setSelectedMunicipalityId] = useState("All");
     const [selectedPoolId, setSelectedPoolId] = useState("All");
     const [contentPools, setContentPools] = useState([]);
     const [newsItems, setNewsItems] = useState([]);
 
     useEffect(() => {
+        const fetchMunicipalities = async () => {
+            try {
+                const response = await fetch(`${serverUrl}/o/endUserRegistrationApplication/getMunicipalities`, {
+                    method: "GET",
+                });
+                const data = await response.json();
+                if (response.ok && data?.success && Array.isArray(data?.data)) {
+                    setMunicipalities(data.data);
+                } else {
+                    setMunicipalities([]);
+                }
+            } catch (error) {
+                setMunicipalities([]);
+            }
+        };
+
+        fetchMunicipalities();
+    }, []);
+
+    useEffect(() => {
         const fetchActiveContentPools = async () => {
             try {
-                const token = sessionStorage.getItem("token");
-                const response = await fetch(`${serverUrl}/o/externalApis/getActiveContentPools`, {
+                const endpoint = selectedMunicipalityId === "All"
+                    ? `${serverUrl}/o/externalApis/getActiveContentPools`
+                    : `${serverUrl}/o/externalApis/getActiveContentPools?groupId=${encodeURIComponent(selectedMunicipalityId)}`;
+
+                const response = await fetch(endpoint, {
                     method: "GET",
-                    headers: token ? { Authorization: `Bearer ${token}` } : {},
                 });
                 const data = await response.json();
                 if (response.ok && data?.success && Array.isArray(data?.data)) {
                     setContentPools(data.data);
+                } else {
+                    setContentPools([]);
                 }
-            } catch (error) {}
+            } catch (error) {
+                setContentPools([]);
+            }
         };
 
         fetchActiveContentPools();
-    }, []);
+    }, [selectedMunicipalityId]);
+
+    useEffect(() => {
+        if (
+            selectedPoolId !== "All" &&
+            !contentPools.some((pool) => String(pool.id) === String(selectedPoolId))
+        ) {
+            setSelectedPoolId("All");
+        }
+    }, [contentPools, selectedPoolId]);
 
     useEffect(() => {
         const fetchPublishedSlides = async () => {
             try {
-                const endpoint = selectedPoolId === "All"
-                    ? `${serverUrl}/o/externalApis/getAllPublishedSlides`
-                    : `${serverUrl}/o/externalApis/getAllPublishedSlides?contentPoolId=${encodeURIComponent(selectedPoolId)}`;
+                const params = new URLSearchParams();
+                if (selectedPoolId !== "All") {
+                    params.append("contentPoolId", String(selectedPoolId));
+                }
+                if (selectedMunicipalityId !== "All") {
+                    params.append("groupId", String(selectedMunicipalityId));
+                }
+                const endpoint = params.toString().length > 0
+                    ? `${serverUrl}/o/externalApis/getAllPublishedSlides?${params.toString()}`
+                    : `${serverUrl}/o/externalApis/getAllPublishedSlides`;
 
                 const response = await fetch(endpoint, {
                     method: "GET",
@@ -53,7 +97,7 @@ const News = () => {
         };
 
         fetchPublishedSlides();
-    }, [selectedPoolId]);
+    }, [selectedPoolId, selectedMunicipalityId]);
 
     const formatDate = (value) => {
         if (!value) return "";
@@ -96,7 +140,19 @@ const News = () => {
                     <div className="d-flex align-items-center gap-2">
                         <i className="fas fa-filter text-info"></i>
                         <select
-                            className="form-select filter-select"
+                            className="form-select filter-select news-select-filter"
+                            value={selectedMunicipalityId}
+                            onChange={(e) => setSelectedMunicipalityId(e.target.value)}
+                        >
+                            <option value="All">{t("calendar.allMunicipalities")}</option>
+                            {municipalities.map((municipality, index) => (
+                                <option key={`${municipality.groupId}-${index}`} value={String(municipality.groupId)}>
+                                    {municipality.name}
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            className="form-select filter-select news-select-filter"
                             value={selectedPoolId}
                             onChange={(e) => setSelectedPoolId(e.target.value)}
                         >

@@ -83,7 +83,7 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                             <FontAwesomeIcon icon={faTriangleExclamation} /> {t('header.report')}
                         </NavLink>
                     )}
-                    {!isCurrentPath('/my-report') && (
+                    {hasLiferayUser && !isCurrentPath('/my-report') && (
                         <NavLink to="/my-report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
                             <FontAwesomeIcon icon={faFileAlt} /> {t('header.myReport')}
                         </NavLink>

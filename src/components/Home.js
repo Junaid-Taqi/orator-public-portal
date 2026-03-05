@@ -53,7 +53,13 @@ const Home = () => {
         });
     };
 
-    const apiCards = latestUpdates.map((item) => ({
+    const apiCards = [...latestUpdates]
+        .sort((a, b) => {
+            const aTime = new Date(a?.publishDate || 0).getTime();
+            const bTime = new Date(b?.publishDate || 0).getTime();
+            return bTime - aTime;
+        })
+        .map((item) => ({
         id: item.id || item.mediaId,
         item,
         icon: (item.poolName || "U").slice(0, 1).toUpperCase(),

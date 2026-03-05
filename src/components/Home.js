@@ -12,6 +12,12 @@ import { serverUrl } from "../Services/Constants/Constants";
 const Home = () => {
     const { t } = useTranslation();
     const [latestUpdates, setLatestUpdates] = useState([]);
+    const [impactCounts, setImpactCounts] = useState({
+        allUsersCount: 0,
+        problemsResolvedCount: 0,
+        totalPublishedSlidesCount: 0,
+        upcomingEventsCount: 0,
+    });
 
     useEffect(() => {
         const fetchLatestUpdates = async () => {
@@ -23,6 +29,12 @@ const Home = () => {
                 const data = await response.json();
                 if (response.ok && data?.success && Array.isArray(data?.data)) {
                     setLatestUpdates(data.data);
+                    setImpactCounts({
+                        allUsersCount: Number(data?.allUsersCount || 0),
+                        problemsResolvedCount: Number(data?.problemsResolvedCount || 0),
+                        totalPublishedSlidesCount: Number(data?.totalPublishedSlidesCount || 0),
+                        upcomingEventsCount: Number(data?.upcomingEventsCount || 0),
+                    });
                 }
             } catch (error) {}
         };
@@ -127,22 +139,22 @@ const Home = () => {
 
                     <div className="impact-stats">
                         <div className="impact-item">
-                            <h3 className="impact-blue">342</h3>
+                            <h3 className="impact-blue">{impactCounts.allUsersCount}</h3>
                             <p>{t('home.activeCitizens')}</p>
                         </div>
 
                         <div className="impact-item">
-                            <h3 className="impact-green">156</h3>
+                            <h3 className="impact-green">{impactCounts.problemsResolvedCount}</h3>
                             <p>{t('home.problemsResolved')}</p>
                         </div>
 
                         <div className="impact-item">
-                            <h3 className="impact-purple">89</h3>
+                            <h3 className="impact-purple">{impactCounts.totalPublishedSlidesCount}</h3>
                             <p>{t('home.newsUpdates')}</p>
                         </div>
 
                         <div className="impact-item">
-                            <h3 className="impact-orange">12</h3>
+                            <h3 className="impact-orange">{impactCounts.upcomingEventsCount}</h3>
                             <p>{t('home.upcomingEvents')}</p>
                         </div>
                     </div>

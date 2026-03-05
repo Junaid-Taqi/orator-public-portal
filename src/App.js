@@ -97,7 +97,8 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, token, expiresIn]);
 
-  if (user && (status === 'idle' || status === 'loading')) {
+  const isBootstrappingAuth = user && !token && (status === 'idle' || status === 'loading');
+  if (isBootstrappingAuth) {
     return (
       <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center' }}>
         <div style={{ fontSize: '16px', fontWeight: 600 }}>Loading...</div>
@@ -105,7 +106,7 @@ function App() {
     );
   }
 
-  if (user && status === 'failed') {
+  if (user && !token && status === 'failed') {
     return (
       <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', color: '#b91c1c' }}>
         <div>Failed to load token{error ? `: ${error}` : ''}</div>

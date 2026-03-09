@@ -660,6 +660,7 @@ input.form-control::placeholder {
 .card-body-custom {
   padding: 25px;
   background: linear-gradient(180deg, #2d5168, #2f6f83);
+  height: inherit;
 }
 
 .category-badge {
@@ -679,6 +680,12 @@ input.form-control::placeholder {
   margin: 15px 0;
   font-weight: 600;
   color: #f1f5f9;
+  min-height: auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .news-text {
@@ -689,9 +696,22 @@ input.form-control::placeholder {
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
+  min-height: 50px;
+}
+.CustomTitle{
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  min-height: 76px;
 }
 
 .divider {

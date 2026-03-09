@@ -121,8 +121,8 @@ const Home = () => {
                                     <div className="badge text-capitalize">{card.badge}</div>
                                     <div className="date">{card.date}</div>
                                 </div>
-                                <h4 className="text-capitalize">{card.title}</h4>
-                                <p className="text-capitalize">{card.subtitle}</p>
+                                <h4 className="text-capitalize CustomTitle">{card.title}</h4>
+                                <p className="text-capitalize news-text">{card.subtitle}</p>
                                 <div className="d-flex justify-content-between align-items-center mt-3">
                                     <Link
                                         to={`/news/${card.id}`}

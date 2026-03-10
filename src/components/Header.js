@@ -63,27 +63,19 @@ const Header = ({ hasLiferayUser, onLogout }) => {
 
                 {/* Navigation — uses .header-nav (not .nav) to avoid Bootstrap conflict */}
                 <nav className={`header-nav ${menuOpen ? "show" : ""}`}>
-                    {!isCurrentPath('/') && (
-                        <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                            <FontAwesomeIcon icon={faHouse} /> {t('header.home')}
-                        </NavLink>
-                    )}
-                    {!isCurrentPath('/news') && (
-                        <NavLink to="/news" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                            <FontAwesomeIcon icon={faNewspaper} /> {t('header.news')}
-                        </NavLink>
-                    )}
-                    {!isCurrentPath('/calendar') && (
-                        <NavLink to="/calendar" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                            <FontAwesomeIcon icon={faCalendarAlt} /> {t('header.calendar')}
-                        </NavLink>
-                    )}
-                    {!isCurrentPath('/report') && (
-                        <NavLink to="/report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                            <FontAwesomeIcon icon={faTriangleExclamation} /> {t('header.report')}
-                        </NavLink>
-                    )}
-                    {hasLiferayUser && !isCurrentPath('/my-report') && (
+                    <NavLink to="/" end className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                        <FontAwesomeIcon icon={faHouse} /> {t('header.home')}
+                    </NavLink>
+                    <NavLink to="/news" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                        <FontAwesomeIcon icon={faNewspaper} /> {t('header.news')}
+                    </NavLink>
+                    <NavLink to="/calendar" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                        <FontAwesomeIcon icon={faCalendarAlt} /> {t('header.calendar')}
+                    </NavLink>
+                    <NavLink to="/report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                        <FontAwesomeIcon icon={faTriangleExclamation} /> {t('header.report')}
+                    </NavLink>
+                    {hasLiferayUser && (
                         <NavLink to="/my-report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
                             <FontAwesomeIcon icon={faFileAlt} /> {t('header.myReport')}
                         </NavLink>
@@ -108,11 +100,9 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                                 <a href="/web/guest/login" className="header-action-btn" onClick={() => setMenuOpen(false)}>
                                     <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
                                 </a>
-                                {!isCurrentPath('/register') && (
-                                    <a href="/register" className="header-action-btn" onClick={() => setMenuOpen(false)}>
-                                        <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
-                                    </a>
-                                )}
+                                <a href="/register" className="header-action-btn" onClick={() => setMenuOpen(false)}>
+                                    <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
+                                </a>
                             </>
                         )}
 
@@ -143,11 +133,9 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                             <a href="/web/guest/login" className="header-action-btn">
                                 <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
                             </a>
-                            {!isCurrentPath('/register') && (
-                                <Link to="/register" className="header-action-btn">
-                                    <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
-                                </Link>
-                            )}
+                            <Link to="/register" className="header-action-btn">
+                                <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
+                            </Link>
                         </>
                     )}
 

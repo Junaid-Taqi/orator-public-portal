@@ -172,7 +172,16 @@ const News = () => {
                             <div className="col-md-6" key={String(item.id || item.mediaId)}>
                                 <div className="news-card">
                                     <div className="card-image-top d-flex align-items-center justify-content-center">
-                                        <span className="display-1">{(item.poolName || "N").slice(0, 1).toUpperCase()}</span>
+                                        {item.mediaUrl ? (
+                                            <img
+                                                src={item.mediaUrl}
+                                                alt={item.title || "News media"}
+                                                className="news-details-image"
+                                                style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }}
+                                            />
+                                        ) : (
+                                            <span className="display-1">{(item.poolName || "N").slice(0, 1).toUpperCase()}</span>
+                                        )}
                                     </div>
 
                                     <div className="card-body-custom">
@@ -191,7 +200,7 @@ const News = () => {
                                                 state={{ item }}
                                                 className="read-more"
                                             >
-                                                Read More 
+                                                Read More
                                             </Link>
                                         </div>
                                     </div>

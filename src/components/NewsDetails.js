@@ -56,6 +56,15 @@ const NewsDetails = () => {
                 return;
             }
 
+            // If we have fallback item from navigation state and it matches the slideId,
+            // we use it directly to avoid a redundant API call.
+            const fallbackId = fallbackItem?.id || fallbackItem?.mediaId;
+            if (fallbackItem && String(fallbackId) === String(slideId)) {
+                setItem(fallbackItem);
+                setLoading(false);
+                return;
+            }
+
             setLoading(true);
             setError("");
             try {

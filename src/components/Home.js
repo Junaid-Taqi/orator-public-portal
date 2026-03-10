@@ -36,7 +36,7 @@ const Home = () => {
                         upcomingEventsCount: Number(data?.upcomingEventsCount || 0),
                     });
                 }
-            } catch (error) {}
+            } catch (error) { }
         };
 
         fetchLatestUpdates();
@@ -60,15 +60,15 @@ const Home = () => {
             return bTime - aTime;
         })
         .map((item) => ({
-        id: item.id || item.mediaId,
-        item,
-        icon: (item.poolName || "U").slice(0, 1).toUpperCase(),
-        badge: item.poolName || "Updates",
-        date: formatDate(item.publishDate),
-        title: item.title || "",
-        subtitle: item.subtitle || "",
-        description: item.webDescription || item.subtitle || "",
-    }));
+            id: item.id || item.mediaId,
+            item,
+            icon: (item.poolName || "U").slice(0, 1).toUpperCase(),
+            badge: item.poolName || "Updates",
+            date: formatDate(item.publishDate),
+            title: item.title || "",
+            subtitle: item.subtitle || "",
+            description: item.webDescription || item.subtitle || "",
+        }));
 
     return (
         <div className="home">
@@ -115,7 +115,18 @@ const Home = () => {
                 <div className="update-cards">
                     {apiCards.map((card) => (
                         <div key={card.id} className="update-card">
-                            <div className="update-top">{card.icon}</div>
+                            <div className="update-top">
+                                {card.item.mediaUrl ? (
+                                    <img
+                                        src={card.item.mediaUrl}
+                                        alt={card.title || "Update media"}
+                                        className="news-details-image"
+                                        style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }}
+                                    />
+                                ) : (
+                                    card.icon
+                                )}
+                            </div>
                             <div className="update-bottom">
                                 <div className="update-info-top">
                                     <div className="badge text-capitalize">{card.badge}</div>

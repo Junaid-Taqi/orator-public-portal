@@ -13,6 +13,25 @@ const formatDate = (value) => {
     });
 };
 
+const getClientRefId = (entry) => {
+    if (!entry) return "";
+    if (entry.clientRefId) return String(entry.clientRefId);
+    const rawConfig = entry.configJSON;
+    if (!rawConfig) return "";
+    if (typeof rawConfig === "object" && rawConfig !== null) {
+        return String(rawConfig.clientRefId || rawConfig.clientRef || "");
+    }
+    try {
+        const parsed = JSON.parse(rawConfig);
+        if (parsed && typeof parsed === "object") {
+            return String(parsed.clientRefId || parsed.clientRef || "");
+        }
+    } catch (e) {
+        return "";
+    }
+    return "";
+};
+
 const NewsDetails = () => {
     const { newsId } = useParams();
     const location = useLocation();
@@ -31,6 +50,11 @@ const NewsDetails = () => {
 
         return 0;
     }, [newsId, fallbackItem]);
+    const routeRef = useMemo(() => {
+        if (slideId) return "";
+        const trimmed = String(newsId || "").trim();
+        return trimmed || "";
+    }, [newsId, slideId]);
 
     const parsedConfig = useMemo(() => {
         if (!item?.configJSON) return {};
@@ -49,35 +73,63 @@ const NewsDetails = () => {
 
     useEffect(() => {
         const fetchSlideDetails = async () => {
-            if (!slideId) {
+            if (!slideId && !routeRef) {
                 setItem(fallbackItem || null);
                 setLoading(false);
                 setError("No valid slide id found.");
                 return;
             }
 
-            // If we have fallback item from navigation state and it matches the slideId,
-            // we use it directly to avoid a redundant API call.
-            const fallbackId = fallbackItem?.id || fallbackItem?.mediaId;
-            if (fallbackItem && String(fallbackId) === String(slideId)) {
-                setItem(fallbackItem);
-                setLoading(false);
-                return;
+            if (slideId) {
+                // If we have fallback item from navigation state and it matches the slideId,
+                // we use it directly to avoid a redundant API call.
+                const fallbackId = fallbackItem?.id || fallbackItem?.mediaId;
+                if (fallbackItem && String(fallbackId) === String(slideId)) {
+                    setItem(fallbackItem);
+                    setLoading(false);
+                    return;
+                }
+            } else if (routeRef) {
+                const fallbackRef = getClientRefId(fallbackItem);
+                if (fallbackItem && fallbackRef && fallbackRef === routeRef) {
+                    setItem(fallbackItem);
+                    setLoading(false);
+                    return;
+                }
             }
 
             setLoading(true);
             setError("");
             try {
-                const response = await fetch(`${serverUrl}/o/externalApis/getSlideDetailsById/${slideId}`, {
-                    method: "GET",
-                });
-                const data = await response.json();
+                if (slideId) {
+                    const response = await fetch(`${serverUrl}/o/externalApis/getSlideDetailsById/${slideId}`, {
+                        method: "GET",
+                    });
+                    const data = await response.json();
 
-                if (response.ok && data?.success && data?.data) {
-                    setItem(data.data);
+                    if (response.ok && data?.success && data?.data) {
+                        setItem(data.data);
+                    } else {
+                        setItem(fallbackItem || null);
+                        setError(data?.message || "Failed to load news details.");
+                    }
                 } else {
-                    setItem(fallbackItem || null);
-                    setError(data?.message || "Failed to load news details.");
+                    const response = await fetch(`${serverUrl}/o/externalApis/getAllPublishedSlides`, {
+                        method: "GET",
+                    });
+                    const data = await response.json();
+                    if (!response.ok || !data?.success || !Array.isArray(data?.data)) {
+                        setItem(fallbackItem || null);
+                        setError("Failed to load news details.");
+                        return;
+                    }
+                    const match = data.data.find((entry) => getClientRefId(entry) === routeRef);
+                    if (match) {
+                        setItem(match);
+                    } else {
+                        setItem(fallbackItem || null);
+                        setError("No matching news item found.");
+                    }
                 }
             } catch (e) {
                 setItem(fallbackItem || null);
@@ -88,7 +140,7 @@ const NewsDetails = () => {
         };
 
         fetchSlideDetails();
-    }, [slideId, fallbackItem]);
+    }, [slideId, routeRef, fallbackItem]);
 
     useEffect(() => {
         const fetchRelatedSlides = async () => {

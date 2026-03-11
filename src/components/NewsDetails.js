@@ -227,9 +227,7 @@ const NewsDetails = () => {
                             <div className="news-details-meta-row">
                                 <span className="badge category-badge">{item.poolName || "Updates"}</span>
                                 <span className="news-details-meta-item">📅 {formatDate(item.publishDate)}</span>
-                            </div>
-
-                            <h1 className="news-details-title">{item.title || "Untitled"}</h1>
+                            </div>                            <h1 className="news-details-title">{item.title || "Untitled"}</h1>
                             {!!item.subtitle && <p className="news-details-subtitle">{item.subtitle}</p>}
 
                             {!!tags.length && (
@@ -244,6 +242,19 @@ const NewsDetails = () => {
                             )}
 
                             <p className="news-details-description">{item.webDescription || item.subtitle || ""}</p>
+                            {!!item.articleUrl && (
+                                <div className="news-details-visit-row">
+                                    <div className="news-details-divider" />
+                                    <a
+                                        className="news-details-visit-btn"
+                                        href={item.articleUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Visit Official Page
+                                    </a>
+                                </div>
+                            )}
                             {error && <p className="text-warning mb-0">{error}</p>}
                         </div>
                     </div>
@@ -276,3 +287,6 @@ const NewsDetails = () => {
 };
 
 export default NewsDetails;
+
+
+

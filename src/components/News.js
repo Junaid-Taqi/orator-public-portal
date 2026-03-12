@@ -180,7 +180,7 @@ const News = () => {
                                                 style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "inherit" }}
                                             />
                                         ) : (
-                                            <span className="display-1">{(item.poolName || "N").slice(0, 1).toUpperCase()}</span>
+                                                <span className="display-1">{(item.title || "N").slice(0, 1).toUpperCase()}</span>
                                         )}
                                     </div>
 

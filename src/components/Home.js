@@ -59,6 +59,7 @@ const Home = () => {
             const bTime = new Date(b?.publishDate || 0).getTime();
             return bTime - aTime;
         })
+        .slice(0, 6)
         .map((item) => ({
             id: item.id || item.mediaId,
             item,

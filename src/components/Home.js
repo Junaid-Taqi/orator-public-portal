@@ -64,7 +64,7 @@ const Home = () => {
             id: item.id || item.mediaId,
             item,
             icon: (item.poolName || "U").slice(0, 1).toUpperCase(),
-            badge: item.poolName || "Updates",
+            badge: item.poolName || t('newsDetails.updates'),
             date: formatDate(item.publishDate),
             title: item.title || "",
             subtitle: item.subtitle || "",
@@ -141,7 +141,7 @@ const Home = () => {
                                         state={{ item: card.item }}
                                         className="read-more"
                                     >
-                                        Read More
+                                        {t('news.readMore')}
                                     </Link>
                                 </div>
                             </div>

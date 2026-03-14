@@ -186,7 +186,7 @@ const News = () => {
 
                                     <div className="card-body-custom">
                                         <div className="d-flex justify-content-between align-items-center mb-3">
-                                            <span className="badge category-badge text-capitalize">{item.poolName || "Updates"}</span>
+                                            <span className="badge category-badge text-capitalize">{item.poolName || t('newsDetails.updates')}</span>
                                             <span className="news-date">
                                                 <i className="far fa-calendar-alt me-1"></i> {formatDate(item.publishDate)}
                                             </span>
@@ -200,7 +200,7 @@ const News = () => {
                                                 state={{ item }}
                                                 className="read-more"
                                             >
-                                                Read More
+                                                {t('news.readMore')}
                                             </Link>
                                         </div>
                                     </div>

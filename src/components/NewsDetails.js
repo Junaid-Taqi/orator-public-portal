@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { useTranslation } from '../i18n';
 import ReCAPTCHA from "react-google-recaptcha";
 import { serverUrl } from "../Services/Constants/Constants";
 
@@ -111,7 +112,7 @@ const collectEventDateWindows = (item, config) => {
                 let parsedDates = [];
                 try {
                     parsedDates = typeof item.eventDates === "string" ? JSON.parse(item.eventDates) : item.eventDates;
-                } catch (e) {}
+                } catch (e) { }
                 addDateWindowsFromArray(parsedDates, windows);
             }
         } else {
@@ -119,7 +120,7 @@ const collectEventDateWindows = (item, config) => {
             if (typeof item.eventDates === "string") {
                 try {
                     parsedDates = JSON.parse(item.eventDates);
-                } catch (e) {}
+                } catch (e) { }
             }
             addDateWindowsFromArray(parsedDates, windows);
             addDateWindowsFromArray(item.dates, windows);
@@ -175,6 +176,7 @@ const getItemKey = (entry) => {
 };
 
 const NewsDetails = () => {
+    const { t } = useTranslation();
     const { newsId } = useParams();
     const location = useLocation();
     const fallbackItem = location?.state?.item;
@@ -230,9 +232,9 @@ const NewsDetails = () => {
         const today = new Date();
         const anchor = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         const offsets = [
-            { days: 1, label: "1 Day" },
-            { days: 7, label: "1 Week" },
-            { days: 30, label: "1 Month" },
+            { days: 1, label: t('newsDetails.day1', "1 Day") },
+            { days: 7, label: t('newsDetails.week1', "1 Week") },
+            { days: 30, label: t('newsDetails.month1', "1 Month") },
         ];
 
         return offsets.map((option) => {
@@ -273,7 +275,7 @@ const NewsDetails = () => {
             if (!slideId && !routeRef) {
                 setItem(fallbackItem || null);
                 setLoading(false);
-                setError("No valid slide id found.");
+                setError(t('newsDetails.noId'));
                 return;
             }
 
@@ -308,7 +310,7 @@ const NewsDetails = () => {
                         setItem(data.data);
                     } else {
                         setItem(fallbackItem || null);
-                        setError(data?.message || "Failed to load news details.");
+                        setError(data?.message || t('newsDetails.failedLoad'));
                     }
                 } else {
                     const response = await fetch(`${serverUrl}/o/externalApis/getAllPublishedSlides`, {
@@ -317,7 +319,7 @@ const NewsDetails = () => {
                     const data = await response.json();
                     if (!response.ok || !data?.success || !Array.isArray(data?.data)) {
                         setItem(fallbackItem || null);
-                        setError("Failed to load news details.");
+                        setError(t('newsDetails.failedLoad'));
                         return;
                     }
                     const match = data.data.find((entry) => getClientRefId(entry) === routeRef);
@@ -325,12 +327,12 @@ const NewsDetails = () => {
                         setItem(match);
                     } else {
                         setItem(fallbackItem || null);
-                        setError("No matching news item found.");
+                        setError(t('newsDetails.noMatch'));
                     }
                 }
             } catch (e) {
                 setItem(fallbackItem || null);
-                setError("Failed to load news details.");
+                setError(t('newsDetails.failedLoad'));
             } finally {
                 setLoading(false);
             }
@@ -402,7 +404,7 @@ const NewsDetails = () => {
         if (!item) return;
         const key = getItemKey(item);
         if (!key) {
-            showActionMessage("Unable to favorite this article.", "error");
+            showActionMessage(t('newsDetails.errorFavorite'), "error");
             return;
         }
 
@@ -412,7 +414,7 @@ const NewsDetails = () => {
             favorites.splice(existingIndex, 1);
             saveFavorites(favorites);
             setIsFavorited(false);
-            showActionMessage("Removed from favorites.", "info");
+            showActionMessage(t('newsDetails.removedFavorite'), "info");
             return;
         }
 
@@ -430,7 +432,7 @@ const NewsDetails = () => {
         favorites.unshift(favoriteEntry);
         saveFavorites(favorites);
         setIsFavorited(true);
-        showActionMessage("Article favorited.", "success");
+        showActionMessage(t('newsDetails.addedFavorite'), "success");
     };
 
     const handleShare = async () => {
@@ -446,15 +448,15 @@ const NewsDetails = () => {
                     text: shareText,
                     url: shareUrl,
                 });
-                showActionMessage("Share dialog opened.", "success");
+                showActionMessage(t('newsDetails.shareDialogOpened'), "success");
             } else if (navigator.clipboard) {
                 await navigator.clipboard.writeText(shareUrl);
-                showActionMessage("Link copied to clipboard.", "success");
+                showActionMessage(t('newsDetails.linkCopied'), "success");
             } else {
-                showActionMessage("Sharing not supported on this browser.", "error");
+                showActionMessage(t('newsDetails.shareNotSupported'), "error");
             }
         } catch (e) {
-            showActionMessage("Unable to share right now.", "error");
+            showActionMessage(t('newsDetails.shareError'), "error");
         }
     };
 
@@ -479,27 +481,27 @@ const NewsDetails = () => {
 
         const selectedOption = reminderOptions.find((opt) => opt.days === reminderOffset);
         if (!selectedOption || !selectedOption.allowed) {
-            setReminderMessage("Selected reminder option is not available for this event.");
+            setReminderMessage(t('newsDetails.reminderOptionUnavailable'));
             setReminderStatus("failed");
             return;
         }
 
         const email = reminderEmail.trim();
         if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setReminderMessage("Please enter a valid email address.");
+            setReminderMessage(t('newsDetails.invalidEmail'));
             setReminderStatus("failed");
             return;
         }
 
         if (!reminderCaptcha) {
-            setReminderMessage("Please complete the captcha.");
+            setReminderMessage(t('newsDetails.completeCaptcha'));
             setReminderStatus("failed");
             return;
         }
 
         const eventDate = pickEventDateForOffset(reminderOffset);
         if (!eventDate) {
-            setReminderMessage("Event dates are not available for this article.");
+            setReminderMessage(t('newsDetails.noEventDates'));
             setReminderStatus("failed");
             return;
         }
@@ -523,18 +525,18 @@ const NewsDetails = () => {
 
             const data = await response.json();
             if (!response.ok || !data?.success) {
-                throw new Error(data?.message || "Failed to save reminder.");
+                throw new Error(data?.message || t('newsDetails.failedReminder'));
             }
 
             setReminderStatus("succeeded");
-            setReminderMessage("Successfully registered! You will receive a reminder via email before the event starts.");
+            setReminderMessage(t('newsDetails.successReminder'));
             setReminderCaptcha("");
             setReminderEmail("");
             setReminderOffset(1);
             reminderCaptchaRef.current?.reset?.();
         } catch (e) {
             setReminderStatus("failed");
-            setReminderMessage(e.message || "Failed to save reminder.");
+            setReminderMessage(e.message || t('newsDetails.failedReminder'));
             setReminderCaptcha("");
             reminderCaptchaRef.current?.reset?.();
         }
@@ -544,8 +546,8 @@ const NewsDetails = () => {
         return (
             <div className="news-wrapper py-5 px-4">
                 <div className="container">
-                    <h2 className="text-white m-0">News Details</h2>
-                    <p className="text-info opacity-75">Loading article...</p>
+                    <h2 className="text-white m-0">{t('header.news', 'News Details')}</h2>
+                    <p className="text-info opacity-75">{t('newsDetails.loading')}</p>
                 </div>
             </div>
         );
@@ -555,9 +557,9 @@ const NewsDetails = () => {
         return (
             <div className="news-wrapper py-5 px-4">
                 <div className="container">
-                    <h2 className="text-white m-0">News Details</h2>
-                    <p className="text-info opacity-75">{error || "No article data found."}</p>
-                    <Link to="/news" className="read-more">Back to News</Link>
+                    <h2 className="text-white m-0">{t('header.news', 'News Details')}</h2>
+                    <p className="text-info opacity-75">{error || t('newsDetails.noData')}</p>
+                    <Link to="/news" className="read-more">{t('newsDetails.backToNews')}</Link>
                 </div>
             </div>
         );
@@ -568,7 +570,7 @@ const NewsDetails = () => {
             <div className="container news-details-container">
                 <div className="news-back-row">
                     <Link to="/news" className="news-back-link">
-                        ← Back to News
+                        {t('newsDetails.backToNewsArrow')}
                     </Link>
                 </div>
 
@@ -590,9 +592,9 @@ const NewsDetails = () => {
 
                         <div className="news-details-content">
                             <div className="news-details-meta-row">
-                                <span className="badge category-badge">{item.poolName || "Updates"}</span>
+                                <span className="badge category-badge">{item.poolName || t('newsDetails.updates')}</span>
                                 <span className="news-details-meta-item">📅 {formatDate(item.publishDate)}</span>
-                            </div>                            <h1 className="news-details-title">{item.title || "Untitled"}</h1>
+                            </div>                            <h1 className="news-details-title">{item.title || t('newsDetails.untitled')}</h1>
                             {!!item.subtitle && <p className="news-details-subtitle">{item.subtitle}</p>}
 
                             {!!tags.length && (
@@ -616,7 +618,7 @@ const NewsDetails = () => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        Visit Official Page
+                                        {t('newsDetails.visitPage')}
                                     </a>
                                 </div>
                             )}
@@ -626,7 +628,7 @@ const NewsDetails = () => {
                                     className={`news-details-visit-btn ${isFavorited ? "is-active" : ""}`}
                                     onClick={handleToggleFavorite}
                                 >
-                                    {isFavorited ? "Favorited" : "Add to Favorites"}
+                                    {isFavorited ? t('newsDetails.favorited') : t('newsDetails.addFavorite')}
                                 </button>
                                 {item.eventEnabled && (
                                     <button
@@ -634,7 +636,7 @@ const NewsDetails = () => {
                                         className="news-details-visit-btn"
                                         onClick={openReminderDialog}
                                     >
-                                        Set Event Reminder
+                                        {t('newsDetails.setReminder')}
                                     </button>
                                 )}
                                 <button
@@ -642,7 +644,7 @@ const NewsDetails = () => {
                                     className="news-details-visit-btn"
                                     onClick={handleShare}
                                 >
-                                    Share Article
+                                    {t('newsDetails.shareArticle')}
                                 </button>
                             </div>
                             {actionMessage && (
@@ -653,9 +655,9 @@ const NewsDetails = () => {
                     </div>
 
                     <aside className="news-details-sidebar">
-                        <h3>Related Articles</h3>
+                        <h3>{t('newsDetails.relatedArticles')}</h3>
                         {!relatedItems.length ? (
-                            <p className="news-details-empty-related">No related articles found</p>
+                            <p className="news-details-empty-related">{t('newsDetails.noRelated')}</p>
                         ) : (
                             <div className="news-details-related-list">
                                 {relatedItems.map((related) => (
@@ -665,27 +667,27 @@ const NewsDetails = () => {
                                         state={{ item: related }}
                                         className="news-details-related-item"
                                     >
-                                        <strong>{related.title || "Untitled"}</strong>
+                                        <strong>{related.title || t('newsDetails.untitled')}</strong>
                                         <small>{formatDate(related.publishDate)}</small>
                                     </Link>
                                 ))}
                             </div>
                         )}
-                        <Link to="/news" className="news-details-view-all">View All News →</Link>
+                        <Link to="/news" className="news-details-view-all">{t('newsDetails.viewAllNews')}</Link>
                     </aside>
                 </div>
             </div>
             {showReminderDialog && (
                 <div className="news-reminder-overlay" onClick={closeReminderDialog}>
                     <div className="news-reminder-dialog" onClick={(event) => event.stopPropagation()}>
-                        <h3>Set Reminder</h3>
+                        <h3>{t('newsDetails.setReminderTitle')}</h3>
                         <p className="news-reminder-subtitle">
-                            Choose when you want to be reminded about this event.
+                            {t('newsDetails.reminderSubtitle')}
                         </p>
 
                         {!reminderAvailable && (
                             <div className="news-reminder-message failed">
-                                No upcoming event dates are available for reminders.
+                                {t('newsDetails.noUpcomingDates')}
                             </div>
                         )}
 
@@ -694,9 +696,8 @@ const NewsDetails = () => {
                                 <button
                                     key={option.days}
                                     type="button"
-                                    className={`news-reminder-option ${
-                                        reminderOffset === option.days ? "is-active" : ""
-                                    } ${option.allowed ? "" : "is-disabled"}`}
+                                    className={`news-reminder-option ${reminderOffset === option.days ? "is-active" : ""
+                                        } ${option.allowed ? "" : "is-disabled"}`}
                                     onClick={() => option.allowed && setReminderOffset(option.days)}
                                     disabled={!option.allowed}
                                 >
@@ -706,11 +707,11 @@ const NewsDetails = () => {
                         </div>
 
                         <div className="news-reminder-form">
-                            <label className="news-reminder-label">Email Address</label>
+                            <label className="news-reminder-label">{t('newsDetails.emailLabel')}</label>
                             <input
                                 type="email"
                                 className="news-reminder-input"
-                                placeholder="Enter your email"
+                                placeholder={t('newsDetails.emailPlaceholder')}
                                 value={reminderEmail}
                                 onChange={(event) => setReminderEmail(event.target.value)}
                             />
@@ -732,7 +733,7 @@ const NewsDetails = () => {
 
                         <div className="news-reminder-actions">
                             <button type="button" className="news-action-btn" onClick={closeReminderDialog}>
-                                Cancel
+                                {t('newsDetails.cancel')}
                             </button>
                             <button
                                 type="button"
@@ -740,12 +741,13 @@ const NewsDetails = () => {
                                 onClick={handleReminderSubmit}
                                 disabled={reminderStatus === "loading" || !reminderAvailable}
                             >
-                                {reminderStatus === "loading" ? "Saving..." : "Set Reminder"}
+                                {reminderStatus === "loading" ? t('newsDetails.saving') : t('newsDetails.setReminderTitle')}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

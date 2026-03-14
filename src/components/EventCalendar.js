@@ -5,7 +5,8 @@ import { useTranslation } from '../i18n';
 import { serverUrl } from '../Services/Constants/Constants';
 
 const EventCalendar = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n?.language || 'en-GB';
   const [view, setView] = useState('Month');
   const [anchorDate, setAnchorDate] = useState(new Date());
   const [events, setEvents] = useState([]);
@@ -152,14 +153,14 @@ const EventCalendar = () => {
   const getHeaderLabel = () => {
     if (view === 'Year') return `${range.from.getFullYear()}`;
     if (view === 'Week') {
-      const a = range.from.toLocaleDateString('en-GB', { month: 'short', day: '2-digit' });
-      const b = range.to.toLocaleDateString('en-GB', { month: 'short', day: '2-digit', year: 'numeric' });
+      const a = range.from.toLocaleDateString(currentLang, { month: 'short', day: '2-digit' });
+      const b = range.to.toLocaleDateString(currentLang, { month: 'short', day: '2-digit', year: 'numeric' });
       return `${a} - ${b}`;
     }
     if (view === 'Day') {
-      return range.from.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+      return range.from.toLocaleDateString(currentLang, { day: '2-digit', month: 'long', year: 'numeric' });
     }
-    return range.from.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    return range.from.toLocaleDateString(currentLang, { month: 'long', year: 'numeric' });
   };
 
   const CalendarViewButton = ({ v }) => (
@@ -172,12 +173,12 @@ const EventCalendar = () => {
 
     return (
       <div className={`${glassPanel} p-4 mt-3`}>
-        <h3 className="mb-4">{range.from.toLocaleDateString('en-GB', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}</h3>
-        {dayEvents.length === 0 && <div className="text-white-50">No events</div>}
+        <h3 className="mb-4">{range.from.toLocaleDateString(currentLang, { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}</h3>
+        {dayEvents.length === 0 && <div className="text-white-50">{t('calendar.noEvents')}</div>}
         {dayEvents.map((e) => (
           <div key={e.eventId} className="p-4 rounded-4 bg-opacity-5 border border-white border-opacity-10 d-flex gap-4 mb-3">
             <div>
-              <h4 className="mb-1">{e.title || 'Untitled'}</h4>
+              <h4 className="mb-1">{e.title || t('calendar.untitled')}</h4>
               <p className="text-info opacity-75 mb-2">{e.subtitle || ''}</p>
               <div className="small mb-2">
                 {e.location && <div className="opacity-75">{e.location}</div>}
@@ -212,15 +213,15 @@ const EventCalendar = () => {
 
             return (
               <div key={key} className="col border-end border-white border-opacity-10 p-3" style={{ minHeight: '320px', backgroundColor: isActive ? 'rgba(0,0,0,0.1)' : 'transparent' }}>
-                <div className={isActive ? 'text-info' : 'text-white'}>{d.toLocaleDateString('en-GB', { weekday: 'short' })}</div>
+                <div className={isActive ? 'text-info' : 'text-white'}>{d.toLocaleDateString(currentLang, { weekday: 'short' })}</div>
                 <div className={`fs-3 mb-3 ${isActive ? 'text-info' : 'text-white'}`}>{d.getDate()}</div>
                 {dayEvents.slice(0, 3).map((e) => (
                   <div key={e.eventId} className="p-2 rounded-3 text-start bg-info bg-opacity-10 border border-info border-opacity-20 mb-2">
-                    <div className="small my-1">{e.title}</div>
+                    <div className="small my-1">{e.title || t('calendar.untitled')}</div>
                     <div className="text-white-50" style={{ fontSize: '0.65rem' }}>{e.location || e.poolName || ''}</div>
                   </div>
                 ))}
-                {dayEvents.length > 3 && <div className="text-white-50 small">+{dayEvents.length - 3} more</div>}
+                {dayEvents.length > 3 && <div className="text-white-50 small">+{dayEvents.length - 3} {t('calendar.more')}</div>}
               </div>
             );
           })}
@@ -243,7 +244,7 @@ const EventCalendar = () => {
     return (
       <div className={`${glassPanel} p-0 overflow-hidden`}>
         <div className="row g-0 text-center bg-opacity-5 py-2 border-bottom border-white border-opacity-10">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => <div key={d} className="col text-white-50">{d}</div>)}
+          {[t('calendar.sun'), t('calendar.mon'), t('calendar.tue'), t('calendar.wed'), t('calendar.thu'), t('calendar.fri'), t('calendar.sat')].map((d) => <div key={d} className="col text-white-50">{d}</div>)}
         </div>
         <div className="row g-0">
           {cells.map((d, i) => {
@@ -254,7 +255,7 @@ const EventCalendar = () => {
                 {d && <span className="small text-white-50">{d.getDate()}</span>}
                 {dayEvents.slice(0, 2).map((e) => (
                   <div key={e.eventId} className="mt-1 p-1 rounded bg-info bg-opacity-10 text-info" style={{ fontSize: '0.65rem' }}>
-                    {e.title}
+                    {e.title || t('calendar.untitled')}
                   </div>
                 ))}
                 {dayEvents.length > 2 && <div className="small text-white-50 mt-1">+{dayEvents.length - 2}</div>}
@@ -283,7 +284,7 @@ const EventCalendar = () => {
           <div key={m} className="col-12 col-md-6 col-lg-3">
             <div className={`${glassPanel} h-100 p-4 d-flex flex-column justify-content-between`} style={{ minHeight: '150px' }}>
               <div>
-                <h5 className="mb-3">{m.charAt(0) + m.slice(1).toLowerCase()}</h5>
+                <h5 className="mb-3">{t(`calendar.${m.substring(0, 3).toLowerCase()}`)}</h5>
                 <h2 className={`mb-1 ${monthMap[m] > 0 ? 'text-info' : 'text-white'}`}>{monthMap[m] || 0}</h2>
               </div>
               <div className="text-white-50 small">{t('calendar.events')}</div>
@@ -338,7 +339,7 @@ const EventCalendar = () => {
         </div>
       </div>
 
-      {loading && <div className="text-white-50 mb-3">Loading events...</div>}
+      {loading && <div className="text-white-50 mb-3">{t('calendar.loading')}</div>}
 
       {!loading && view === 'Day' && <DayView />}
       {!loading && view === 'Week' && <WeekView />}

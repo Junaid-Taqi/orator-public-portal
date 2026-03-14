@@ -14,13 +14,13 @@ const parseJsonSafely = (raw) => {
   }
 };
 
-const topStatusFromReport = (report) => {
-  if (report?.status === 4) return { label: 'Rejected', className: 'status-pill status-rejected' };
-  if (report?.status === 3) return { label: 'Finished', className: 'status-pill status-finished' };
-  if (report?.status === 2) return { label: 'In Progress', className: 'status-pill status-in-progress' };
-  if (report?.validationStatus === 1) return { label: 'Accepted', className: 'status-pill status-accepted' };
-  if (report?.status === 1) return { label: 'Not Authorized', className: 'status-pill status-not-authorized' };
-  return { label: 'Unknown', className: 'status-pill status-unknown' };
+const topStatusFromReport = (report, t) => {
+  if (report?.status === 4) return { label: t('myReport.rejected'), className: 'status-pill status-rejected' };
+  if (report?.status === 3) return { label: t('myReport.resolved'), className: 'status-pill status-finished' };
+  if (report?.status === 2) return { label: t('myReport.inProgress'), className: 'status-pill status-in-progress' };
+  if (report?.validationStatus === 1) return { label: t('myReport.accepted'), className: 'status-pill status-accepted' };
+  if (report?.status === 1) return { label: t('myReport.notAuthorized'), className: 'status-pill status-not-authorized' };
+  return { label: t('myReport.unknown'), className: 'status-pill status-unknown' };
 };
 
 const formatDate = (value) => {
@@ -34,11 +34,11 @@ const formatDate = (value) => {
   });
 };
 
-const getFallbackHistoryItems = (report) => {
+const getFallbackHistoryItems = (report, t) => {
   const items = [
     {
-      text: 'Report submitted',
-      badge: 'Not Authorized',
+      text: t('myReport.reportSubmitted'),
+      badge: t('myReport.notAuthorized'),
       badgeClass: 'status-not-authorized',
       date: formatDate(report.createDate),
     },
@@ -46,8 +46,8 @@ const getFallbackHistoryItems = (report) => {
 
   if (report.validationStatus === 1) {
     items.push({
-      text: 'Report authorized by municipality',
-      badge: 'Accepted',
+      text: t('myReport.reportAuthorized'),
+      badge: t('myReport.accepted'),
       badgeClass: 'status-accepted',
       date: formatDate(report.modifiedDate || report.createDate),
     });
@@ -55,8 +55,8 @@ const getFallbackHistoryItems = (report) => {
 
   if (report.status >= 2) {
     items.push({
-      text: report.assignedToUserName ? `Assigned to ${report.assignedToUserName}` : 'Assigned to Public Works team',
-      badge: 'In Progress',
+      text: report.assignedToUserName ? t('myReport.assignedTo', { name: report.assignedToUserName }) : t('myReport.assignedPublicWorks'),
+      badge: t('myReport.inProgress'),
       badgeClass: 'status-in-progress',
       date: formatDate(report.modifiedDate || report.createDate),
     });
@@ -64,8 +64,8 @@ const getFallbackHistoryItems = (report) => {
 
   if (report.status === 3) {
     items.push({
-      text: 'Street light repaired and tested',
-      badge: 'Finished',
+      text: t('myReport.repaired'),
+      badge: t('myReport.resolved'),
       badgeClass: 'status-finished',
       date: formatDate(report.resolvedDate || report.closedDate || report.modifiedDate),
     });
@@ -73,8 +73,8 @@ const getFallbackHistoryItems = (report) => {
 
   if (report.status === 4) {
     items.push({
-      text: report.rejectionReason || 'Report rejected by municipality',
-      badge: 'Rejected',
+      text: report.rejectionReason || t('myReport.reportRejected'),
+      badge: t('myReport.rejected'),
       badgeClass: 'status-rejected',
       date: formatDate(report.modifiedDate),
     });
@@ -122,7 +122,7 @@ const MyReport = ({ user }) => {
   useEffect(() => {
     const fetchReports = async () => {
       if (!groupId || !userId) {
-        setError('Missing user/group context. Please login again.');
+        setError(t('myReport.missingContext'));
         return;
       }
 
@@ -152,7 +152,7 @@ const MyReport = ({ user }) => {
         const data = parseJsonSafely(raw);
 
         if (!response.ok || !data?.success) {
-          throw new Error(data?.message || 'Failed to load reports.');
+          throw new Error(data?.message || t('myReport.failedLoad'));
         }
 
         setReports(data?.data || []);
@@ -167,7 +167,7 @@ const MyReport = ({ user }) => {
           }
         );
       } catch (fetchError) {
-        setError(fetchError.message || 'Failed to load reports.');
+        setError(fetchError.message || t('myReport.failedLoad'));
       } finally {
         setLoading(false);
       }
@@ -178,24 +178,24 @@ const MyReport = ({ user }) => {
 
   const stats = useMemo(
     () => [
-      { label: 'Total Reports', value: counters.total, color: 'text-white' },
-      { label: 'Pending', value: counters.pending, color: 'text-warning' },
-      { label: 'In Progress', value: counters.inProgress, color: 'text-info' },
-      { label: 'Resolved', value: counters.resolved, color: 'text-success' },
-      { label: 'Rejected', value: counters.rejected, color: 'text-danger' },
+      { label: t('myReport.totalReports'), value: counters.total, color: 'text-white' },
+      { label: t('myReport.pending'), value: counters.pending, color: 'text-warning' },
+      { label: t('myReport.inProgress'), value: counters.inProgress, color: 'text-info' },
+      { label: t('myReport.resolved'), value: counters.resolved, color: 'text-success' },
+      { label: t('myReport.rejected'), value: counters.rejected, color: 'text-danger' },
     ],
-    [counters]
+    [counters, t]
   );
 
   if (!hasLiferayUser) {
     return (
       <div className="report-wrapper">
         <div className="auth-popup-card">
-          <h3>Login Required</h3>
-          <p>Register or login to see your reports.</p>
+          <h3>{t('myReport.loginRequired')}</h3>
+          <p>{t('myReport.loginPrompt')}</p>
           <div className="auth-popup-actions">
-            <a href="/web/guest/login" className="auth-popup-btn">Login</a>
-            <Link to="/register" className="auth-popup-btn secondary">Register</Link>
+            <a href="/web/guest/login" className="auth-popup-btn">{t('myReport.login')}</a>
+            <Link to="/register" className="auth-popup-btn secondary">{t('myReport.register')}</Link>
           </div>
         </div>
       </div>
@@ -233,16 +233,16 @@ const MyReport = ({ user }) => {
             onChange={(e) => setStatusFilter(e.target.value)}
           >
             <option value="">{t('myReport.allReports')}</option>
-            <option value="1">Pending</option>
-            <option value="2">In Progress</option>
-            <option value="3">Resolved</option>
-            <option value="4">Rejected</option>
+            <option value="1">{t('myReport.pending')}</option>
+            <option value="2">{t('myReport.inProgress')}</option>
+            <option value="3">{t('myReport.resolved')}</option>
+            <option value="4">{t('myReport.rejected')}</option>
           </select>
         </div>
 
         {loading && (
           <div className="glass-card p-4 text-white-50">
-            Loading reports...
+            {t('myReport.loadingReports')}
           </div>
         )}
 
@@ -254,20 +254,20 @@ const MyReport = ({ user }) => {
 
         {!loading && !error && reports.length === 0 && (
           <div className="glass-card p-4 text-white-50">
-            No reports found.
+            {t('myReport.noReports')}
           </div>
         )}
 
         {!loading && !error && reports.slice(0, visibleCount).map((report) => {
           const history = Array.isArray(report.statusHistory) && report.statusHistory.length > 0
             ? report.statusHistory.map((row) => ({
-              text: row?.text || 'Report updated',
-              badge: row?.badge || 'Updated',
+              text: row?.text || t('myReport.reportUpdated'),
+              badge: row?.badge || t('myReport.updated'),
               badgeClass: badgeTypeToClass(row?.badgeType, row?.badge),
               date: formatDate(row?.date),
             }))
-            : getFallbackHistoryItems(report);
-          const topStatus = topStatusFromReport(report);
+            : getFallbackHistoryItems(report, t);
+          const topStatus = topStatusFromReport(report, t);
           return (
             <div key={report.reportId} className="my-report-card mb-3">
               <div className="my-report-top-row">
@@ -284,17 +284,17 @@ const MyReport = ({ user }) => {
               <p className="my-report-description">{report.description || '-'}</p>
 
               <div className="my-report-meta">
-                <span className='text-capitalize'>Location: {report.locationText || '-'}</span>
+                <span className='text-capitalize'>{t('myReport.location')} {report.locationText || '-'}</span>
                 <span>{formatDate(report.createDate)}</span>
               </div>
 
               <div className="my-report-note">
-                {report.status === 3 ? 'This issue has been resolved.' : 'A team is actively working on resolving this issue.'}
+                {report.status === 3 ? t('myReport.issueResolved') : t('myReport.teamWorking')}
               </div>
 
               <div className="my-report-divider" />
 
-              <h6 className="my-report-history-title">Status History</h6>
+              <h6 className="my-report-history-title">{t('myReport.statusHistory')}</h6>
               <div className="my-report-history-list">
                 {history.map((item, index) => (
                   <div className="my-report-history-item" key={`${report.reportId}-${index}`}>
@@ -320,7 +320,7 @@ const MyReport = ({ user }) => {
               onClick={() => setVisibleCount(prev => prev + 5)}
               style={{ fontWeight: 500, letterSpacing: '0.5px' }}
             >
-              Load More Reports
+              {t('myReport.loadMore')}
             </button>
           </div>
         )}

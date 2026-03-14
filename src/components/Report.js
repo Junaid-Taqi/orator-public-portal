@@ -48,11 +48,11 @@ const Report = ({ user }) => {
     return (
       <div className="report-wrapper">
         <div className="auth-popup-card">
-          <h3>Login Required</h3>
-          <p>Register or log in to report a problem.</p>
+          <h3>{t('reportForm.loginRequired')}</h3>
+          <p>{t('reportForm.loginPrompt')}</p>
           <div className="auth-popup-actions">
-            <a href="/web/guest/login" className="auth-popup-btn">Login</a>
-            <Link to="/register" className="auth-popup-btn secondary">Register</Link>
+            <a href="/web/guest/login" className="auth-popup-btn">{t('reportForm.login')}</a>
+            <Link to="/register" className="auth-popup-btn secondary">{t('reportForm.register')}</Link>
           </div>
         </div>
       </div>
@@ -115,7 +115,7 @@ const Report = ({ user }) => {
 
     if (!groupId || !userId) {
       setIsSuccess(false);
-      setServerMessage('Missing user/group context. Please login again.');
+      setServerMessage(t('reportForm.missingContext'));
       return;
     }
 
@@ -146,15 +146,15 @@ const Report = ({ user }) => {
       const data = parseJsonSafely(raw);
 
       if (!response.ok || !data?.success) {
-        throw new Error(data?.message || 'Failed to submit report.');
+        throw new Error(data?.message || t('reportForm.failedSubmit'));
       }
 
       setIsSuccess(true);
-      setServerMessage(data?.message || 'Report submitted successfully');
+      setServerMessage(data?.message || t('reportForm.successSubmit'));
       resetForm();
     } catch (error) {
       setIsSuccess(false);
-      setServerMessage(error.message || 'Failed to submit report.');
+      setServerMessage(error.message || t('reportForm.failedSubmit'));
     } finally {
       setSubmitting(false);
     }
@@ -271,7 +271,7 @@ const Report = ({ user }) => {
           )}
 
           <button type="submit" className="submit-btn" disabled={submitting}>
-            {submitting ? 'Submitting...' : t('reportForm.submit')}
+            {submitting ? t('reportForm.submitting') : t('reportForm.submit')}
           </button>
         </form>
       </div>

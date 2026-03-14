@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from '../i18n';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './RegisterCitizen.css';
 
@@ -16,6 +17,7 @@ const initialForm = {
 };
 
 function RegisterCitizen() {
+  const { t } = useTranslation();
   const recaptchaRef = useRef(null);
   const [form, setForm] = useState(initialForm);
   const [captchaValue, setCaptchaValue] = useState('');
@@ -37,14 +39,14 @@ function RegisterCitizen() {
 
         const data = await response.json();
         if (!response.ok || !data?.success) {
-          throw new Error(data?.message || 'Failed to load municipalities');
+          throw new Error(data?.message || t('registerCitizen.errors.fetchMunicipalities'));
         }
 
         setMunicipalities(data?.data || []);
         setMunicipalitiesStatus('succeeded');
       } catch (error) {
         setMunicipalitiesStatus('failed');
-        setServerMessage(error.message || 'Unable to fetch municipalities');
+        setServerMessage(error.message || t('registerCitizen.errors.fetchMunicipalities'));
       }
     };
 
@@ -62,34 +64,34 @@ function RegisterCitizen() {
     const nextErrors = {};
 
     if (!form.firstName.trim()) {
-      nextErrors.firstName = 'First name is required.';
+      nextErrors.firstName = t('registerCitizen.errors.firstNameReq');
     }
     if (!form.lastName.trim()) {
-      nextErrors.lastName = 'Last name is required.';
+      nextErrors.lastName = t('registerCitizen.errors.lastNameReq');
     }
     if (!form.email.trim()) {
-      nextErrors.email = 'Email is required.';
+      nextErrors.email = t('registerCitizen.errors.emailReq');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      nextErrors.email = 'Enter a valid email address.';
+      nextErrors.email = t('registerCitizen.errors.emailInv');
     }
     if (!form.password) {
-      nextErrors.password = 'Password is required.';
+      nextErrors.password = t('registerCitizen.errors.passwordReq');
     } else if (form.password.length < 8) {
-      nextErrors.password = 'Password must be at least 8 characters.';
+      nextErrors.password = t('registerCitizen.errors.passwordMin');
     }
     if (!form.confirmPassword) {
-      nextErrors.confirmPassword = 'Confirm password is required.';
+      nextErrors.confirmPassword = t('registerCitizen.errors.confirmPasswordReq');
     } else if (form.confirmPassword !== form.password) {
-      nextErrors.confirmPassword = 'Passwords do not match.';
+      nextErrors.confirmPassword = t('registerCitizen.errors.confirmPasswordMatch');
     }
     if (!form.groupId) {
-      nextErrors.groupId = 'Please select a municipality.';
+      nextErrors.groupId = t('registerCitizen.errors.municipalityReq');
     }
     if (!form.gender) {
-      nextErrors.gender = 'Please select gender.';
+      nextErrors.gender = t('registerCitizen.errors.genderReq');
     }
     if (!captchaValue) {
-      nextErrors.captcha = 'Please complete the captcha.';
+      nextErrors.captcha = t('registerCitizen.errors.captchaReq');
     }
 
     return nextErrors;
@@ -127,18 +129,18 @@ function RegisterCitizen() {
 
       const data = await response.json();
       if (!response.ok || !data?.success) {
-        throw new Error(data?.message || 'Registration failed.');
+        throw new Error(data?.message || t('registerCitizen.errors.failed'));
       }
 
       setSubmitStatus('succeeded');
       setIsSuccess(true);
-      setServerMessage(data?.message || 'Citizen registered successfully.');
+      setServerMessage(data?.message || t('registerCitizen.success'));
       setForm(initialForm);
       setCaptchaValue('');
       recaptchaRef.current?.reset();
     } catch (error) {
       setSubmitStatus('failed');
-      setServerMessage(error.message || 'Registration failed.');
+      setServerMessage(error.message || t('registerCitizen.errors.failed'));
       setCaptchaValue('');
       recaptchaRef.current?.reset();
     }
@@ -147,29 +149,29 @@ function RegisterCitizen() {
   return (
     <div className="registration-page">
       <div className="registration-card">
-        <h1>Citizen Registration</h1>
-        <p className="registration-subtitle">Create your account and select your municipality.</p>
+        <h1>{t('registerCitizen.title')}</h1>
+        <p className="registration-subtitle">{t('registerCitizen.subtitle')}</p>
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="registration-grid">
             <div className="registration-field">
-              <label>First Name</label>
+              <label>{t('registerCitizen.firstName')}</label>
               <input
                 type="text"
                 value={form.firstName}
                 onChange={(e) => handleChange('firstName', e.target.value)}
-                placeholder="Enter first name"
+                placeholder={t('registerCitizen.firstNamePlaceholder')}
               />
               {!!errors.firstName && <span className="registration-error">{errors.firstName}</span>}
             </div>
 
             <div className="registration-field">
-              <label>Last Name</label>
+              <label>{t('registerCitizen.lastName')}</label>
               <input
                 type="text"
                 value={form.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
-                placeholder="Enter last name"
+                placeholder={t('registerCitizen.lastNamePlaceholder')}
               />
               {!!errors.lastName && <span className="registration-error">{errors.lastName}</span>}
             </div>
@@ -177,22 +179,22 @@ function RegisterCitizen() {
 
           <div className="registration-grid">
             <div className="registration-field">
-              <label>Email</label>
+              <label>{t('registerCitizen.email')}</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={(e) => handleChange('email', e.target.value)}
-                placeholder="Enter email"
+                placeholder={t('registerCitizen.emailPlaceholder')}
               />
               {!!errors.email && <span className="registration-error">{errors.email}</span>}
             </div>
 
             <div className="registration-field">
-              <label>Gender</label>
+              <label>{t('registerCitizen.gender')}</label>
               <select value={form.gender} onChange={(e) => handleChange('gender', e.target.value)}>
-                <option value="">Select gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="">{t('registerCitizen.selectGender')}</option>
+                <option value="male">{t('registerCitizen.male')}</option>
+                <option value="female">{t('registerCitizen.female')}</option>
               </select>
               {!!errors.gender && <span className="registration-error">{errors.gender}</span>}
             </div>
@@ -200,36 +202,36 @@ function RegisterCitizen() {
 
           <div className="registration-grid">
             <div className="registration-field">
-              <label>Password</label>
+              <label>{t('registerCitizen.password')}</label>
               <input
                 type="password"
                 value={form.password}
                 onChange={(e) => handleChange('password', e.target.value)}
-                placeholder="Enter password"
+                placeholder={t('registerCitizen.passwordPlaceholder')}
               />
               {!!errors.password && <span className="registration-error">{errors.password}</span>}
             </div>
 
             <div className="registration-field">
-              <label>Confirm Password</label>
+              <label>{t('registerCitizen.confirmPassword')}</label>
               <input
                 type="password"
                 value={form.confirmPassword}
                 onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                placeholder="Re-enter password"
+                placeholder={t('registerCitizen.confirmPasswordPlaceholder')}
               />
               {!!errors.confirmPassword && <span className="registration-error">{errors.confirmPassword}</span>}
             </div>
           </div>
 
           <div className="registration-field">
-            <label>Municipality</label>
+            <label>{t('registerCitizen.municipality')}</label>
             <select
               value={form.groupId}
               onChange={(e) => handleChange('groupId', e.target.value)}
               disabled={municipalitiesStatus === 'loading'}
             >
-              <option value="">Select municipality</option>
+              <option value="">{t('registerCitizen.selectMunicipality')}</option>
               {municipalities.map((item) => (
                 <option key={item.groupId} value={item.groupId}>
                   {item.name}
@@ -258,7 +260,7 @@ function RegisterCitizen() {
           )}
 
           <button type="submit" className="registration-submit-btn" disabled={submitStatus === 'loading'}>
-            {submitStatus === 'loading' ? 'Registering...' : 'Register'}
+            {submitStatus === 'loading' ? t('registerCitizen.registering') : t('registerCitizen.register')}
           </button>
         </form>
       </div>

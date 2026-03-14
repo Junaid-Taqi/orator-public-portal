@@ -835,13 +835,80 @@ input.form-control::placeholder {
   text-decoration: none;
   border: 1px solid rgba(0, 210, 255, 0.6);
   box-shadow: 0 10px 20px rgba(8, 25, 40, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .news-details-visit-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 14px 26px rgba(8, 25, 40, 0.26);
   color: #043141;
+}
+
+.news-details-visit-btn.is-active {
+  background: rgba(0, 210, 255, 0.22);
+  color: #7ee5ff;
+  border-color: rgba(0, 210, 255, 0.6);
+  box-shadow: none;
+}
+
+.news-details-actions {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.news-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 200, 230, 0.45);
+  background: rgba(47, 110, 134, 0.35);
+  color: #dff7ff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.news-action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 20px rgba(8, 25, 40, 0.2);
+}
+
+.news-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.news-action-btn.primary {
+  background: #00c6ff;
+  color: #043141;
+  border-color: rgba(0, 210, 255, 0.7);
+}
+
+.news-action-btn.is-active {
+  background: rgba(0, 210, 255, 0.22);
+  color: #7ee5ff;
+  border-color: rgba(0, 210, 255, 0.6);
+}
+
+.news-action-message {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: #aef4ff;
+}
+
+.news-action-message.success {
+  color: #7fffd4;
+}
+
+.news-action-message.error {
+  color: #ffb4a2;
 }
 
 .news-details-title {
@@ -954,6 +1021,121 @@ input.form-control::placeholder {
   text-decoration: none;
   font-weight: 700;
   font-size: clamp(16px, 1.2vw, 22px);
+}
+
+.news-reminder-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 23, 33, 0.65);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 2000;
+}
+
+.news-reminder-dialog {
+  width: min(520px, 92vw);
+  background: rgba(36, 80, 108, 0.95);
+  border: 1px solid rgba(139, 214, 242, 0.35);
+  border-radius: 18px;
+  padding: 24px;
+  color: #eaf8ff;
+  box-shadow: 0 20px 40px rgba(7, 20, 30, 0.35);
+}
+
+.news-reminder-dialog h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+
+.news-reminder-subtitle {
+  margin: 0 0 18px;
+  color: #b8ecff;
+  font-size: 14px;
+}
+
+.news-reminder-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.news-reminder-option {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 200, 230, 0.45);
+  background: rgba(47, 110, 134, 0.4);
+  color: #dff7ff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.news-reminder-option.is-active {
+  background: rgba(0, 210, 255, 0.35);
+  color: #073b4c;
+  border-color: rgba(0, 210, 255, 0.8);
+}
+
+.news-reminder-option.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.news-reminder-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.news-reminder-label {
+  font-size: 13px;
+  color: #bfeeff;
+}
+
+.news-reminder-input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 230, 0.35);
+  background: rgba(15, 44, 65, 0.4);
+  color: #eaf8ff;
+  outline: none;
+}
+
+.news-reminder-input::placeholder {
+  color: rgba(234, 248, 255, 0.6);
+}
+
+.news-reminder-captcha {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
+.news-reminder-message {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.news-reminder-message.succeeded {
+  color: #7fffd4;
+}
+
+.news-reminder-message.failed {
+  color: #ffb4a2;
+}
+
+.news-reminder-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 992px) {

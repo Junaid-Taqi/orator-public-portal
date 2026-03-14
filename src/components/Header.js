@@ -100,9 +100,9 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                                 <a href="/web/guest/login" className="header-action-btn" onClick={() => setMenuOpen(false)}>
                                     <FontAwesomeIcon icon={faRightToBracket} /> {t('header.login')}
                                 </a>
-                                <a href="/register" className="header-action-btn" onClick={() => setMenuOpen(false)}>
+                                <Link to="/register" className="header-action-btn" onClick={() => setMenuOpen(false)}>
                                     <FontAwesomeIcon icon={faUserPlus} /> {t('header.register')}
-                                </a>
+                                </Link>
                             </>
                         )}
 

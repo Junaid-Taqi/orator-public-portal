@@ -115,7 +115,7 @@ const Favorites = ({ user }) => {
                                             <td className="px-3 py-3 border-0 text-end">
                                                 <div className="d-flex justify-content-end gap-2">
                                                     <Link 
-                                                        to={`/news/${fav.slideId}`} 
+                                                        to={`/news/${fav.id}`} 
                                                         className="btn btn-sm btn-info rounded-pill px-3"
                                                         title={t('favorites.actions.view')}
                                                     >

@@ -38,7 +38,6 @@ function Settings({ user }) {
     const fetchMunicipalities = async () => {
       setMunicipalitiesStatus('loading');
       try {
-        const token = sessionStorage.getItem('token');
         const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/getMunicipalities`, {
           method: 'GET',
           headers: { 

@@ -738,8 +738,8 @@ const NewsDetails = ({ hasCitizenRole }) => {
                             <div className="news-details-related-list">
                                 {relatedItems.map((related) => (
                                     <Link
-                                        key={String(related.id || related.mediaId)}
-                                        to={`/news/${related.id || related.mediaId}`}
+                                        key={String(related.id)}
+                                        to={`/news/${related.id}`}
                                         state={{ item: related }}
                                         className="news-details-related-item"
                                     >

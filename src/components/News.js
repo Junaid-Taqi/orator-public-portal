@@ -196,7 +196,7 @@ const News = () => {
                                         <hr className="divider" />
                                         <div className="d-flex justify-content-between align-items-center mt-3">
                                             <Link
-                                                to={`/news/${item.id || item.mediaId}`}
+                                                to={`/news/${item.id}`}
                                                 state={{ item }}
                                                 className="read-more"
                                             >

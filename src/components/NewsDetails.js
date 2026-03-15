@@ -567,7 +567,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
             const payload = {
                 token: String(reminderCaptcha),
                 email,
-                slideId: String(item?.id),
+                slideId: String(item?.slideId),
                 reminderOffsetDays: String(reminderOffset),
             };
 

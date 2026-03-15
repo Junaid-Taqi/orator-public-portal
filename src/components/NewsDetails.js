@@ -437,7 +437,7 @@ const NewsDetails = () => {
 
     const handleShare = async () => {
         if (!item) return;
-        const shareUrl = item.articleUrl || window.location.href;
+        const shareUrl = window.location.href;
         const shareTitle = item.title || "News Article";
         const shareText = item.subtitle || "Check out this news update.";
 

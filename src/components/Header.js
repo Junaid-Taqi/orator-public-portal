@@ -11,6 +11,7 @@ import {
     faHandshake,
     faCalendarAlt,
     faFileAlt,
+    faHeart,
     faGlobe,
     faUserCircle,
     faChevronDown,
@@ -81,13 +82,18 @@ const Header = ({ hasLiferayUser, user, onLogout, hasCitizenRole }) => {
                     <NavLink to="/calendar" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
                         <FontAwesomeIcon icon={faCalendarAlt} /> {t('header.calendar')}
                     </NavLink>
-                    <NavLink to="/report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                        <FontAwesomeIcon icon={faTriangleExclamation} /> {t('header.report')}
-                    </NavLink>
-                    {hasLiferayUser && (
-                        <NavLink to="/my-report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
-                            <FontAwesomeIcon icon={faFileAlt} /> {t('header.myReport')}
-                        </NavLink>
+                    {hasCitizenRole && (
+                        <>
+                            <NavLink to="/report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                                <FontAwesomeIcon icon={faTriangleExclamation} /> {t('header.report')}
+                            </NavLink>
+                            <NavLink to="/favorites" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                                <FontAwesomeIcon icon={faHeart} /> {t('favorites.title')}
+                            </NavLink>
+                            <NavLink to="/my-report" className={({ isActive }) => "nav-link" + (isActive ? " active" : "")} onClick={() => setMenuOpen(false)}>
+                                <FontAwesomeIcon icon={faFileAlt} /> {t('header.myReport')}
+                            </NavLink>
+                        </>
                     )}
 
                     {/* Mobile-only actions inside the dropdown */}

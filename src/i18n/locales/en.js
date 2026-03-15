@@ -261,6 +261,26 @@ const en = {
       reasonReq: 'Please provide a reason for deletion.',
       passwordReq: 'Password is required to delete account.'
     }
+  },
+  favorites: {
+    title: 'My Favorites',
+    subtitle: 'Manage your favorited news articles',
+    table: {
+      title: 'Title',
+      date: 'Published Date',
+      actions: 'Actions'
+    },
+    actions: {
+      view: 'View',
+      remove: 'Remove'
+    },
+    messages: {
+      loading: 'Loading your favorites...',
+      noFavorites: 'You have no favorited articles yet.',
+      removedSuccess: 'Article removed from favorites.',
+      addedSuccess: 'Article added to favorites.',
+      loginRequired: 'Please log in to add favorites.'
+    }
   }
 };
 

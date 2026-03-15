@@ -261,6 +261,26 @@ const hr = {
       reasonReq: 'Molimo navedite razlog brisanja.',
       passwordReq: 'Lozinka je obavezna za brisanje računa.'
     }
+  },
+  favorites: {
+    title: 'Moji favoriti',
+    subtitle: 'Upravljajte svojim omiljenim vijestima',
+    table: {
+      title: 'Naslov',
+      date: 'Datum objave',
+      actions: 'Radnje'
+    },
+    actions: {
+      view: 'Pregledaj',
+      remove: 'Ukloni'
+    },
+    messages: {
+      loading: 'Učitavanje vaših favorita...',
+      noFavorites: 'Još nemate omiljenih članaka.',
+      removedSuccess: 'Članak uklonjen iz favorita.',
+      addedSuccess: 'Članak dodan u favorite.',
+      loginRequired: 'Molimo prijavite se da biste dodali favorite.'
+    }
   }
 };
 

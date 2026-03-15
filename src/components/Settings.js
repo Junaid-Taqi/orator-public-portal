@@ -42,8 +42,7 @@ function Settings({ user }) {
         const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/getMunicipalities`, {
           method: 'GET',
           headers: { 
-            Accept: 'application/json',
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
+            Accept: 'application/json'
           },
         });
 
@@ -65,7 +64,7 @@ function Settings({ user }) {
       setLoadStatus('loading');
       try {
         const token = sessionStorage.getItem('token');
-        const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/getCitizenData?userId=${user.userId}`, {
+        const response = await fetch(`${API_BASE_URL}/o/endUserCitizen/getCitizenData?userId=${user.userId}`, {
           method: 'GET',
           headers: { 
             Accept: 'application/json',
@@ -166,7 +165,7 @@ function Settings({ user }) {
       };
 
       const token = sessionStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/updateCitizen`, {
+      const response = await fetch(`${API_BASE_URL}/o/endUserCitizen/updateCitizen`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -212,7 +211,7 @@ function Settings({ user }) {
 
     try {
       const token = sessionStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/deleteAccount`, {
+      const response = await fetch(`${API_BASE_URL}/o/endUserCitizen/deleteAccount`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

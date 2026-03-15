@@ -12,6 +12,7 @@ import { Routes, Route } from 'react-router-dom';
 import MyReport from './components/MyReport';
 import RegisterCitizen from './components/RegisterCitizen';
 import Settings from './components/Settings';
+import Favorites from './components/Favorites';
 import { serverUrl } from './Services/Constants/Constants';
 
 function Login() {
@@ -84,7 +85,7 @@ function App() {
     setCitizenStatus('loading');
     try {
       const token = sessionStorage.getItem('token');
-      const response = await fetch(`${serverUrl}/o/endUserRegistrationApplication/getCitizenData?userId=${userId}`, {
+      const response = await fetch(`${serverUrl}/o/endUserCitizen/getCitizenData?userId=${userId}`, {
         method: 'GET',
         headers: { 
           'Accept': 'application/json',
@@ -157,13 +158,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/news" element={<News />} />
-          <Route path="/news/:newsId" element={<NewsDetails />} />
+          <Route path="/news/:newsId" element={<NewsDetails hasCitizenRole={hasCitizenRole} />} />
           <Route path="/calendar" element={<EventCalendar />} />
           <Route path="/report" element={<Report user={user} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterCitizen />} />
-          <Route path="/my-report" element={<MyReport user={user} />} />
-          {hasCitizenRole && <Route path="/settings" element={<Settings user={user} />} />}
+           <Route path="/my-report" element={<MyReport user={user} />} />
+           {hasLiferayUser && <Route path="/favorites" element={<Favorites user={user} />} />}
+           {hasCitizenRole && <Route path="/settings" element={<Settings user={user} />} />}
         </Routes>
       </main>
       <Footer />

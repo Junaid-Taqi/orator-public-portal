@@ -48,12 +48,7 @@ const loadFavorites = () => {
 };
 
 const saveFavorites = (favorites) => {
-    if (typeof window === "undefined") return;
-    try {
-        window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
-    } catch (e) {
-        // ignore storage errors
-    }
+    // This is no longer used, we use the backend API now.
 };
 
 const parseDateValue = (value) => {
@@ -175,7 +170,7 @@ const getItemKey = (entry) => {
     return String(entry.id || entry.mediaId || getClientRefId(entry) || "");
 };
 
-const NewsDetails = () => {
+const NewsDetails = ({ hasCitizenRole }) => {
     const { t } = useTranslation();
     const { newsId } = useParams();
     const location = useLocation();
@@ -187,6 +182,7 @@ const NewsDetails = () => {
     const [actionMessage, setActionMessage] = useState("");
     const [actionTone, setActionTone] = useState("info");
     const [isFavorited, setIsFavorited] = useState(false);
+    const [currentFavoriteId, setCurrentFavoriteId] = useState(null);
     const [showReminderDialog, setShowReminderDialog] = useState(false);
     const [reminderEmail, setReminderEmail] = useState("");
     const [reminderOffset, setReminderOffset] = useState(1);
@@ -347,13 +343,47 @@ const NewsDetails = () => {
     }, [location.pathname]);
 
     useEffect(() => {
-        const favorites = loadFavorites();
-        const key = getItemKey(item);
-        if (!key) {
-            setIsFavorited(false);
-            return;
-        }
-        setIsFavorited(favorites.some((fav) => String(fav.key) === key));
+        const checkFavoriteStatus = async () => {
+            const liferayUserRaw = sessionStorage.getItem('liferayUser');
+            if (!liferayUserRaw || !item) {
+                setIsFavorited(false);
+                return;
+            }
+
+            try {
+                const user = JSON.parse(liferayUserRaw);
+                const groupId = user?.groups?.[0]?.id;
+                const token = sessionStorage.getItem('token');
+                const response = await fetch(`${serverUrl}/o/endUserCitizen/getAllFavoriteArticles`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                    },
+                    body: JSON.stringify({
+                        userId: String(user.userId),
+                        groupId: String(groupId)
+                    })
+                });
+                const data = await response.json();
+                if (data?.success) {
+                    const favList = data.favorites || data.slides || [];
+                    const currentId = String(item.id || item.mediaId);
+                    const favItem = favList.find(fav => String(fav.slideId) === currentId);
+                    if (favItem) {
+                        setIsFavorited(true);
+                        setCurrentFavoriteId(favItem.favoriteId);
+                    } else {
+                        setIsFavorited(false);
+                        setCurrentFavoriteId(null);
+                    }
+                }
+            } catch (err) {
+                console.error('Error checking favorite status:', err);
+            }
+        };
+
+        checkFavoriteStatus();
     }, [item]);
 
     useEffect(() => {
@@ -400,39 +430,82 @@ const NewsDetails = () => {
         }, 3000);
     };
 
-    const handleToggleFavorite = () => {
+    const handleToggleFavorite = async () => {
+        const liferayUserRaw = sessionStorage.getItem('liferayUser');
+        if (!liferayUserRaw) {
+            showActionMessage(t('favorites.messages.loginRequired'), "info");
+            return;
+        }
+
         if (!item) return;
-        const key = getItemKey(item);
-        if (!key) {
-            showActionMessage(t('newsDetails.errorFavorite'), "error");
-            return;
-        }
 
-        const favorites = loadFavorites();
-        const existingIndex = favorites.findIndex((fav) => String(fav.key) === key);
-        if (existingIndex >= 0) {
-            favorites.splice(existingIndex, 1);
-            saveFavorites(favorites);
-            setIsFavorited(false);
-            showActionMessage(t('newsDetails.removedFavorite'), "info");
-            return;
-        }
+        try {
+            const user = JSON.parse(liferayUserRaw);
+            const groupId = user?.groups?.[0]?.id;
+            const token = sessionStorage.getItem('token');
+            const currentId = String(item.id || item.mediaId);
 
-        const favoriteEntry = {
-            key,
-            id: item.id || item.mediaId || null,
-            title: item.title || "",
-            subtitle: item.subtitle || "",
-            mediaUrl: item.mediaUrl || "",
-            publishDate: item.publishDate || "",
-            articleUrl: item.articleUrl || "",
-            poolName: item.poolName || "",
-            savedAt: new Date().toISOString(),
-        };
-        favorites.unshift(favoriteEntry);
-        saveFavorites(favorites);
-        setIsFavorited(true);
-        showActionMessage(t('newsDetails.addedFavorite'), "success");
+            if (isFavorited && currentFavoriteId) {
+                const response = await fetch(`${serverUrl}/o/endUserCitizen/removeFromFavorite`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                    },
+                    body: JSON.stringify({
+                        favoriteId: String(currentFavoriteId)
+                    })
+                });
+                const data = await response.json();
+                if (data?.success) {
+                    setIsFavorited(false);
+                    setCurrentFavoriteId(null);
+                    showActionMessage(data.message || t('favorites.messages.removedSuccess'), "info");
+                } else {
+                    throw new Error(data?.message || 'Failed to remove favorite');
+                }
+            } else {
+                const response = await fetch(`${serverUrl}/o/endUserCitizen/addToFavorite`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token ? { Authorization: `Bearer ${token}` } : {})
+                    },
+                    body: JSON.stringify({
+                        userId: String(user.userId),
+                        groupId: String(groupId),
+                        slideId: currentId
+                    })
+                });
+                const data = await response.json();
+                if (data?.success) {
+                    setIsFavorited(true);
+                    // Re-fetch to get the new favoriteId
+                    const fetchAllResp = await fetch(`${serverUrl}/o/endUserCitizen/getAllFavoriteArticles`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { Authorization: `Bearer ${token}` } : {})
+                        },
+                        body: JSON.stringify({
+                            userId: String(user.userId),
+                            groupId: String(groupId)
+                        })
+                    });
+                    const allData = await fetchAllResp.json();
+                    if (allData?.success) {
+                        const favList = allData.favorites || allData.slides || [];
+                        const newFav = favList.find(f => String(f.slideId) === currentId);
+                        if (newFav) setCurrentFavoriteId(newFav.favoriteId);
+                    }
+                    showActionMessage(data.message || t('favorites.messages.addedSuccess'), "success");
+                } else {
+                    throw new Error(data?.message || 'Failed to add favorite');
+                }
+            }
+        } catch (error) {
+            showActionMessage(error.message, "error");
+        }
     };
 
     const handleShare = async () => {
@@ -609,32 +682,34 @@ const NewsDetails = () => {
                             )}
 
                             <p className="news-details-description">{item.webDescription || item.subtitle || ""}</p>
-                            {!!item.articleUrl && (
-                                <div className="news-details-visit-row">
-                                    <div className="news-details-divider" />
+                            <div className="news-details-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                                {!!item.articleUrl && (
                                     <a
                                         className="news-details-visit-btn"
                                         href={item.articleUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        style={{ margin: 0 }}
                                     >
                                         {t('newsDetails.visitPage')}
                                     </a>
-                                </div>
-                            )}
-                            <div className="news-details-actions">
-                                <button
-                                    type="button"
-                                    className={`news-details-visit-btn ${isFavorited ? "is-active" : ""}`}
-                                    onClick={handleToggleFavorite}
-                                >
-                                    {isFavorited ? t('newsDetails.favorited') : t('newsDetails.addFavorite')}
-                                </button>
+                                )}
+                                {hasCitizenRole && (
+                                    <button
+                                        type="button"
+                                        className={`news-details-visit-btn ${isFavorited ? "is-active" : ""}`}
+                                        onClick={handleToggleFavorite}
+                                        style={{ margin: 0 }}
+                                    >
+                                        {isFavorited ? t('newsDetails.favorited') : t('newsDetails.addFavorite')}
+                                    </button>
+                                )}
                                 {item.eventEnabled && (
                                     <button
                                         type="button"
                                         className="news-details-visit-btn"
                                         onClick={openReminderDialog}
+                                        style={{ margin: 0 }}
                                     >
                                         {t('newsDetails.setReminder')}
                                     </button>
@@ -643,6 +718,7 @@ const NewsDetails = () => {
                                     type="button"
                                     className="news-details-visit-btn"
                                     onClick={handleShare}
+                                    style={{ margin: 0 }}
                                 >
                                     {t('newsDetails.shareArticle')}
                                 </button>

@@ -11,7 +11,8 @@ const en = {
     logout: 'Logout',
     register: 'Register',
     partnership: 'Partnership',
-    language: 'Language'
+    language: 'Language',
+    settings: 'Settings'
   },
   footer: {
     brandTitle: 'ORATOR',
@@ -233,6 +234,20 @@ const en = {
     day1: '1 Day',
     week1: '1 Week',
     month1: '1 Month'
+  },
+  settings: {
+    title: 'Profile Settings',
+    subtitle: 'Manage your personal information and account security.',
+    updateProfile: 'Update Profile',
+    updating: 'Updating...',
+    success: 'Profile updated successfully.',
+    currentPassword: 'Current Password',
+    currentPasswordPlaceholder: 'Enter current password to save changes',
+    newPassword: 'New Password (Optional)',
+    newPasswordPlaceholder: 'Enter new password if you want to change it',
+    errors: {
+      passwordReq: 'Current password is required to save changes.'
+    }
   }
 };
 

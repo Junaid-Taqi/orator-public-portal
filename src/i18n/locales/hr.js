@@ -11,7 +11,8 @@ const hr = {
     logout: 'Odjava',
     register: 'Registracija',
     partnership: 'Partnerstvo',
-    language: 'Jezik'
+    language: 'Jezik',
+    settings: 'Postavke'
   },
   footer: {
     brandTitle: 'ORATOR',
@@ -233,6 +234,20 @@ const hr = {
     day1: '1 Dan',
     week1: '1 Tjedan',
     month1: '1 Mjesec'
+  },
+  settings: {
+    title: 'Postavke profila',
+    subtitle: 'Upravljajte svojim osobnim podacima i sigurnošću računa.',
+    updateProfile: 'Ažuriraj profil',
+    updating: 'Ažuriranje...',
+    success: 'Profil je uspješno ažuriran.',
+    currentPassword: 'Trenutna lozinka',
+    currentPasswordPlaceholder: 'Unesite trenutnu lozinku za spremanje promjena',
+    newPassword: 'Nova lozinka (opcionalno)',
+    newPasswordPlaceholder: 'Unesite novu lozinku ako je želite promijeniti',
+    errors: {
+      passwordReq: 'Trenutna lozinka je obavezna za spremanje promjena.'
+    }
   }
 };
 

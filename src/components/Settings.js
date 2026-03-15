@@ -1,28 +1,27 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from '../i18n';
-import ReCAPTCHA from 'react-google-recaptcha';
-import './RegisterCitizen.css';
+import './RegisterCitizen.css'; // Reusing styles from RegisterCitizen
+import { serverUrl } from '../Services/Constants/Constants';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
-const SITE_KEY = process.env.REACT_APP_RECAPTCHA_SITE_KEY || '6Ld7PGosAAAAAKW0wruLeowTCOdG6j8c4qInVmg8';
+const API_BASE_URL = serverUrl;
 
 const initialForm = {
   firstName: '',
   lastName: '',
   email: '',
-  password: '',
-  confirmPassword: '',
-  groupId: '',
   gender: '',
+  groupId: '',
+  oldPassword: '',
+  newPassword: '',
+  confirmNewPassword: '',
 };
 
-function RegisterCitizen() {
+function Settings({ user }) {
   const { t } = useTranslation();
-  const recaptchaRef = useRef(null);
   const [form, setForm] = useState(initialForm);
-  const [captchaValue, setCaptchaValue] = useState('');
   const [municipalities, setMunicipalities] = useState([]);
   const [municipalitiesStatus, setMunicipalitiesStatus] = useState('idle');
+  const [loadStatus, setLoadStatus] = useState('idle');
   const [submitStatus, setSubmitStatus] = useState('idle');
   const [errors, setErrors] = useState({});
   const [serverMessage, setServerMessage] = useState('');
@@ -32,9 +31,13 @@ function RegisterCitizen() {
     const fetchMunicipalities = async () => {
       setMunicipalitiesStatus('loading');
       try {
+        const token = sessionStorage.getItem('token');
         const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/getMunicipalities`, {
           method: 'GET',
-          headers: { Accept: 'application/json' },
+          headers: { 
+            Accept: 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
         });
 
         const data = await response.json();
@@ -46,12 +49,47 @@ function RegisterCitizen() {
         setMunicipalitiesStatus('succeeded');
       } catch (error) {
         setMunicipalitiesStatus('failed');
-        setServerMessage(error.message || t('registerCitizen.errors.fetchMunicipalities'));
+        console.error('Error fetching municipalities:', error);
+      }
+    };
+
+    const fetchUserData = async () => {
+      if (!user?.userId) return;
+      setLoadStatus('loading');
+      try {
+        const token = sessionStorage.getItem('token');
+        const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/getCitizenData?userId=${user.userId}`, {
+          method: 'GET',
+          headers: { 
+            Accept: 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          },
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data?.success) {
+          throw new Error(data?.message || 'Failed to load user data');
+        }
+
+        const citizen = data.data;
+        setForm((prev) => ({
+          ...prev,
+          firstName: citizen.firstName || '',
+          lastName: citizen.lastName || '',
+          email: citizen.email || '',
+          gender: citizen.gender || '',
+          groupId: citizen.groups?.[0] ? String(citizen.groups[0]) : '',
+        }));
+        setLoadStatus('succeeded');
+      } catch (error) {
+        setLoadStatus('failed');
+        setServerMessage(error.message);
       }
     };
 
     fetchMunicipalities();
-  }, []);
+    fetchUserData();
+  }, [user?.userId, t]);
 
   const handleChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -74,24 +112,22 @@ function RegisterCitizen() {
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
       nextErrors.email = t('registerCitizen.errors.emailInv');
     }
-    if (!form.password) {
-      nextErrors.password = t('registerCitizen.errors.passwordReq');
-    } else if (form.password.length < 8) {
-      nextErrors.password = t('registerCitizen.errors.passwordMin');
+    if (!form.oldPassword) {
+      nextErrors.oldPassword = t('settings.errors.passwordReq');
     }
-    if (!form.confirmPassword) {
-      nextErrors.confirmPassword = t('registerCitizen.errors.confirmPasswordReq');
-    } else if (form.confirmPassword !== form.password) {
-      nextErrors.confirmPassword = t('registerCitizen.errors.confirmPasswordMatch');
+    if (form.newPassword) {
+      if (form.newPassword.length < 8) {
+        nextErrors.newPassword = t('registerCitizen.errors.passwordMin');
+      }
+      if (form.newPassword !== form.confirmNewPassword) {
+        nextErrors.confirmNewPassword = t('registerCitizen.errors.confirmPasswordMatch');
+      }
     }
     if (!form.groupId) {
       nextErrors.groupId = t('registerCitizen.errors.municipalityReq');
     }
     if (!form.gender) {
       nextErrors.gender = t('registerCitizen.errors.genderReq');
-    }
-    if (!captchaValue) {
-      nextErrors.captcha = t('registerCitizen.errors.captchaReq');
     }
 
     return nextErrors;
@@ -112,49 +148,55 @@ function RegisterCitizen() {
 
     try {
       const payload = {
-        token: captchaValue,
+        userId: String(user.userId),
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
         email: form.email.trim(),
-        password: form.password,
+        oldPassword: form.oldPassword,
+        newPassword: form.newPassword || '',
         groupId: String(form.groupId),
         gender: form.gender,
       };
 
-      const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/registerCitizen`, {
+      const token = sessionStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/updateCitizen`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
         body: JSON.stringify(payload),
       });
 
       const data = await response.json();
       if (!response.ok || !data?.success) {
-        let errorMessage = data?.message || t('registerCitizen.errors.failed');
-        if (typeof errorMessage === 'string') {
-          errorMessage = errorMessage.replace(/A user with company .*?and e/i, 'E');
-        }
-        throw new Error(errorMessage);
+        throw new Error(data?.message || 'Failed to update profile');
       }
 
       setSubmitStatus('succeeded');
       setIsSuccess(true);
-      setServerMessage(data?.message || t('registerCitizen.success'));
-      setForm(initialForm);
-      setCaptchaValue('');
-      recaptchaRef.current?.reset();
+      setServerMessage(t('settings.success'));
+      setForm((prev) => ({ ...prev, oldPassword: '', newPassword: '', confirmNewPassword: '' }));
+      
+      // Reload page after a short delay to show success message
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } catch (error) {
       setSubmitStatus('failed');
-      setServerMessage(error.message || t('registerCitizen.errors.failed'));
-      setCaptchaValue('');
-      recaptchaRef.current?.reset();
+      setServerMessage(error.message);
     }
   };
+
+  if (loadStatus === 'loading') {
+    return <div className="registration-page"><div className="registration-card"><h2>Loading...</h2></div></div>;
+  }
 
   return (
     <div className="registration-page">
       <div className="registration-card">
-        <h1>{t('registerCitizen.title')}</h1>
-        <p className="registration-subtitle">{t('registerCitizen.subtitle')}</p>
+        <h1>{t('settings.title')}</h1>
+        <p className="registration-subtitle">{t('settings.subtitle')}</p>
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="registration-grid">
@@ -204,30 +246,6 @@ function RegisterCitizen() {
             </div>
           </div>
 
-          <div className="registration-grid">
-            <div className="registration-field">
-              <label>{t('registerCitizen.password')}</label>
-              <input
-                type="password"
-                value={form.password}
-                onChange={(e) => handleChange('password', e.target.value)}
-                placeholder={t('registerCitizen.passwordPlaceholder')}
-              />
-              {!!errors.password && <span className="registration-error">{errors.password}</span>}
-            </div>
-
-            <div className="registration-field">
-              <label>{t('registerCitizen.confirmPassword')}</label>
-              <input
-                type="password"
-                value={form.confirmPassword}
-                onChange={(e) => handleChange('confirmPassword', e.target.value)}
-                placeholder={t('registerCitizen.confirmPasswordPlaceholder')}
-              />
-              {!!errors.confirmPassword && <span className="registration-error">{errors.confirmPassword}</span>}
-            </div>
-          </div>
-
           <div className="registration-field">
             <label>{t('registerCitizen.municipality')}</label>
             <select
@@ -245,16 +263,39 @@ function RegisterCitizen() {
             {!!errors.groupId && <span className="registration-error">{errors.groupId}</span>}
           </div>
 
-          <div className="registration-field registration-captcha-field">
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={SITE_KEY}
-              onChange={(value) => {
-                setCaptchaValue(value || '');
-                setErrors((prev) => ({ ...prev, captcha: '' }));
-              }}
+          <div className="registration-field">
+            <label>{t('settings.currentPassword')}</label>
+            <input
+              type="password"
+              value={form.oldPassword}
+              onChange={(e) => handleChange('oldPassword', e.target.value)}
+              placeholder={t('settings.currentPasswordPlaceholder')}
             />
-            {!!errors.captcha && <span className="registration-error">{errors.captcha}</span>}
+            {!!errors.oldPassword && <span className="registration-error">{errors.oldPassword}</span>}
+          </div>
+
+          <div className="registration-grid">
+            <div className="registration-field">
+              <label>{t('settings.newPassword')}</label>
+              <input
+                type="password"
+                value={form.newPassword}
+                onChange={(e) => handleChange('newPassword', e.target.value)}
+                placeholder={t('settings.newPasswordPlaceholder')}
+              />
+              {!!errors.newPassword && <span className="registration-error">{errors.newPassword}</span>}
+            </div>
+
+            <div className="registration-field">
+              <label>{t('registerCitizen.confirmPassword')}</label>
+              <input
+                type="password"
+                value={form.confirmNewPassword}
+                onChange={(e) => handleChange('confirmNewPassword', e.target.value)}
+                placeholder={t('registerCitizen.confirmPasswordPlaceholder')}
+              />
+              {!!errors.confirmNewPassword && <span className="registration-error">{errors.confirmNewPassword}</span>}
+            </div>
           </div>
 
           {!!serverMessage && (
@@ -264,7 +305,7 @@ function RegisterCitizen() {
           )}
 
           <button type="submit" className="registration-submit-btn" disabled={submitStatus === 'loading'}>
-            {submitStatus === 'loading' ? t('registerCitizen.registering') : t('registerCitizen.register')}
+            {submitStatus === 'loading' ? t('settings.updating') : t('settings.updateProfile')}
           </button>
         </form>
       </div>
@@ -272,4 +313,4 @@ function RegisterCitizen() {
   );
 }
 
-export default RegisterCitizen;
+export default Settings;

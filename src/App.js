@@ -11,6 +11,7 @@ import EventCalendar from './components/EventCalendar';
 import { Routes, Route } from 'react-router-dom';
 import MyReport from './components/MyReport';
 import RegisterCitizen from './components/RegisterCitizen';
+import Settings from './components/Settings';
 import { serverUrl } from './Services/Constants/Constants';
 
 function Login() {
@@ -28,6 +29,8 @@ function App() {
   const [expiresIn, setExpiresIn] = useState(null);
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
+  const [citizenData, setCitizenData] = useState(null);
+  const [citizenStatus, setCitizenStatus] = useState('idle');
 
   const user = useMemo(() => {
     const raw = sessionStorage.getItem('liferayUser');
@@ -77,12 +80,43 @@ function App() {
     }
   };
 
+  const fetchCitizenData = async (userId) => {
+    setCitizenStatus('loading');
+    try {
+      const token = sessionStorage.getItem('token');
+      const response = await fetch(`${serverUrl}/o/endUserRegistrationApplication/getCitizenData?userId=${userId}`, {
+        method: 'GET',
+        headers: { 
+          'Accept': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+      });
+      const data = await response.json();
+      if (data?.success) {
+        setCitizenData(data.data);
+        setCitizenStatus('succeeded');
+      } else {
+        setCitizenStatus('failed');
+      }
+    } catch (err) {
+      setCitizenStatus('failed');
+      console.error('Error fetching citizen data:', err);
+    }
+  };
+
   useEffect(() => {
     // Fetch token only when liferayUser exists in session storage
     if (!user) return;
     fetchToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  useEffect(() => {
+    // Fetch citizen data only when liferayUser exists in session storage
+    if (!user || !token) return;
+    fetchCitizenData(user.userId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, token]);
 
   useEffect(() => {
     if (!user || !token || !expiresIn) return;
@@ -96,6 +130,8 @@ function App() {
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, token, expiresIn]);
+
+  const hasCitizenRole = citizenData?.hasCitizenRole === true;
 
   const isBootstrappingAuth = user && !token && (status === 'idle' || status === 'loading');
   if (isBootstrappingAuth) {
@@ -116,7 +152,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header hasLiferayUser={hasLiferayUser} onLogout={handleLogout} />
+      <Header hasLiferayUser={hasLiferayUser} user={user} onLogout={handleLogout} hasCitizenRole={hasCitizenRole} />
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -127,6 +163,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterCitizen />} />
           <Route path="/my-report" element={<MyReport user={user} />} />
+          {hasCitizenRole && <Route path="/settings" element={<Settings user={user} />} />}
         </Routes>
       </main>
       <Footer />

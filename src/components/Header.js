@@ -11,25 +11,34 @@ import {
     faHandshake,
     faCalendarAlt,
     faFileAlt,
-    faGlobe
+    faGlobe,
+    faUserCircle,
+    faChevronDown,
+    faChevronUp,
+    faGear
 } from "@fortawesome/free-solid-svg-icons";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import { useTranslation } from '../i18n';
 
-const Header = ({ hasLiferayUser, onLogout }) => {
+const Header = ({ hasLiferayUser, user, onLogout, hasCitizenRole }) => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
     const { t, lang, setLang } = useTranslation();
     const { pathname } = useLocation();
     const headerRef = useRef(null);
+    const userMenuRef = useRef(null);
 
     const isCurrentPath = (path) => pathname === path;
 
-    // Close menu when clicking outside the header
+    // Close menu when clicking outside the header or user menu
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (headerRef.current && !headerRef.current.contains(e.target)) {
                 setMenuOpen(false);
+            }
+            if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+                setUserMenuOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -107,9 +116,16 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                         )}
 
                         {hasLiferayUser && (
-                            <button type="button" className="header-action-btn" onClick={() => { onLogout(); setMenuOpen(false); }}>
-                                <FontAwesomeIcon icon={faRightToBracket} /> {t('header.logout')}
-                            </button>
+                            <>
+                                {hasCitizenRole && (
+                                    <NavLink to="/settings" className="header-action-btn" onClick={() => { setMenuOpen(false); }}>
+                                        <FontAwesomeIcon icon={faGear} /> {t('header.settings')}
+                                    </NavLink>
+                                )}
+                                <button type="button" className="header-action-btn" onClick={() => { onLogout(); setMenuOpen(false); }}>
+                                    <FontAwesomeIcon icon={faRightToBracket} /> {t('header.logout')}
+                                </button>
+                            </>
                         )}
                     </div>
                 </nav>
@@ -140,9 +156,36 @@ const Header = ({ hasLiferayUser, onLogout }) => {
                     )}
 
                     {hasLiferayUser && (
-                        <button type="button" className="header-action-btn" onClick={onLogout}>
-                            <FontAwesomeIcon icon={faRightToBracket} /> {t('header.logout')}
-                        </button>
+                        <div className="header-user-wrap" ref={userMenuRef}>
+                            <button
+                                type="button"
+                                className="header-user-btn"
+                                onClick={() => setUserMenuOpen((v) => !v)}
+                                aria-expanded={userMenuOpen}
+                            >
+                                <FontAwesomeIcon icon={faUserCircle} className="header-user-icon" />
+                                <div className="header-user-info">
+                                    <span className="header-user-name">{user?.fullName}</span>
+                                    <span className="header-user-email">{user?.email}</span>
+                                </div>
+                                <FontAwesomeIcon icon={userMenuOpen ? faChevronUp : faChevronDown} className="header-user-chevron" />
+                            </button>
+
+                            {userMenuOpen && (
+                                <div className="header-user-dropdown">
+                                    {hasCitizenRole && (
+                                        <NavLink to="/settings" className="dropdown-item" onClick={() => setUserMenuOpen(false)}>
+                                            <FontAwesomeIcon icon={faGear} />
+                                            {t('header.settings')}
+                                        </NavLink>
+                                    )}
+                                    <button type="button" className="dropdown-item dropdown-logout" onClick={onLogout}>
+                                        <FontAwesomeIcon icon={faRightToBracket} />
+                                        {t('header.logout')}
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
 

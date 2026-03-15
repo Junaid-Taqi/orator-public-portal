@@ -1863,3 +1863,97 @@ input.form-control::placeholder {
   margin-top: 20px;
 }
 
+
+/* Favorites Premium Glass UI */
+.glass-card-premium {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s ease;
+}
+
+.custom-premium-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.custom-premium-table thead tr {
+  background: linear-gradient(90deg, rgba(31, 200, 219, 0.15) 0%, rgba(31, 200, 219, 0) 100%);
+}
+
+.custom-premium-table th {
+  padding: 20px;
+  color: #1fc8db;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(31, 200, 219, 0.3);
+}
+
+.custom-premium-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.custom-premium-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.custom-premium-table td {
+  padding: 18px 20px;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fav-item-title {
+  color: #f8fafc;
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+
+.fav-item-date {
+  color: rgba(248, 250, 252, 0.6);
+  font-size: 0.95rem;
+}
+
+.action-btn-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.action-btn-circle.view {
+  color: #1fc8db;
+}
+
+.action-btn-circle.view:hover {
+  background: #1fc8db;
+  color: #fff;
+  border-color: #1fc8db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(31, 200, 219, 0.3);
+}
+
+.action-btn-circle.remove {
+  color: #ff4d4d;
+}
+
+.action-btn-circle.remove:hover {
+  background: #ff4d4d;
+  color: #fff;
+  border-color: #ff4d4d;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
+}

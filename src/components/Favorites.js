@@ -81,49 +81,63 @@ const Favorites = ({ user }) => {
     return (
         <div className="report-dashboard py-5">
             <div className="container">
-                <header className="mb-4">
-                    <h2 className="text-white">{t('favorites.title')}</h2>
-                    <p className="text-info opacity-75">{t('favorites.subtitle')}</p>
+                <header className="mb-5 text-center">
+                    <h2 className="text-white fw-bold mb-2" style={{ fontSize: '2.5rem', letterSpacing: '-0.5px' }}>
+                        {t('favorites.title')}
+                    </h2>
+                    <p className="text-info opacity-75" style={{ fontSize: '1.1rem' }}>
+                        {t('favorites.subtitle')}
+                    </p>
                 </header>
 
-                <div className="glass-card p-4">
-                    {loading && <div className="text-white-50">{t('favorites.messages.loading')}</div>}
-                    {error && <div className="text-danger">{error}</div>}
+                <div className="glass-card-premium overflow-hidden">
+                    {loading && (
+                        <div className="p-5 text-center">
+                            <div className="spinner-border text-info mb-3" role="status"></div>
+                            <div className="text-white-50">{t('favorites.messages.loading')}</div>
+                        </div>
+                    )}
+                    {error && <div className="p-5 text-center text-danger">{error}</div>}
                     {!loading && !error && favorites.length === 0 && (
-                        <div className="text-white-50">{t('favorites.messages.noFavorites')}</div>
+                        <div className="p-5 text-center text-white-50">
+                            <FontAwesomeIcon icon={faTrashAlt} size="3x" className="mb-3 opacity-25" />
+                            <div>{t('favorites.messages.noFavorites')}</div>
+                        </div>
                     )}
 
                     {!loading && !error && favorites.length > 0 && (
                         <div className="table-responsive">
-                            <table className="table table-dark table-hover mb-0" style={{ background: 'transparent' }}>
+                            <table className="custom-premium-table mb-0">
                                 <thead>
-                                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                                        <th className="px-3 py-3 border-0">{t('favorites.table.title')}</th>
-                                        <th className="px-3 py-3 border-0" style={{ width: '200px' }}>{t('favorites.table.date')}</th>
-                                        <th className="px-3 py-3 border-0 text-end" style={{ width: '150px' }}>{t('favorites.table.actions')}</th>
+                                    <tr>
+                                        <th>{t('favorites.table.title')}</th>
+                                        <th style={{ width: '200px' }}>{t('favorites.table.date')}</th>
+                                        <th className="text-end" style={{ width: '150px' }}>{t('favorites.table.actions')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {favorites.map((fav) => (
-                                        <tr key={fav.slideId} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                            <td className="px-3 py-3 border-0">
-                                                <div className="text-white fw-bold">{fav.title || 'Untitled'}</div>
+                                        <tr key={fav.id || fav.slideId}>
+                                            <td>
+                                                <div className="fav-item-title">{fav.title || 'Untitled'}</div>
                                             </td>
-                                            <td className="px-3 py-3 border-0 text-white-50">
-                                                {fav.publishDate ? new Date(fav.publishDate).toLocaleDateString() : '-'}
+                                            <td>
+                                                <span className="fav-item-date">
+                                                    {fav.publishDate ? new Date(fav.publishDate).toLocaleDateString() : '-'}
+                                                </span>
                                             </td>
-                                            <td className="px-3 py-3 border-0 text-end">
-                                                <div className="d-flex justify-content-end gap-2">
+                                            <td className="text-end">
+                                                <div className="d-flex justify-content-end gap-3">
                                                     <Link 
                                                         to={`/news/${fav.id}`} 
-                                                        className="btn btn-sm btn-info rounded-pill px-3"
+                                                        className="action-btn-circle view"
                                                         title={t('favorites.actions.view')}
                                                     >
                                                         <FontAwesomeIcon icon={faEye} />
                                                     </Link>
                                                     <button 
                                                         onClick={() => handleRemove(fav.favoriteId)}
-                                                        className="btn btn-sm btn-outline-danger rounded-pill px-3"
+                                                        className="action-btn-circle remove"
                                                         title={t('favorites.actions.remove')}
                                                     >
                                                         <FontAwesomeIcon icon={faTrashAlt} />

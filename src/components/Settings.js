@@ -27,6 +27,13 @@ function Settings({ user }) {
   const [serverMessage, setServerMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // Account deletion state
+  const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [deleteForm, setDeleteForm] = useState({ reason: '', password: '' });
+  const [deleteStatus, setDeleteStatus] = useState('idle');
+  const [deleteErrors, setDeleteErrors] = useState({});
+  const [deleteMessage, setDeleteMessage] = useState('');
+
   useEffect(() => {
     const fetchMunicipalities = async () => {
       setMunicipalitiesStatus('loading');
@@ -188,6 +195,54 @@ function Settings({ user }) {
     }
   };
 
+  const handleDeleteAccount = async (e) => {
+    e.preventDefault();
+    const nextErrors = {};
+    if (!deleteForm.reason.trim()) nextErrors.reason = t('settings.deleteErrors.reasonReq');
+    if (!deleteForm.password) nextErrors.password = t('settings.deleteErrors.passwordReq');
+
+    if (Object.keys(nextErrors).length > 0) {
+      setDeleteErrors(nextErrors);
+      return;
+    }
+
+    setDeleteStatus('loading');
+    setDeleteErrors({});
+    setDeleteMessage('');
+
+    try {
+      const token = sessionStorage.getItem('token');
+      const response = await fetch(`${API_BASE_URL}/o/endUserRegistrationApplication/deleteAccount`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
+        },
+        body: JSON.stringify({
+          userId: String(user.userId),
+          password: deleteForm.password,
+          reason: deleteForm.reason.trim()
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.message || 'Failed to delete account');
+      }
+
+      setDeleteStatus('succeeded');
+      setDeleteMessage(t('settings.deleteSuccess'));
+      
+      // Logout and refresh
+      setTimeout(() => {
+        window.location.href = '/c/portal/logout';
+      }, 2000);
+    } catch (error) {
+      setDeleteStatus('failed');
+      setDeleteMessage(error.message);
+    }
+  };
+
   if (loadStatus === 'loading') {
     return <div className="registration-page"><div className="registration-card"><h2>Loading...</h2></div></div>;
   }
@@ -308,6 +363,85 @@ function Settings({ user }) {
             {submitStatus === 'loading' ? t('settings.updating') : t('settings.updateProfile')}
           </button>
         </form>
+
+        <div className="danger-zone">
+          <h2 className="danger-zone-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            {t('settings.dangerZone')}
+          </h2>
+          <p className="danger-zone-subtitle">{t('settings.deleteSubtitle')}</p>
+
+          {!showDeleteForm ? (
+            <button 
+              type="button" 
+              className="delete-btn"
+              onClick={() => setShowDeleteForm(true)}
+            >
+              {t('settings.deleteAccount')}
+            </button>
+          ) : (
+            <div className="delete-form-wrap">
+              <div className="registration-field">
+                <label>{t('settings.deleteReason')}</label>
+                <textarea
+                  value={deleteForm.reason}
+                  onChange={(e) => {
+                    setDeleteForm(prev => ({ ...prev, reason: e.target.value }));
+                    setDeleteErrors(prev => ({ ...prev, reason: '' }));
+                  }}
+                  placeholder={t('settings.deleteReasonPlaceholder')}
+                  rows="3"
+                />
+                {!!deleteErrors.reason && <span className="registration-error">{deleteErrors.reason}</span>}
+              </div>
+
+              <div className="registration-field">
+                <label>{t('settings.deleteConfirmPassword')}</label>
+                <input
+                  type="password"
+                  value={deleteForm.password}
+                  onChange={(e) => {
+                    setDeleteForm(prev => ({ ...prev, password: e.target.value }));
+                    setDeleteErrors(prev => ({ ...prev, password: '' }));
+                  }}
+                  placeholder={t('settings.currentPasswordPlaceholder')}
+                />
+                {!!deleteErrors.password && <span className="registration-error">{deleteErrors.password}</span>}
+              </div>
+
+              {!!deleteMessage && (
+                <div className={deleteStatus === 'succeeded' ? 'registration-message registration-success' : 'registration-message registration-failed'}>
+                  {deleteMessage}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                <button 
+                  type="button" 
+                  className="registration-submit-btn" 
+                  style={{ background: '#ff4444', flex: 1 }}
+                  onClick={handleDeleteAccount}
+                  disabled={deleteStatus === 'loading'}
+                >
+                  {deleteStatus === 'loading' ? t('settings.deleting') : t('settings.deleteAction')}
+                </button>
+                <button 
+                  type="button" 
+                  className="registration-submit-btn secondary" 
+                  style={{ flex: 1, color: '#ff4444', borderColor: '#ff4444', background: 'transparent' }}
+                  onClick={() => setShowDeleteForm(false)}
+                  disabled={deleteStatus === 'loading'}
+                >
+                  {t('newsDetails.cancel')}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

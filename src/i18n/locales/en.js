@@ -247,6 +247,19 @@ const en = {
     newPasswordPlaceholder: 'Enter new password if you want to change it',
     errors: {
       passwordReq: 'Current password is required to save changes.'
+    },
+    dangerZone: 'Danger Zone',
+    deleteAccount: 'Delete Account',
+    deleteSubtitle: 'Once you delete your account, there is no going back. Please be certain.',
+    deleteReason: 'Reason for deletion',
+    deleteReasonPlaceholder: 'Why are you leaving us?',
+    deleteConfirmPassword: 'Confirm with Password',
+    deleteAction: 'Delete My Account',
+    deleting: 'Deleting...',
+    deleteSuccess: 'Account deleted successfully. Redirecting...',
+    deleteErrors: {
+      reasonReq: 'Please provide a reason for deletion.',
+      passwordReq: 'Password is required to delete account.'
     }
   }
 };

@@ -247,6 +247,19 @@ const hr = {
     newPasswordPlaceholder: 'Unesite novu lozinku ako je želite promijeniti',
     errors: {
       passwordReq: 'Trenutna lozinka je obavezna za spremanje promjena.'
+    },
+    dangerZone: 'Opasna zona',
+    deleteAccount: 'Obriši račun',
+    deleteSubtitle: 'Nakon što obrišete svoj račun, nema povratka. Budite sigurni.',
+    deleteReason: 'Razlog brisanja',
+    deleteReasonPlaceholder: 'Zašto nas napuštate?',
+    deleteConfirmPassword: 'Potvrdite lozinkom',
+    deleteAction: 'Obriši moj račun',
+    deleting: 'Brisanje...',
+    deleteSuccess: 'Račun je uspješno obrisan. Preusmjeravanje...',
+    deleteErrors: {
+      reasonReq: 'Molimo navedite razlog brisanja.',
+      passwordReq: 'Lozinka je obavezna za brisanje računa.'
     }
   }
 };

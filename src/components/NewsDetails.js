@@ -36,21 +36,6 @@ const getClientRefId = (entry) => {
     return "";
 };
 
-const loadFavorites = () => {
-    if (typeof window === "undefined") return [];
-    try {
-        const raw = window.localStorage.getItem(FAVORITES_KEY);
-        const parsed = JSON.parse(raw || "[]");
-        return Array.isArray(parsed) ? parsed : [];
-    } catch (e) {
-        return [];
-    }
-};
-
-const saveFavorites = (favorites) => {
-    // This is no longer used, we use the backend API now.
-};
-
 const parseDateValue = (value) => {
     if (!value) return null;
     if (value instanceof Date && !Number.isNaN(value.getTime())) {
@@ -165,10 +150,6 @@ const collectEventDateWindows = (item, config) => {
     return windows;
 };
 
-const getItemKey = (entry) => {
-    if (!entry) return "";
-    return String(entry.id || entry.mediaId || getClientRefId(entry) || "");
-};
 
 const NewsDetails = ({ hasCitizenRole }) => {
     const { t } = useTranslation();

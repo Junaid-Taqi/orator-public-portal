@@ -224,7 +224,7 @@
   padding: 10px 15px;
   border: none;
   background: transparent;
-  color: #334e68;
+  color: #334e68 !important;
   font-size: 14px;
   font-weight: 500;
   border-radius: 8px;
@@ -236,11 +236,11 @@
 
 .header-user-dropdown .dropdown-item:hover {
   background: #f0f7ff;
-  color: #1fc8db;
+  color: #1fc8db !important;
 }
 
 .header-user-dropdown .dropdown-item.dropdown-logout {
-  color: #e53e3e;
+  color: #e53e3e !important;
   border-top: 1px solid #f0f0f0;
   margin-top: 4px;
   padding-top: 12px;
@@ -248,7 +248,7 @@
 }
 
 .header-user-dropdown .dropdown-item.dropdown-logout:hover {
-  background: #fff5f5;
+  background: #fff5f5 !important;
 }
 
 /* Hamburger */

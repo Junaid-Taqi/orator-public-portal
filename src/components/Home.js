@@ -61,7 +61,7 @@ const Home = () => {
         })
         .slice(0, 6)
         .map((item) => ({
-            id: item.id || item.mediaId,
+            id: item.id,
             item,
             icon: (item.poolName || "U").slice(0, 1).toUpperCase(),
             badge: item.poolName || t('newsDetails.updates'),

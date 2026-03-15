@@ -4,8 +4,6 @@ import { useTranslation } from '../i18n';
 import ReCAPTCHA from "react-google-recaptcha";
 import { serverUrl } from "../Services/Constants/Constants";
 
-const FAVORITES_KEY = "orator_news_favorites";
-
 const formatDate = (value) => {
     if (!value) return "";
     const parsed = new Date(value);
@@ -173,20 +171,22 @@ const NewsDetails = ({ hasCitizenRole }) => {
     const reminderCaptchaRef = useRef(null);
     const actionTimerRef = useRef(null);
 
-    const slideId = useMemo(() => {
-        const routeId = Number(newsId);
-        if (!Number.isNaN(routeId) && routeId > 0) return routeId;
-
-        const stateId = Number(fallbackItem?.id || fallbackItem?.mediaId);
-        if (!Number.isNaN(stateId) && stateId > 0) return stateId;
-
+    const slideUuid = useMemo(() => {
+        if (newsId && newsId.length > 0 && !newsId.startsWith("qr-code-scan")) {
+            return newsId;
+        }
+        const stateId = fallbackItem?.id;
+        if (stateId && !stateId.startsWith("qr-code-scan")) {
+            return stateId;
+        }
         return 0;
     }, [newsId, fallbackItem]);
+
     const routeRef = useMemo(() => {
-        if (slideId) return "";
+        if (slideUuid) return "";
         const trimmed = String(newsId || "").trim();
         return trimmed || "";
-    }, [newsId, slideId]);
+    }, [newsId, slideUuid]);
 
     const parsedConfig = useMemo(() => {
         if (!item?.configJSON) return {};
@@ -249,18 +249,18 @@ const NewsDetails = ({ hasCitizenRole }) => {
 
     useEffect(() => {
         const fetchSlideDetails = async () => {
-            if (!slideId && !routeRef) {
+            if (!slideUuid && !routeRef) {
                 setItem(fallbackItem || null);
                 setLoading(false);
                 setError(t('newsDetails.noId'));
                 return;
             }
 
-            if (slideId) {
-                // If we have fallback item from navigation state and it matches the slideId,
+            if (slideUuid) {
+                // If we have fallback item from navigation state and it matches the slideUuid,
                 // we use it directly to avoid a redundant API call.
-                const fallbackId = fallbackItem?.id || fallbackItem?.mediaId;
-                if (fallbackItem && String(fallbackId) === String(slideId)) {
+                const fallbackId = fallbackItem?.id;
+                if (fallbackItem && String(fallbackId) === String(slideUuid)) {
                     setItem(fallbackItem);
                     setLoading(false);
                     return;
@@ -277,8 +277,8 @@ const NewsDetails = ({ hasCitizenRole }) => {
             setLoading(true);
             setError("");
             try {
-                if (slideId) {
-                    const response = await fetch(`${serverUrl}/o/externalApis/getSlideDetailsById/${slideId}`, {
+                if (slideUuid) {
+                    const response = await fetch(`${serverUrl}/o/externalApis/getSlideDetailsById/${slideUuid}`, {
                         method: "GET",
                     });
                     const data = await response.json();
@@ -316,7 +316,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
         };
 
         fetchSlideDetails();
-    }, [slideId, routeRef, fallbackItem]);
+    }, [slideUuid, routeRef, fallbackItem]);
 
     // Ensure the page scrolls to the top whenever the route changes to this component
     useEffect(() => {
@@ -349,7 +349,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
                 const data = await response.json();
                 if (data?.success) {
                     const favList = data.favorites || data.slides || [];
-                    const currentId = String(item.id || item.mediaId);
+                    const currentId = String(item.slideId);
                     const favItem = favList.find(fav => String(fav.slideId) === currentId);
                     if (favItem) {
                         setIsFavorited(true);
@@ -385,9 +385,9 @@ const NewsDetails = ({ hasCitizenRole }) => {
                     return;
                 }
 
-                const currentId = String(item.id || item.mediaId || "");
+                const currentId = String(item.slideId);
                 const filtered = data.data
-                    .filter((entry) => String(entry.id || entry.mediaId || "") !== currentId)
+                    .filter((entry) => String(entry.slideId || "") !== currentId)
                     .filter((entry) => String(entry.poolName || "").trim() === String(item.poolName || "").trim())
                     .slice(0, 4);
 
@@ -424,7 +424,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
             const user = JSON.parse(liferayUserRaw);
             const groupId = user?.groups?.[0]?.id;
             const token = sessionStorage.getItem('token');
-            const currentId = String(item.id || item.mediaId);
+            const currentId = String(item.slideId);
 
             if (isFavorited && currentFavoriteId) {
                 const response = await fetch(`${serverUrl}/o/endUserCitizen/removeFromFavorite`, {

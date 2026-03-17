@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from '../i18n';
+import { Link } from 'react-router-dom';
 import { serverUrl } from '../Services/Constants/Constants';
 
 const EventCalendar = () => {
@@ -183,10 +184,17 @@ const EventCalendar = () => {
               <div className="small mb-2">
                 {e.location && <div className="opacity-75">{e.location}</div>}
               </div>
-              <div className="d-flex gap-2">
+              <div className="d-flex gap-2 align-items-center">
                 <span className="badge rounded-pill bg-info bg-opacity-20 border border-info border-opacity-25 px-3">
                   {e.poolName || t('calendar.events')}
                 </span>
+                <Link 
+                  to={`/news/${e.slideUuid}`} 
+                  className="read-more"
+                  style={{ fontSize: '0.85rem' }}
+                >
+                  {t('news.readMore')}
+                </Link>
               </div>
             </div>
           </div>

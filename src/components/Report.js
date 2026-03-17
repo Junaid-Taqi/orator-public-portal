@@ -171,6 +171,7 @@ const Report = ({ user }) => {
               value={formData.subject}
               onChange={handleChange}
               placeholder={t('reportForm.subjectPlaceholder')}
+              maxLength="255"
             />
             {errors.subject && <span className="error">{errors.subject}</span>}
           </div>
@@ -222,6 +223,7 @@ const Report = ({ user }) => {
               value={formData.address}
               onChange={handleChange}
               placeholder={t('reportForm.addressPlaceholder')}
+              maxLength="255"
             />
             {errors.address && <span className="error">{errors.address}</span>}
           </div>
@@ -234,7 +236,11 @@ const Report = ({ user }) => {
               value={formData.description}
               onChange={handleChange}
               placeholder={t('reportForm.descriptionPlaceholder')}
+              maxLength="2000"
             />
+            <div className="char-counter" style={{ textAlign: 'right', fontSize: '12px', color: '#666', marginTop: '4px' }}>
+              {formData.description.length}/2000
+            </div>
             {errors.description && <span className="error">{errors.description}</span>}
           </div>
 

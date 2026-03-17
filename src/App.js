@@ -147,6 +147,8 @@ function App() {
     );
   }
 
+  const isLoadingRoles = user && token && !citizenData;
+
   return (
     <div className="App">
       <Header hasLiferayUser={hasLiferayUser} user={user} onLogout={handleLogout} hasCitizenRole={hasCitizenRole} />
@@ -162,7 +164,9 @@ function App() {
           <Route
             path="/my-report"
             element={
-              hasCitizenRole ? (
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : hasCitizenRole ? (
                 <MyReport user={user} />
               ) : (
                 <Navigate to="/" replace />
@@ -173,7 +177,9 @@ function App() {
           <Route
             path="/favorites"
             element={
-              hasCitizenRole ? (
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : hasCitizenRole ? (
                 <Favorites user={user} />
               ) : (
                 <Navigate to="/" replace />
@@ -184,7 +190,9 @@ function App() {
           <Route
             path="/settings"
             element={
-              hasCitizenRole ? (
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : hasCitizenRole ? (
                 <Settings user={user} />
               ) : (
                 <Navigate to="/" replace />
@@ -193,7 +201,7 @@ function App() {
           />
         </Routes>
       </main>
-      <Footer hasMunicipalAdminRole={hasMunicipalAdminRole} hasCitizenRole={hasCitizenRole} user={user}/>
+      <Footer hasMunicipalAdminRole={hasMunicipalAdminRole} hasCitizenRole={hasCitizenRole} user={user} />
     </div>
   );
 }

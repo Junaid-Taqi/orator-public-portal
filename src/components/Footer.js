@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
 
-const Footer = () => {
+const Footer = ({ hasMunicipalAdminRole, hasCitizenRole, user }) => {
   const { t } = useTranslation();
   return (
     <footer className="footer">
@@ -19,8 +19,9 @@ const Footer = () => {
           <h4>{t('footer.quickLinks')}</h4>
           <ul>
             <li><Link to="/news">{t('footer.news')}</Link></li>
-            <li><Link to="/report">{t('footer.report')}</Link></li>
-            <li><a href="/web/guest/login">{t('footer.admin')}</a></li>
+            {hasCitizenRole && <li><Link to="/report">{t('footer.report')}</Link></li>}
+            {!hasCitizenRole && !hasMunicipalAdminRole && !user && <li><a href="/web/guest/login">{t('footer.admin')}</a></li>}
+            {hasMunicipalAdminRole && <li><a href={sessionStorage.getItem('userLandingPageUrl')}>{t('footer.admin')}</a></li>}
             <li><a href="partnership">{t('header.partnership')}</a></li>
           </ul>
         </div>

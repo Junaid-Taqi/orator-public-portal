@@ -14,6 +14,7 @@ import RegisterCitizen from './components/RegisterCitizen';
 import Settings from './components/Settings';
 import Favorites from './components/Favorites';
 import { serverUrl } from './Services/Constants/Constants';
+import { Navigate } from "react-router-dom";
 
 function Login() {
   const { t } = useTranslation();
@@ -31,7 +32,6 @@ function App() {
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState(null);
   const [citizenData, setCitizenData] = useState(null);
-  const [citizenStatus, setCitizenStatus] = useState('idle');
 
   const user = useMemo(() => {
     const raw = sessionStorage.getItem('liferayUser');
@@ -82,12 +82,11 @@ function App() {
   };
 
   const fetchCitizenData = async (userId) => {
-    setCitizenStatus('loading');
     try {
       const token = sessionStorage.getItem('token');
       const response = await fetch(`${serverUrl}/o/endUserCitizen/getCitizenData?userId=${userId}`, {
         method: 'GET',
-        headers: { 
+        headers: {
           'Accept': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
@@ -95,12 +94,8 @@ function App() {
       const data = await response.json();
       if (data?.success) {
         setCitizenData(data.data);
-        setCitizenStatus('succeeded');
-      } else {
-        setCitizenStatus('failed');
       }
     } catch (err) {
-      setCitizenStatus('failed');
       console.error('Error fetching citizen data:', err);
     }
   };
@@ -133,6 +128,7 @@ function App() {
   }, [user, token, expiresIn]);
 
   const hasCitizenRole = citizenData?.hasCitizenRole === true;
+  const hasMunicipalAdminRole = citizenData?.hasMunicipalAdminRole === true;
 
   const isBootstrappingAuth = user && !token && (status === 'idle' || status === 'loading');
   if (isBootstrappingAuth) {
@@ -163,12 +159,41 @@ function App() {
           <Route path="/report" element={<Report user={user} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterCitizen />} />
-           <Route path="/my-report" element={<MyReport user={user} />} />
-           {hasLiferayUser && <Route path="/favorites" element={<Favorites user={user} />} />}
-           {hasCitizenRole && <Route path="/settings" element={<Settings user={user} />} />}
+          <Route
+            path="/my-report"
+            element={
+              hasCitizenRole ? (
+                <MyReport user={user} />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/favorites"
+            element={
+              hasCitizenRole ? (
+                <Favorites user={user} />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              hasCitizenRole ? (
+                <Settings user={user} />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
         </Routes>
       </main>
-      <Footer />
+      <Footer hasMunicipalAdminRole={hasMunicipalAdminRole} hasCitizenRole={hasCitizenRole} user={user}/>
     </div>
   );
 }

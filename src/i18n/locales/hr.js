@@ -125,6 +125,16 @@ const hr = {
     subject: 'Predmet *',
     subjectPlaceholder: 'Kratki opis problema',
     category: 'Kategorija Problema *',
+    categories: {
+      streetLighting: 'Ulična rasvjeta',
+      potholes: 'Rupe na cesti',
+      garbageCollection: 'Odvoz otpada',
+      waterSewage: 'Voda/Kanalizacija',
+      parkMaintenance: 'Održavanje parkova',
+      trafficSignals: 'Prometna signalizacija',
+      graffiti: 'Grafiti',
+      other: 'Ostalo'
+    },
     address: 'Adresa / Lokacija *',
     addressPlaceholder: 'Unesite adresu ili raskrižje',
     description: 'Detaljan Opis *',

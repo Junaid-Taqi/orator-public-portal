@@ -1,19 +1,19 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
+import { serverUrl } from '../Services/Constants/Constants';
 
 const categories = [
-  'Street Lighting',
-  'Potholes',
-  'Garbage Collection',
-  'Water/Sewage',
-  'Park Maintenance',
-  'Traffic Signals',
-  'Graffiti',
-  'Other',
+  'streetLighting',
+  'potholes',
+  'garbageCollection',
+  'waterSewage',
+  'parkMaintenance',
+  'trafficSignals',
+  'graffiti',
+  'other',
 ];
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const parseJsonSafely = (raw) => {
   if (!raw) return null;
@@ -133,7 +133,7 @@ const Report = ({ user }) => {
         payload.append('files', formData.image);
       }
 
-      const response = await fetch(`${API_BASE_URL}/o/endUserCitizen/addCitizenReport`, {
+      const response = await fetch(`${serverUrl}/o/endUserCitizen/addCitizenReport`, {
         method: 'POST',
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         body: payload,
@@ -190,7 +190,7 @@ const Report = ({ user }) => {
                     }
                   }}
                 >
-                  {cat}
+                  {t(`reportForm.categories.${cat}`)}
                 </button>
               ))}
             </div>

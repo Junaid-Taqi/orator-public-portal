@@ -125,6 +125,16 @@ const en = {
     subject: 'Subject *',
     subjectPlaceholder: 'Brief description of the issue',
     category: 'Problem Category *',
+    categories: {
+      streetLighting: 'Street Lighting',
+      potholes: 'Potholes',
+      garbageCollection: 'Garbage Collection',
+      waterSewage: 'Water/Sewage',
+      parkMaintenance: 'Park Maintenance',
+      trafficSignals: 'Traffic Signals',
+      graffiti: 'Graffiti',
+      other: 'Other'
+    },
     address: 'Address / Location *',
     addressPlaceholder: 'Enter address or intersection',
     description: 'Detailed Description *',

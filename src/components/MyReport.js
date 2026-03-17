@@ -103,6 +103,7 @@ const badgeTypeToClass = (badgeType, badgeLabel) => {
 const MyReport = ({ user }) => {
   const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState('');
+  const [groupIdFilter, setGroupIdFilter] = useState('0');
   const [reports, setReports] = useState([]);
   const [visibleCount, setVisibleCount] = useState(5);
   const [counters, setCounters] = useState({
@@ -115,13 +116,12 @@ const MyReport = ({ user }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const groupId = user?.groups?.[0]?.id;
   const userId = user?.userId;
   const hasLiferayUser = !!user;
 
   useEffect(() => {
     const fetchReports = async () => {
-      if (!groupId || !userId) {
+      if (!userId) {
         setError(t('myReport.missingContext'));
         return;
       }
@@ -132,7 +132,7 @@ const MyReport = ({ user }) => {
       try {
         const token = sessionStorage.getItem('token');
         const payload = {
-          groupId: String(groupId),
+          groupId: String(groupIdFilter),
           userId: String(userId),
         };
         if (statusFilter) {
@@ -174,7 +174,7 @@ const MyReport = ({ user }) => {
     };
 
     fetchReports();
-  }, [groupId, userId, statusFilter]);
+  }, [groupIdFilter, userId, statusFilter]);
 
   const stats = useMemo(
     () => [
@@ -240,6 +240,24 @@ const MyReport = ({ user }) => {
           </select>
         </div>
 
+        <div className="glass-card p-2 mb-4 d-flex align-items-center">
+          <div className="px-3 border-end border-white-10">
+            <span className="text-info">{t('registerCitizen.municipality')}</span>
+          </div>
+          <select
+            className="form-select bg-transparent border-0 text-white-50 shadow-none"
+            value={groupIdFilter}
+            onChange={(e) => setGroupIdFilter(e.target.value)}
+          >
+            <option value="0">{t('myReport.allReports')}</option>
+            {user?.groups?.map((group) => (
+              <option key={group.id} value={group.id}>
+                {group.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {loading && (
           <div className="glass-card p-4 text-white-50">
             {t('myReport.loadingReports')}
@@ -272,6 +290,7 @@ const MyReport = ({ user }) => {
             <div key={report.reportId} className="my-report-card mb-3">
               <div className="my-report-top-row">
                 <div className="my-report-top-left">
+                  <span className="report-chip report-chip-group">{report.groupName || 'N/A'}</span>
                   <span className="report-chip report-chip-category">{report.category || 'N/A'}</span>
                   <span className={topStatus.className}>{topStatus.label}</span>
                 </div>

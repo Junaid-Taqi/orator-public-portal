@@ -1611,6 +1611,11 @@ input.form-control::placeholder {
   color: #e8d3ff;
 }
 
+.report-chip-group {
+  background: rgba(30, 210, 255, 0.2);
+  color: #e0faff;
+}
+
 .status-not-authorized {
   background: rgba(250, 204, 21, 0.24);
   color: #fde68a;
@@ -1957,3 +1962,4 @@ input.form-control::placeholder {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
 }
+

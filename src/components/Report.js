@@ -38,6 +38,7 @@ const Report = ({ user }) => {
     description: '',
     accept: false,
     image: null,
+    groupId: '',
   });
 
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -86,6 +87,7 @@ const Report = ({ user }) => {
     if (!selectedCategory) nextErrors.category = t('reportForm.errors.category');
     if (!formData.address.trim()) nextErrors.address = t('reportForm.errors.address');
     if (!formData.description.trim()) nextErrors.description = t('reportForm.errors.description');
+    if (!formData.groupId) nextErrors.groupId = t('registerCitizen.errors.municipalityReq');
     if (!formData.accept) nextErrors.accept = t('reportForm.errors.accept');
 
     setErrors(nextErrors);
@@ -99,6 +101,7 @@ const Report = ({ user }) => {
       description: '',
       accept: false,
       image: null,
+      groupId: '',
     });
     setSelectedCategory('');
     if (fileInputRef.current) {
@@ -110,14 +113,8 @@ const Report = ({ user }) => {
     e.preventDefault();
     if (!validate()) return;
 
-    const groupId = user?.groups?.[0]?.id;
+    const groupId = formData.groupId;
     const userId = user?.userId;
-
-    if (!groupId || !userId) {
-      setIsSuccess(false);
-      setServerMessage(t('reportForm.missingContext'));
-      return;
-    }
 
     setSubmitting(true);
     setServerMessage('');
@@ -198,6 +195,23 @@ const Report = ({ user }) => {
               ))}
             </div>
             {errors.category && <span className="error">{errors.category}</span>}
+          </div>
+          
+          <div className="form-group registration-field">
+            <label>{t('registerCitizen.municipality')}</label>
+            <select
+               name="groupId"
+               value={formData.groupId}
+               onChange={handleChange}
+            >
+              <option value="">{t('registerCitizen.selectMunicipality')}</option>
+              {user?.groups?.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+            {errors.groupId && <span className="error">{errors.groupId}</span>}
           </div>
 
           <div className="form-group">

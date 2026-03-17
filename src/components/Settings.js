@@ -10,7 +10,7 @@ const initialForm = {
   lastName: '',
   email: '',
   gender: '',
-  groupId: '',
+  groupIds: [],
   oldPassword: '',
   newPassword: '',
   confirmNewPassword: '',
@@ -83,7 +83,7 @@ function Settings({ user }) {
           lastName: citizen.lastName || '',
           email: citizen.email || '',
           gender: citizen.gender || '',
-          groupId: citizen.groups?.[0] ? String(citizen.groups[0]) : '',
+          groupIds: citizen.groups ? citizen.groups.map(String) : [],
         }));
         setLoadStatus('succeeded');
       } catch (error) {
@@ -128,8 +128,8 @@ function Settings({ user }) {
         nextErrors.confirmNewPassword = t('registerCitizen.errors.confirmPasswordMatch');
       }
     }
-    if (!form.groupId) {
-      nextErrors.groupId = t('registerCitizen.errors.municipalityReq');
+    if (form.groupIds.length === 0) {
+      nextErrors.groupIds = t('registerCitizen.errors.municipalityReq');
     }
     if (!form.gender) {
       nextErrors.gender = t('registerCitizen.errors.genderReq');
@@ -159,7 +159,7 @@ function Settings({ user }) {
         email: form.email.trim(),
         oldPassword: form.oldPassword,
         newPassword: form.newPassword || '',
-        groupId: String(form.groupId),
+        groupIds: form.groupIds,
         gender: form.gender,
       };
 
@@ -301,19 +301,33 @@ function Settings({ user }) {
 
           <div className="registration-field">
             <label>{t('registerCitizen.municipality')}</label>
-            <select
-              value={form.groupId}
-              onChange={(e) => handleChange('groupId', e.target.value)}
-              disabled={municipalitiesStatus === 'loading'}
-            >
-              <option value="">{t('registerCitizen.selectMunicipality')}</option>
-              {municipalities.map((item) => (
-                <option key={item.groupId} value={item.groupId}>
-                  {item.name}
-                </option>
-              ))}
-            </select>
-            {!!errors.groupId && <span className="registration-error">{errors.groupId}</span>}
+            <div className="multi-checkbox-container">
+              {municipalitiesStatus === 'loading' ? (
+                <div className="loading-text">{t('registerCitizen.loading')}</div>
+              ) : (
+                municipalities.map((item) => {
+                  const isChecked = form.groupIds.includes(String(item.groupId));
+                  return (
+                    <div key={item.groupId} className="multi-checkbox-item">
+                      <input
+                        type="checkbox"
+                        id={`group-${item.groupId}`}
+                        checked={isChecked}
+                        onChange={() => {
+                          const idStr = String(item.groupId);
+                          const next = isChecked
+                            ? form.groupIds.filter(id => id !== idStr)
+                            : [...form.groupIds, idStr];
+                          handleChange('groupIds', next);
+                        }}
+                      />
+                      <label htmlFor={`group-${item.groupId}`}>{item.name}</label>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+            {!!errors.groupIds && <span className="registration-error">{errors.groupIds}</span>}
           </div>
 
           <div className="registration-field">

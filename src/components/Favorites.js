@@ -12,10 +12,9 @@ const Favorites = ({ user }) => {
     const [error, setError] = useState('');
 
     const userId = user?.userId;
-    const groupId = user?.groups?.[0]?.id;
 
     const fetchFavorites = async () => {
-        if (!userId || !groupId) return;
+        if (!userId) return;
         setLoading(true);
         setError('');
         try {
@@ -27,8 +26,7 @@ const Favorites = ({ user }) => {
                     ...(token ? { Authorization: `Bearer ${token}` } : {})
                 },
                 body: JSON.stringify({ 
-                    userId: String(userId),
-                    groupId: String(groupId)
+                    userId: String(userId)
                 })
             });
 

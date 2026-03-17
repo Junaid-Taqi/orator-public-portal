@@ -333,7 +333,6 @@ const NewsDetails = ({ hasCitizenRole }) => {
 
             try {
                 const user = JSON.parse(liferayUserRaw);
-                const groupId = user?.groups?.[0]?.id;
                 const token = sessionStorage.getItem('token');
                 const response = await fetch(`${serverUrl}/o/endUserCitizen/getAllFavoriteArticles`, {
                     method: 'POST',
@@ -342,8 +341,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
                         ...(token ? { Authorization: `Bearer ${token}` } : {})
                     },
                     body: JSON.stringify({
-                        userId: String(user.userId),
-                        groupId: String(groupId)
+                        userId: String(user.userId)
                     })
                 });
                 const data = await response.json();
@@ -422,7 +420,6 @@ const NewsDetails = ({ hasCitizenRole }) => {
 
         try {
             const user = JSON.parse(liferayUserRaw);
-            const groupId = user?.groups?.[0]?.id;
             const token = sessionStorage.getItem('token');
             const currentId = String(item.slideId);
 
@@ -454,7 +451,6 @@ const NewsDetails = ({ hasCitizenRole }) => {
                     },
                     body: JSON.stringify({
                         userId: String(user.userId),
-                        groupId: String(groupId),
                         slideId: currentId
                     })
                 });
@@ -469,8 +465,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
                             ...(token ? { Authorization: `Bearer ${token}` } : {})
                         },
                         body: JSON.stringify({
-                            userId: String(user.userId),
-                            groupId: String(groupId)
+                            userId: String(user.userId)
                         })
                     });
                     const allData = await fetchAllResp.json();

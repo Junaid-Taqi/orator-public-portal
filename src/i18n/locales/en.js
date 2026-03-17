@@ -1,4 +1,8 @@
 const en = {
+  common: {
+    save: 'Save',
+    saving: 'Saving...'
+  },
   header: {
     title: 'ORATOR',
     subTitle: 'Public Portal',
@@ -202,6 +206,10 @@ const en = {
       fetchMunicipalities: 'Unable to fetch municipalities'
     },
     success: 'Citizen registered successfully.'
+  },
+  registerInMunicipality: {
+    title: 'Register in Municipality',
+    subtitle: 'Select the municipalities you want to register with.'
   },
   newsDetails: {
     loading: 'Loading article...',

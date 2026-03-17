@@ -13,6 +13,7 @@ import MyReport from './components/MyReport';
 import RegisterCitizen from './components/RegisterCitizen';
 import Settings from './components/Settings';
 import Favorites from './components/Favorites';
+import RegisterInMunicipality from './components/RegisterInMunicipality';
 import { serverUrl } from './Services/Constants/Constants';
 import { Navigate } from "react-router-dom";
 
@@ -194,6 +195,19 @@ function App() {
                 <div>Loading...</div>
               ) : hasCitizenRole ? (
                 <Settings user={user} />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/register-in-municipility"
+            element={
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : (user && !hasCitizenRole && !hasMunicipalAdminRole) ? (
+                <RegisterInMunicipality user={user} />
               ) : (
                 <Navigate to="/" replace />
               )

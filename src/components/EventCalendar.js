@@ -218,7 +218,7 @@ const EventCalendar = () => {
                 {dayEvents.slice(0, 3).map((e) => (
                   <div key={e.eventId} className="p-2 rounded-3 text-start bg-info bg-opacity-10 border border-info border-opacity-20 mb-2">
                     <div className="small my-1">{e.title || t('calendar.untitled')}</div>
-                    <div className="text-white-50" style={{ fontSize: '0.65rem' }}>{e.location || e.poolName || ''}</div>
+                    <div className="text-white-50" style={{ fontSize: '0.65rem' }}>{e.subtitle || ''}</div>
                   </div>
                 ))}
                 {dayEvents.length > 3 && <div className="text-white-50 small">+{dayEvents.length - 3} {t('calendar.more')}</div>}

@@ -1272,11 +1272,14 @@ input.form-control::placeholder {
   }
 
   .news-details-description {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .news-details-subtitle {
-    font-size: 24px;
+    font-size: 16px;
+  }
+  .news-details-title {
+    font-size: 20px !important;
   }
 }
 

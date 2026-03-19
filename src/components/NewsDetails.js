@@ -615,7 +615,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
     }
 
     return (
-        <div className="news-wrapper py-5 px-4">
+        <div className="news-wrapper py-2 px-2">
             <div className="container news-details-container">
                 <div className="news-back-row">
                     <Link to="/news" className="news-back-link">

@@ -1,19 +1,19 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../i18n';
+import { serverUrl } from '../Services/Constants/Constants';
 
 const categories = [
-  'Street Lighting',
-  'Potholes',
-  'Garbage Collection',
-  'Water/Sewage',
-  'Park Maintenance',
-  'Traffic Signals',
-  'Graffiti',
-  'Other',
+  'streetLighting',
+  'potholes',
+  'garbageCollection',
+  'waterSewage',
+  'parkMaintenance',
+  'trafficSignals',
+  'graffiti',
+  'other',
 ];
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || '';
 
 const parseJsonSafely = (raw) => {
   if (!raw) return null;
@@ -133,7 +133,7 @@ const Report = ({ user }) => {
         payload.append('files', formData.image);
       }
 
-      const response = await fetch(`${API_BASE_URL}/o/endUserCitizen/addCitizenReport`, {
+      const response = await fetch(`${serverUrl}/o/endUserCitizen/addCitizenReport`, {
         method: 'POST',
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
         body: payload,
@@ -171,6 +171,7 @@ const Report = ({ user }) => {
               value={formData.subject}
               onChange={handleChange}
               placeholder={t('reportForm.subjectPlaceholder')}
+              maxLength="255"
             />
             {errors.subject && <span className="error">{errors.subject}</span>}
           </div>
@@ -190,7 +191,7 @@ const Report = ({ user }) => {
                     }
                   }}
                 >
-                  {cat}
+                  {t(`reportForm.categories.${cat}`)}
                 </button>
               ))}
             </div>
@@ -222,6 +223,7 @@ const Report = ({ user }) => {
               value={formData.address}
               onChange={handleChange}
               placeholder={t('reportForm.addressPlaceholder')}
+              maxLength="255"
             />
             {errors.address && <span className="error">{errors.address}</span>}
           </div>
@@ -234,7 +236,11 @@ const Report = ({ user }) => {
               value={formData.description}
               onChange={handleChange}
               placeholder={t('reportForm.descriptionPlaceholder')}
+              maxLength="2000"
             />
+            <div className="char-counter" style={{ textAlign: 'right', fontSize: '12px', color: '#666', marginTop: '4px' }}>
+              {formData.description.length}/2000
+            </div>
             {errors.description && <span className="error">{errors.description}</span>}
           </div>
 

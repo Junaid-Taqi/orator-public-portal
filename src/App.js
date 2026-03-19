@@ -13,6 +13,7 @@ import MyReport from './components/MyReport';
 import RegisterCitizen from './components/RegisterCitizen';
 import Settings from './components/Settings';
 import Favorites from './components/Favorites';
+import RegisterInMunicipality from './components/RegisterInMunicipality';
 import { serverUrl } from './Services/Constants/Constants';
 import { Navigate } from "react-router-dom";
 
@@ -147,6 +148,8 @@ function App() {
     );
   }
 
+  const isLoadingRoles = user && token && !citizenData;
+
   return (
     <div className="App">
       <Header hasLiferayUser={hasLiferayUser} user={user} onLogout={handleLogout} hasCitizenRole={hasCitizenRole} />
@@ -162,7 +165,9 @@ function App() {
           <Route
             path="/my-report"
             element={
-              hasCitizenRole ? (
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : hasCitizenRole ? (
                 <MyReport user={user} />
               ) : (
                 <Navigate to="/" replace />
@@ -173,7 +178,9 @@ function App() {
           <Route
             path="/favorites"
             element={
-              hasCitizenRole ? (
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : hasCitizenRole ? (
                 <Favorites user={user} />
               ) : (
                 <Navigate to="/" replace />
@@ -184,8 +191,23 @@ function App() {
           <Route
             path="/settings"
             element={
-              hasCitizenRole ? (
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : hasCitizenRole ? (
                 <Settings user={user} />
+              ) : (
+                <Navigate to="/" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/register-in-municipility"
+            element={
+              isLoadingRoles ? (
+                <div>Loading...</div>
+              ) : (user && !hasCitizenRole && !hasMunicipalAdminRole) ? (
+                <RegisterInMunicipality user={user} />
               ) : (
                 <Navigate to="/" replace />
               )
@@ -193,7 +215,7 @@ function App() {
           />
         </Routes>
       </main>
-      <Footer hasMunicipalAdminRole={hasMunicipalAdminRole} hasCitizenRole={hasCitizenRole} user={user}/>
+      <Footer hasMunicipalAdminRole={hasMunicipalAdminRole} hasCitizenRole={hasCitizenRole} user={user} />
     </div>
   );
 }

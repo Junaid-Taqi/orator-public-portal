@@ -12,6 +12,8 @@ import { serverUrl } from "../Services/Constants/Constants";
 const Home = () => {
     const { t } = useTranslation();
     const [latestUpdates, setLatestUpdates] = useState([]);
+    const [municipalities, setMunicipalities] = useState([]);
+    const [selectedMunicipalityId, setSelectedMunicipalityId] = useState("All");
     const [impactCounts, setImpactCounts] = useState({
         allUsersCount: 0,
         problemsResolvedCount: 0,
@@ -20,9 +22,39 @@ const Home = () => {
     });
 
     useEffect(() => {
+        const fetchMunicipalities = async () => {
+            try {
+                const response = await fetch(`${serverUrl}/o/endUserRegistrationApplication/getMunicipalities`, {
+                    method: "GET",
+                });
+                const data = await response.json();
+
+                if (response.ok && data?.success && Array.isArray(data?.data)) {
+                    setMunicipalities(data.data);
+                } else {
+                    setMunicipalities([]);
+                }
+            } catch (error) {
+                setMunicipalities([]);
+            }
+        };
+
+        fetchMunicipalities();
+    }, []);
+
+    useEffect(() => {
         const fetchLatestUpdates = async () => {
             try {
-                const response = await fetch(`${serverUrl}/o/externalApis/getLatestPublishedSlidePerPool`, {
+                const params = new URLSearchParams();
+                if (selectedMunicipalityId !== "All") {
+                    params.append("groupId", String(selectedMunicipalityId));
+                }
+
+                const endpoint = params.toString().length > 0
+                    ? `${serverUrl}/o/externalApis/getLatestPublishedSlidePerPool?${params.toString()}`
+                    : `${serverUrl}/o/externalApis/getLatestPublishedSlidePerPool`;
+
+                const response = await fetch(endpoint, {
                     method: "GET",
                 });
 
@@ -35,12 +67,16 @@ const Home = () => {
                         totalPublishedSlidesCount: Number(data?.totalPublishedSlidesCount || 0),
                         upcomingEventsCount: Number(data?.upcomingEventsCount || 0),
                     });
+                } else {
+                    setLatestUpdates([]);
                 }
-            } catch (error) { }
+            } catch (error) {
+                setLatestUpdates([]);
+            }
         };
 
         fetchLatestUpdates();
-    }, []);
+    }, [selectedMunicipalityId]);
 
     const formatDate = (value) => {
         if (!value) return "";
@@ -109,7 +145,24 @@ const Home = () => {
             {/* Latest Updates */}
             <section className="updates">
                 <div className="updates-header">
-                    <h2>{t('home.latestUpdates')}</h2>
+                    <div className="d-flex align-items-center gap-3 flex-wrap">
+                        <h2 className="m-0">{t('home.latestUpdates')}</h2>
+                        <div className="d-flex align-items-center gap-2 flex-wrap">
+                            <i className="fas fa-filter text-info"></i>
+                            <select
+                                className="form-select filter-select news-select-filter"
+                                value={selectedMunicipalityId}
+                                onChange={(e) => setSelectedMunicipalityId(e.target.value)}
+                            >
+                                <option value="All">{t("calendar.allMunicipalities")}</option>
+                                {municipalities.map((municipality, index) => (
+                                    <option key={`${municipality.groupId}-${index}`} value={String(municipality.groupId)}>
+                                        {municipality.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
                     <Link to="/news" className="view-all">{t('home.viewAll')}</Link>
                 </div>
 

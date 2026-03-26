@@ -26,7 +26,7 @@ const hr = {
     report: 'Prijavi Problem',
     admin: 'Admin Portal',
     contact: 'Kontakt',
-    email: 'Email: info@orator.gov',
+    email: 'Email: gradani@orator.hr',
     phone: 'Telefon: (555) 123-4567',
     copyright: '© 2026 ORATOR. Sva prava pridržana.'
   },

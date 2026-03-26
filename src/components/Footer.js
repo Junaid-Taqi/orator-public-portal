@@ -30,7 +30,7 @@ const Footer = ({ hasMunicipalAdminRole, hasCitizenRole, user }) => {
         <div className="footer-col">
           <h4>{t('footer.contact')}</h4>
           <p>{t('footer.email')}</p>
-          <p>{t('footer.phone')}</p>
+          {/* <p>{t('footer.phone')}</p> */}
         </div>
 
       </div>

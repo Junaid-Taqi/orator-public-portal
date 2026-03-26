@@ -36,12 +36,12 @@ const hr = {
     viewAllNews: 'Prikaži sve vijesti',
     reportProblem: 'Prijavi Problem',
     eventCalendar: 'Kalendar Događaja',
-    latestUpdates: 'Najnovija Obavijet',
+    latestUpdates: 'Najnovije Obavijesti',
     viewAll: 'Prikaži sve →',
     communityImpact: 'Utjecaj Zajednice',
     activeCitizens: 'Aktivni Građani',
     problemsResolved: 'Riješeni Problemi',
-    newsUpdates: 'Obavijet Vijesti',
+    newsUpdates: 'Obavijesti',
     upcomingEvents: 'Nadolazeći Događaji'
   },
   calendar: {

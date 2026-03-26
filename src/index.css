@@ -11,3 +11,65 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+/* Main Container */
+.municipality-card-wrapper {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 20px 95px;
+    color: white;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    max-width: 600px;
+}
+
+/* Round Icon Design */
+.icon-circle {
+  background: #0088cc;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* Typography */
+.select-label {
+  font-weight: 700;
+  font-size: 1.2rem;
+  display: block;
+}
+
+.select-subtitle {
+  font-size: 0.85rem;
+  color: #a0c4ff;
+  margin-bottom: 5px !important;
+}
+
+/* Custom Select Styling */
+.custom-glass-select {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+  padding: 0 !important;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Dropdown ke options ko readable banane ke liye */
+.custom-glass-select option {
+  background-color: #1e3c72;
+  color: white;
+}
+
+/* Bootstrap arrow color change (Optional) */
+.custom-glass-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+}

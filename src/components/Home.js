@@ -114,6 +114,37 @@ const Home = () => {
             <section className="hero">
                 <h1>{t('home.welcome')}</h1>
                 <p>{t('home.intro')}</p>
+                <div className="d-flex align-items-center justify-content-center gap-3">
+                    <div className="municipality-card-wrapper d-flex align-items-center justify-content-center gap-3">
+                        {/* Left Side Icon */}
+                        <div className="icon-circle">
+                            <FontAwesomeIcon
+                            icon={faLocationDot}
+                            className=""
+                        />
+                        </div>
+
+                        {/* Text and Select Container */}
+                        <div className="flex-grow-1">
+                            <label className="select-label m-0">Select Your Municipality</label>
+                            <p className="select-subtitle m-0">Choose your location to see relevant updates</p>
+
+                            <select
+                                className="form-select custom-glass-select text-center"
+                                value={selectedMunicipalityId}
+                                onChange={(e) => setSelectedMunicipalityId(e.target.value)}
+                            >
+                                <option value="All">{t("calendar.allMunicipalities")}</option>
+                                {municipalities.map((municipality, index) => (
+                                    <option key={`${municipality.groupId}-${index}`} value={String(municipality.groupId)}>
+                                        {municipality.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div className="hero-cards">
                     <Link to="/news" className="hero-card">
@@ -149,22 +180,6 @@ const Home = () => {
                         <h2 className="m-0">{t('home.latestUpdates')}</h2>
                     </div>
                     <div className="filterDropdown d-flex gap-3 align-items-center">
-                        <div className="d-flex align-items-center gap-2 flex-wrap">
-                            <i className="fas fa-filter text-info"></i>
-                            <select
-                                className="form-select filter-select news-select-filter"
-                                value={selectedMunicipalityId}
-                                onChange={(e) => setSelectedMunicipalityId(e.target.value)}
-                            >
-                                <option value="All">{t("calendar.allMunicipalities")}</option>
-                                {municipalities.map((municipality, index) => (
-                                    <option key={`${municipality.groupId}-${index}`} value={String(municipality.groupId)}>
-                                        {municipality.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
                         <Link to="/news" className="header-action-btn">{t('home.viewAll')}</Link>
                     </div>
                 </div>

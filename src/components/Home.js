@@ -117,7 +117,7 @@ const Home = () => {
                 <div className="d-flex align-items-center justify-content-center gap-3">
                     <div className="municipality-card-wrapper d-flex align-items-center justify-content-center gap-3">
                         {/* Left Side Icon */}
-                        <div className="icon-circle">
+                        <div>
                             <FontAwesomeIcon
                             icon={faLocationDot}
                             className=""

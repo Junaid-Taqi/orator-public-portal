@@ -144,9 +144,11 @@ const Home = () => {
 
             {/* Latest Updates */}
             <section className="updates">
-                <div className="updates-header">
-                    <div className="d-flex align-items-center gap-3 flex-wrap">
+                <div className="d-flex align-items-center justify-content-between gap-3 flex-wrap">
+                    <div className="latestUpdate">
                         <h2 className="m-0">{t('home.latestUpdates')}</h2>
+                    </div>
+                    <div className="filterDropdown d-flex gap-3 align-items-center">
                         <div className="d-flex align-items-center gap-2 flex-wrap">
                             <i className="fas fa-filter text-info"></i>
                             <select
@@ -162,8 +164,9 @@ const Home = () => {
                                 ))}
                             </select>
                         </div>
+
+                        <Link to="/news" className="header-action-btn">{t('home.viewAll')}</Link>
                     </div>
-                    <Link to="/news" className="view-all">{t('home.viewAll')}</Link>
                 </div>
 
                 <div className="update-cards">

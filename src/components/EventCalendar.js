@@ -14,6 +14,8 @@ const EventCalendar = () => {
   const [summaryMonths, setSummaryMonths] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
   const [selectedMunicipalityId, setSelectedMunicipalityId] = useState('All');
+  const [contentPools, setContentPools] = useState([]);
+  const [selectedPoolId, setSelectedPoolId] = useState('All');
   const [loading, setLoading] = useState(false);
 
   const containerStyle = {
@@ -85,6 +87,38 @@ const EventCalendar = () => {
   }, []);
 
   useEffect(() => {
+    const fetchActiveContentPools = async () => {
+      try {
+        const endpoint =
+          selectedMunicipalityId === 'All'
+            ? `${serverUrl}/o/externalApis/getActiveContentPools`
+            : `${serverUrl}/o/externalApis/getActiveContentPools?groupId=${encodeURIComponent(selectedMunicipalityId)}`;
+
+        const response = await fetch(endpoint, { method: 'GET' });
+        const data = await response.json();
+        if (response.ok && data?.success && Array.isArray(data?.data)) {
+          setContentPools(data.data);
+        } else {
+          setContentPools([]);
+        }
+      } catch (e) {
+        setContentPools([]);
+      }
+    };
+
+    fetchActiveContentPools();
+  }, [selectedMunicipalityId]);
+
+  useEffect(() => {
+    if (
+      selectedPoolId !== 'All' &&
+      !contentPools.some((pool) => String(pool.id) === String(selectedPoolId))
+    ) {
+      setSelectedPoolId('All');
+    }
+  }, [contentPools, selectedPoolId]);
+
+  useEffect(() => {
     const fetchCalendar = async () => {
       setLoading(true);
       try {
@@ -94,6 +128,9 @@ const EventCalendar = () => {
         };
         if (selectedMunicipalityId !== 'All') {
           params.groupId = String(selectedMunicipalityId);
+        }
+        if (selectedPoolId !== 'All') {
+          params.contentPoolId = String(selectedPoolId);
         }
         const qs = new URLSearchParams(params);
 
@@ -116,7 +153,7 @@ const EventCalendar = () => {
     };
 
     fetchCalendar();
-  }, [range.from, range.to, selectedMunicipalityId]);
+  }, [range.from, range.to, selectedMunicipalityId, selectedPoolId]);
 
   useEffect(() => {
     if (
@@ -347,6 +384,24 @@ const EventCalendar = () => {
         </div>
       </div>
 
+      <div className={glassPanel}>
+        <div className="d-flex align-items-center gap-2 flex-wrap">
+          <i className="fas fa-filter text-info"></i>
+          <select
+            className="form-select filter-select news-select-filter w-auto"
+            value={selectedPoolId}
+            onChange={(e) => setSelectedPoolId(e.target.value)}
+          >
+            <option value="All">{t('news.all')}</option>
+            {contentPools.map((pool) => (
+              <option key={pool.id} value={String(pool.id)}>
+                {pool.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {loading && <div className="text-white-50 mb-3">{t('calendar.loading')}</div>}
 
       {!loading && view === 'Day' && <DayView />}
@@ -358,4 +413,3 @@ const EventCalendar = () => {
 };
 
 export default EventCalendar;
-

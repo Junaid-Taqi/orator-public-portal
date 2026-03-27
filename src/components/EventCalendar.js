@@ -1,9 +1,31 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from '../i18n';
 import { Link } from 'react-router-dom';
 import { serverUrl } from '../Services/Constants/Constants';
+
+// Sync with TemplateSlideForm TAG_OPTIONS
+const TAG_OPTIONS = [
+  '🏥 Health',
+  '⚽ Sport',
+  '⚽ Football',
+  '🏀 Basketball',
+  '🎾 Tennis',
+  '🏊 Swimming',
+  '🚗 Traffic',
+  '🏗️ Infrastructure',
+  '🏘️ Communal',
+  '🌳 Environment',
+  '👶 Child Care',
+  '👥 Social',
+  '🌍 International',
+  '🎓 Education',
+  '🎭 Culture',
+  '🚨 Safety',
+  '🏠 Housing',
+  '💼 Economy'
+];
 
 const EventCalendar = () => {
   const { t, i18n } = useTranslation();
@@ -14,9 +36,15 @@ const EventCalendar = () => {
   const [summaryMonths, setSummaryMonths] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
   const [selectedMunicipalityId, setSelectedMunicipalityId] = useState('All');
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedEventModes, setSelectedEventModes] = useState([]); // empty by default; user selects explicitly
   const [contentPools, setContentPools] = useState([]);
   const [selectedPoolId, setSelectedPoolId] = useState('All');
   const [loading, setLoading] = useState(false);
+  const [tagsOpen, setTagsOpen] = useState(false);
+  const [modesOpen, setModesOpen] = useState(false);
+
+  const selectedModesLabel = useMemo(() => selectedEventModes.length, [selectedEventModes]);
 
   const containerStyle = {
     background: 'linear-gradient(135deg, #112235 0%, #0f2d3e 40%, #155e75 100%)',
@@ -132,6 +160,12 @@ const EventCalendar = () => {
         if (selectedPoolId !== 'All') {
           params.contentPoolId = String(selectedPoolId);
         }
+        if (selectedTags.length > 0) {
+          params.tags = selectedTags.join(',');
+        }
+        if (selectedEventModes.length > 0) {
+          params.eventModes = selectedEventModes.join(',');
+        }
         const qs = new URLSearchParams(params);
 
         const response = await fetch(`${serverUrl}/o/externalApis/getEventCalendar?${qs.toString()}`);
@@ -153,7 +187,7 @@ const EventCalendar = () => {
     };
 
     fetchCalendar();
-  }, [range.from, range.to, selectedMunicipalityId, selectedPoolId]);
+  }, [range.from, range.to, selectedMunicipalityId, selectedPoolId, selectedTags, selectedEventModes]);
 
   useEffect(() => {
     if (
@@ -400,6 +434,118 @@ const EventCalendar = () => {
             ))}
           </select>
         </div>
+      </div>
+
+      <div className={glassPanel}>
+        <button
+          className="w-100 d-flex align-items-center justify-content-between text-white bg-transparent border-0"
+          onClick={() => setTagsOpen((v) => !v)}
+        >
+          <div className="d-flex align-items-center gap-2">
+            <i className="fas fa-tags text-info"></i>
+            <span>{t('calendar.tags') || 'Tags'}</span>
+          </div>
+          <FontAwesomeIcon icon={tagsOpen ? faChevronUp : faChevronDown} />
+        </button>
+        {tagsOpen && (
+          <>
+            <div className="mt-2 d-flex align-items-center justify-content-between gap-2 flex-wrap">
+              <div />
+              {selectedTags.length > 0 && (
+                <button className="btn btn-sm btn-outline-danger text-white" onClick={() => setSelectedTags([])}>
+                  {t('calendar.clearAll') || 'Clear All'}
+                </button>
+              )}
+            </div>
+            <div className="mt-3 d-flex flex-wrap gap-2">
+              {TAG_OPTIONS.map((tag) => {
+                const selected = selectedTags.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    className={selected ? activeBtn : 'btn btn-sm bg-opacity-10 text-white-50 rounded-pill border-0 px-3'}
+                    onClick={() =>
+                      setSelectedTags((prev) =>
+                        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+                      )
+                    }
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className={glassPanel}>
+        <button
+          className="w-100 d-flex align-items-center justify-content-between text-white bg-transparent border-0"
+          onClick={() => setModesOpen((v) => !v)}
+        >
+          <div className="d-flex align-items-center gap-2">
+            <i className="far fa-calendar-alt text-info"></i>
+            <span>{t('calendar.dateSelectionType') || 'Date Selection Type'}</span>
+            {selectedModesLabel > 0 && (
+              <span className="badge bg-info text-dark rounded-pill">{selectedModesLabel} {t('calendar.selected') || 'selected'}</span>
+            )}
+          </div>
+          <FontAwesomeIcon icon={modesOpen ? faChevronUp : faChevronDown} />
+        </button>
+
+        {modesOpen && (
+          <>
+            <div className="mt-2 d-flex align-items-center justify-content-end">
+              {selectedEventModes.length > 0 && (
+                <button className="btn btn-sm btn-outline-danger text-white" onClick={() => setSelectedEventModes([])}>
+                  {t('calendar.clearAll') || 'Clear All'}
+                </button>
+              )}
+            </div>
+            {selectedEventModes.length > 0 && (
+              <div className="mt-2 mb-2 d-flex flex-wrap gap-2">
+                {selectedEventModes.map((id) => (
+                  <span key={id} className="badge bg-info text-dark d-flex align-items-center gap-2 px-3">
+                    {id === 1 ? (t('calendar.singleDate') || 'Single Date') : id === 2 ? (t('calendar.dateRange') || 'Date Range') : (t('calendar.multipleDates') || 'Multiple Dates')}
+                    <button
+                      className="btn btn-sm btn-link text-dark p-0"
+                      onClick={() => setSelectedEventModes((prev) => prev.filter((m) => m !== id))}
+                      aria-label="remove mode"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="d-flex flex-column gap-2">
+              {[{ id: 1, title: t('calendar.singleDate') || 'Single Date Event', desc: t('calendar.singleDateDesc') || 'Events occurring on one specific date' },
+                { id: 2, title: t('calendar.dateRange') || 'From-To Date Range', desc: t('calendar.dateRangeDesc') || 'Events spanning multiple consecutive days' },
+                { id: 3, title: t('calendar.multipleDates') || 'Multiple Dates Event', desc: t('calendar.multipleDatesDesc') || 'Events recurring on multiple separate dates' }].map((mode) => {
+                  const checked = selectedEventModes.includes(mode.id);
+                  return (
+                    <label key={mode.id} className="d-flex align-items-start gap-3 bg-dark bg-opacity-10 rounded-4 p-3 border border-white border-opacity-10">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() =>
+                          setSelectedEventModes((prev) =>
+                            prev.includes(mode.id) ? prev.filter((m) => m !== mode.id) : [...prev, mode.id]
+                          )
+                        }
+                        className="form-check-input mt-1"
+                      />
+                      <div>
+                        <div className="text-white fw-semibold">{mode.title}</div>
+                        <div className="text-white-50 small">{mode.desc}</div>
+                      </div>
+                    </label>
+                  );
+                })}
+            </div>
+          </>
+        )}
       </div>
 
       {loading && <div className="text-white-50 mb-3">{t('calendar.loading')}</div>}

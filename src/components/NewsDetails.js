@@ -4,6 +4,28 @@ import { useTranslation } from '../i18n';
 import ReCAPTCHA from "react-google-recaptcha";
 import { serverUrl } from "../Services/Constants/Constants";
 
+// Map raw tag values (as they come from backend) to translation keys
+const TAG_VALUE_TO_KEY = {
+    '🏥 Health': 'health',
+    '⚽ Sport': 'sport',
+    '⚽ Football': 'football',
+    '🏀 Basketball': 'basketball',
+    '🎾 Tennis': 'tennis',
+    '🏊 Swimming': 'swimming',
+    '🚗 Traffic': 'traffic',
+    '🏗️ Infrastructure': 'infrastructure',
+    '🏘️ Communal': 'communal',
+    '🌳 Environment': 'environment',
+    '👶 Child Care': 'childCare',
+    '👥 Social': 'social',
+    '🌍 International': 'international',
+    '🎓 Education': 'education',
+    '🎭 Culture': 'culture',
+    '🚨 Safety': 'safety',
+    '🏠 Housing': 'housing',
+    '💼 Economy': 'economy'
+};
+
 const formatDate = (value) => {
     if (!value) return "";
     const parsed = new Date(value);
@@ -650,9 +672,15 @@ const NewsDetails = ({ hasCitizenRole }) => {
                                 <div className="news-details-tags-wrap">
                                     <span className="news-details-tag-icon">🏷</span>
                                     <div className="news-details-tags">
-                                        {tags.map((tag) => (
-                                            <span key={tag} className="news-details-tag-chip">{tag}</span>
-                                        ))}
+                                        {tags.map((tag) => {
+                                            const key = TAG_VALUE_TO_KEY[tag];
+                                            const label = key ? (t(`calendar.tag.${key}`) || tag) : tag;
+                                            return (
+                                                <span key={tag} className="news-details-tag-chip">
+                                                    {label}
+                                                </span>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             )}
@@ -805,6 +833,3 @@ const NewsDetails = ({ hasCitizenRole }) => {
 };
 
 export default NewsDetails;
-
-
-

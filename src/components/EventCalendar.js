@@ -5,6 +5,8 @@ import { useTranslation } from '../i18n';
 import { Link } from 'react-router-dom';
 import { serverUrl } from '../Services/Constants/Constants';
 
+const MUNICIPALITY_STORAGE_KEY = 'selectedMunicipalityId';
+
 // Sync with TemplateSlideForm TAG_OPTIONS
 const TAG_OPTIONS = [
   { value: '🏥 Health', key: 'health' },
@@ -35,7 +37,9 @@ const EventCalendar = () => {
   const [events, setEvents] = useState([]);
   const [summaryMonths, setSummaryMonths] = useState([]);
   const [municipalities, setMunicipalities] = useState([]);
-  const [selectedMunicipalityId, setSelectedMunicipalityId] = useState('All');
+  const [selectedMunicipalityId, setSelectedMunicipalityId] = useState(() => {
+    return sessionStorage.getItem(MUNICIPALITY_STORAGE_KEY) || 'All';
+  });
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedEventModes, setSelectedEventModes] = useState([]); // empty by default; user selects explicitly
   const [contentPools, setContentPools] = useState([]);
@@ -114,6 +118,19 @@ const EventCalendar = () => {
     fetchMunicipalities();
   }, []);
 
+  // Restore stored municipality selection on mount
+  useEffect(() => {
+    const stored = sessionStorage.getItem(MUNICIPALITY_STORAGE_KEY);
+    if (stored) {
+      setSelectedMunicipalityId(stored);
+    }
+  }, []);
+
+  // Persist selection for reuse across pages
+  useEffect(() => {
+    sessionStorage.setItem(MUNICIPALITY_STORAGE_KEY, selectedMunicipalityId);
+  }, [selectedMunicipalityId]);
+
   useEffect(() => {
     const fetchActiveContentPools = async () => {
       try {
@@ -190,6 +207,8 @@ const EventCalendar = () => {
   }, [range.from, range.to, selectedMunicipalityId, selectedPoolId, selectedTags, selectedEventModes]);
 
   useEffect(() => {
+    // Wait until municipalities are loaded before validating stored selection
+    if (!municipalities || municipalities.length === 0) return;
     if (
       selectedMunicipalityId !== 'All' &&
       !municipalities.some((m) => String(m.groupId) === String(selectedMunicipalityId))

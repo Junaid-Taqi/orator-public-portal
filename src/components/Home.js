@@ -9,11 +9,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { serverUrl } from "../Services/Constants/Constants";
 
+const MUNICIPALITY_STORAGE_KEY = "selectedMunicipalityId";
+
 const Home = () => {
     const { t } = useTranslation();
     const [latestUpdates, setLatestUpdates] = useState([]);
     const [municipalities, setMunicipalities] = useState([]);
-    const [selectedMunicipalityId, setSelectedMunicipalityId] = useState("All");
+    const [selectedMunicipalityId, setSelectedMunicipalityId] = useState(() => {
+        return sessionStorage.getItem(MUNICIPALITY_STORAGE_KEY) || "All";
+    });
     const [impactCounts, setImpactCounts] = useState({
         allUsersCount: 0,
         problemsResolvedCount: 0,
@@ -41,6 +45,19 @@ const Home = () => {
 
         fetchMunicipalities();
     }, []);
+
+    // Restore selected municipality from session storage on mount
+    useEffect(() => {
+        const stored = sessionStorage.getItem(MUNICIPALITY_STORAGE_KEY);
+        if (stored) {
+            setSelectedMunicipalityId(stored);
+        }
+    }, []);
+
+    // Persist selection for use across pages
+    useEffect(() => {
+        sessionStorage.setItem(MUNICIPALITY_STORAGE_KEY, selectedMunicipalityId);
+    }, [selectedMunicipalityId]);
 
     useEffect(() => {
         const fetchLatestUpdates = async () => {

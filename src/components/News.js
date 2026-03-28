@@ -5,11 +5,15 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "../i18n";
 import { serverUrl } from "../Services/Constants/Constants";
 
+const MUNICIPALITY_STORAGE_KEY = "selectedMunicipalityId";
+
 const News = () => {
     const { t } = useTranslation();
     const [searchTerm, setSearchTerm] = useState("");
     const [municipalities, setMunicipalities] = useState([]);
-    const [selectedMunicipalityId, setSelectedMunicipalityId] = useState("All");
+    const [selectedMunicipalityId, setSelectedMunicipalityId] = useState(() => {
+        return sessionStorage.getItem(MUNICIPALITY_STORAGE_KEY) || "All";
+    });
     const [selectedPoolId, setSelectedPoolId] = useState("All");
     const [contentPools, setContentPools] = useState([]);
     const [newsItems, setNewsItems] = useState([]);
@@ -33,6 +37,19 @@ const News = () => {
 
         fetchMunicipalities();
     }, []);
+
+    // Restore stored municipality selection on mount
+    useEffect(() => {
+        const stored = sessionStorage.getItem(MUNICIPALITY_STORAGE_KEY);
+        if (stored) {
+            setSelectedMunicipalityId(stored);
+        }
+    }, []);
+
+    // Persist selection for other pages
+    useEffect(() => {
+        sessionStorage.setItem(MUNICIPALITY_STORAGE_KEY, selectedMunicipalityId);
+    }, [selectedMunicipalityId]);
 
     useEffect(() => {
         const fetchActiveContentPools = async () => {

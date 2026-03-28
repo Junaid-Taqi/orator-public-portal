@@ -38,6 +38,8 @@ const hr = {
     eventCalendar: 'Kalendar Događaja',
     latestUpdates: 'Najnovije Obavijesti',
     viewAll: 'Prikaži sve →',
+    selectMunicipalityTitle: 'Odaberite svoju općinu',
+    selectMunicipalitySubtitle: 'Odaberite lokaciju za relevantne obavijesti',
     communityImpact: 'Utjecaj Zajednice',
     activeCitizens: 'Aktivni Građani',
     problemsResolved: 'Riješeni Problemi',

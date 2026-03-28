@@ -143,8 +143,8 @@ const Home = () => {
 
                         {/* Text and Select Container */}
                         <div className="flex-grow-1">
-                            <label className="select-label m-0">Select Your Municipality</label>
-                            <p className="select-subtitle m-0">Choose your location to see relevant updates</p>
+                            <label className="select-label m-0">{t('home.selectMunicipalityTitle')}</label>
+                            <p className="select-subtitle m-0">{t('home.selectMunicipalitySubtitle')}</p>
 
                             <select
                                 className="form-select custom-glass-select text-center"

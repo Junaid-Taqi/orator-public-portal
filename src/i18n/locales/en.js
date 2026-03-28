@@ -38,6 +38,8 @@ const en = {
     eventCalendar: 'Event Calendar',
     latestUpdates: 'Latest Updates',
     viewAll: 'View All →',
+    selectMunicipalityTitle: 'Select Your Municipality',
+    selectMunicipalitySubtitle: 'Choose your location to see relevant updates',
     communityImpact: 'Community Impact',
     activeCitizens: 'Active Citizens',
     problemsResolved: 'Problems Resolved',

@@ -7,24 +7,24 @@ import { serverUrl } from '../Services/Constants/Constants';
 
 // Sync with TemplateSlideForm TAG_OPTIONS
 const TAG_OPTIONS = [
-  '🏥 Health',
-  '⚽ Sport',
-  '⚽ Football',
-  '🏀 Basketball',
-  '🎾 Tennis',
-  '🏊 Swimming',
-  '🚗 Traffic',
-  '🏗️ Infrastructure',
-  '🏘️ Communal',
-  '🌳 Environment',
-  '👶 Child Care',
-  '👥 Social',
-  '🌍 International',
-  '🎓 Education',
-  '🎭 Culture',
-  '🚨 Safety',
-  '🏠 Housing',
-  '💼 Economy'
+  { value: '🏥 Health', key: 'health' },
+  { value: '⚽ Sport', key: 'sport' },
+  { value: '⚽ Football', key: 'football' },
+  { value: '🏀 Basketball', key: 'basketball' },
+  { value: '🎾 Tennis', key: 'tennis' },
+  { value: '🏊 Swimming', key: 'swimming' },
+  { value: '🚗 Traffic', key: 'traffic' },
+  { value: '🏗️ Infrastructure', key: 'infrastructure' },
+  { value: '🏘️ Communal', key: 'communal' },
+  { value: '🌳 Environment', key: 'environment' },
+  { value: '👶 Child Care', key: 'childCare' },
+  { value: '👥 Social', key: 'social' },
+  { value: '🌍 International', key: 'international' },
+  { value: '🎓 Education', key: 'education' },
+  { value: '🎭 Culture', key: 'culture' },
+  { value: '🚨 Safety', key: 'safety' },
+  { value: '🏠 Housing', key: 'housing' },
+  { value: '💼 Economy', key: 'economy' }
 ];
 
 const EventCalendar = () => {
@@ -459,18 +459,19 @@ const EventCalendar = () => {
             </div>
             <div className="mt-3 d-flex flex-wrap gap-2">
               {TAG_OPTIONS.map((tag) => {
-                const selected = selectedTags.includes(tag);
+                const selected = selectedTags.includes(tag.value);
+                const label = t(`calendar.tag.${tag.key}`) || tag.value;
                 return (
                   <button
-                    key={tag}
+                    key={tag.key}
                     className={selected ? activeBtn : 'btn btn-sm bg-opacity-10 text-white-50 rounded-pill border-0 px-3'}
                     onClick={() =>
                       setSelectedTags((prev) =>
-                        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+                        prev.includes(tag.value) ? prev.filter((t) => t !== tag.value) : [...prev, tag.value]
                       )
                     }
                   >
-                    {tag}
+                    {label}
                   </button>
                 );
               })}

@@ -132,7 +132,7 @@ const Home = () => {
                 <h1>{t('home.welcome')}</h1>
                 <p>{t('home.intro')}</p>
                 <div className="d-flex align-items-center justify-content-center gap-3">
-                    <div className="municipality-card-wrapper d-flex align-items-center justify-content-center gap-3">
+                    <div className="municipality-card-wrapper d-flex justify-content-center gap-3">
                         {/* Left Side Icon */}
                         <div>
                             <FontAwesomeIcon
@@ -144,7 +144,6 @@ const Home = () => {
                         {/* Text and Select Container */}
                         <div className="flex-grow-1">
                             <label className="select-label m-0">{t('home.selectMunicipalityTitle')}</label>
-                            <p className="select-subtitle m-0">{t('home.selectMunicipalitySubtitle')}</p>
 
                             <select
                                 className="form-select custom-glass-select text-center"

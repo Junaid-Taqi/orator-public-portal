@@ -259,6 +259,7 @@ const hr = {
     invalidEmail: 'Unesite ispravnu adresu e-pošte.',
     completeCaptcha: 'Molimo ispunite captcha provjeru.',
     noEventDates: 'Datumi događaja nisu dostupni za ovaj članak.',
+    eventDates: 'Datumi događaja',
     failedReminder: 'Spremanje podsjetnika nije uspjelo.',
     successReminder: 'Uspješno registrirano! Primit ćete podsjetnik e-poštom prije početka događaja.',
     noData: 'Podaci o članku nisu pronađeni.',

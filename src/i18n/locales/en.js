@@ -259,6 +259,7 @@ const en = {
     invalidEmail: 'Please enter a valid email address.',
     completeCaptcha: 'Please complete the captcha.',
     noEventDates: 'Event dates are not available for this article.',
+    eventDates: 'Event Dates',
     failedReminder: 'Failed to save reminder.',
     successReminder: 'Successfully registered! You will receive a reminder via email before the event starts.',
     noData: 'No article data found.',

@@ -172,7 +172,8 @@ const collectEventDateWindows = (item, config) => {
 
 
 const NewsDetails = ({ hasCitizenRole }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const currentLang = i18n?.language || 'en-GB';
     const { newsId } = useParams();
     const location = useLocation();
     const fallbackItem = location?.state?.item;
@@ -226,6 +227,29 @@ const NewsDetails = ({ hasCitizenRole }) => {
         : [];
 
     const eventDateWindows = useMemo(() => collectEventDateWindows(item, parsedConfig), [item, parsedConfig]);
+
+    const formatEventDate = (value) => {
+        if (!value) return "";
+        const parsed = new Date(value);
+        if (Number.isNaN(parsed.getTime())) return value;
+        return parsed.toLocaleDateString(currentLang, {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        });
+    };
+
+    const formattedEventWindows = useMemo(() => {
+        return eventDateWindows.map((window) => {
+            const startText = formatEventDate(window.start);
+            const endText = formatEventDate(window.end);
+            const isSingleDay = startText === endText;
+            return {
+                label: isSingleDay ? startText : `${startText} \u2013 ${endText}`,
+                isSingleDay
+            };
+        });
+    }, [eventDateWindows, currentLang]);
 
     const reminderOptions = useMemo(() => {
         const today = new Date();
@@ -686,6 +710,28 @@ const NewsDetails = ({ hasCitizenRole }) => {
                             )}
 
                             <p className="news-details-description">{item.webDescription || item.subtitle || ""}</p>
+
+                            {formattedEventWindows.length > 0 && (
+                                <div className="news-details-event-dates">
+                                    <div className="d-flex align-items-center gap-2 mb-2">
+                                        <i className="far fa-calendar-check text-info"></i>
+                                        <span className="fw-semibold">
+                                            {t('newsDetails.eventDates', 'Event Dates')}
+                                        </span>
+                                    </div>
+                                    <div className="d-flex flex-wrap gap-2">
+                                        {formattedEventWindows.map((win, idx) => (
+                                            <span
+                                                key={`${win.label}-${idx}`}
+                                                className="badge bg-info bg-opacity-10 border border-info border-opacity-25 text-info px-3 py-2"
+                                                style={{ fontSize: '0.9rem' }}
+                                            >
+                                                {win.label}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                             <div className="news-details-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
                                 {!!item.articleUrl && (
                                     <a

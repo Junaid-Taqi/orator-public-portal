@@ -1066,6 +1066,15 @@ input.form-control::placeholder {
   font-weight: 500;
 }
 
+/* Event dates block */
+.news-details-event-dates {
+  margin: 18px 0 10px;
+}
+
+.news-details-event-dates .badge {
+  border-radius: 12px;
+}
+
 .news-details-description {
   color: #d3ebf7;
   line-height: 1.8;
@@ -1965,4 +1974,3 @@ input.form-control::placeholder {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
 }
-

@@ -57,7 +57,7 @@ code {
   background-color: transparent !important;
   border: none !important;
   color: white !important;
-  padding: 0 !important;
+  padding: .375rem 2.25rem .375rem .75rem !important;
   font-size: 0.9rem;
   cursor: pointer;
   outline: none;

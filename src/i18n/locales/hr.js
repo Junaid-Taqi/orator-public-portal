@@ -20,7 +20,7 @@ const hr = {
   },
   footer: {
     brandTitle: 'ORATOR',
-    brandDesc: 'Vaša digitalna veza s gradskim uslugama i informacijama zajednice.',
+    brandDesc: 'Vaša digitalna veza sa gradskim uslugama i informacijama zajednice.',
     quickLinks: 'Brze poveznice',
     news: 'Novosti i Obavijesti',
     report: 'Prijavi Problem',

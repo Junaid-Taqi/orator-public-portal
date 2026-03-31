@@ -364,11 +364,6 @@ const NewsDetails = ({ hasCitizenRole }) => {
         fetchSlideDetails();
     }, [slideUuid, routeRef, fallbackItem]);
 
-    // Ensure the page scrolls to the top whenever the route changes to this component
-    useEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-    }, [location.pathname]);
-
     useEffect(() => {
         const checkFavoriteStatus = async () => {
             const liferayUserRaw = sessionStorage.getItem('liferayUser');

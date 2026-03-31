@@ -16,6 +16,7 @@ import Favorites from './components/Favorites';
 import RegisterInMunicipality from './components/RegisterInMunicipality';
 import { serverUrl } from './Services/Constants/Constants';
 import { Navigate } from "react-router-dom";
+import ScrollToTop from './components/ScrollToTop';
 
 function Login() {
   const { t } = useTranslation();
@@ -152,6 +153,7 @@ function App() {
 
   return (
     <div className="App">
+      <ScrollToTop />
       <Header hasLiferayUser={hasLiferayUser} user={user} onLogout={handleLogout} hasCitizenRole={hasCitizenRole} />
       <main>
         <Routes>

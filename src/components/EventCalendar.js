@@ -395,30 +395,7 @@ const EventCalendar = () => {
 
   return (
     <div style={containerStyle}>
-      <div className={glassPanel}>
-        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
-            {['Day', 'Week', 'Month', 'Year'].map((v) => (
-              <CalendarViewButton key={v} v={v} />
-            ))}
-          </div>
-
-          <div className="d-flex align-items-center gap-2">
-            <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
-              <button className="btn btn-sm text-white-50 border-0" onClick={() => shiftRange(-1)}>
-                <FontAwesomeIcon icon={faChevronLeft} />
-              </button>
-              <button className="btn btn-sm text-white px-3 border-0 bg-opacity-10 rounded-pill mx-1" onClick={resetToday}>
-                {t('calendar.today')}
-              </button>
-              <button className="btn btn-sm text-white-50 border-0" onClick={() => shiftRange(1)}>
-                <FontAwesomeIcon icon={faChevronRight} />
-              </button>
-            </div>
-            <span className="ms-2 text-white">{getHeaderLabel()}</span>
-          </div>
-        </div>
-      </div>
+      
 
       <div className={glassPanel}>
         <div className="d-flex gap-2 flex-wrap">
@@ -566,6 +543,31 @@ const EventCalendar = () => {
             </div>
           </>
         )}
+      </div>
+
+      <div className={glassPanel}>
+        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
+            {['Day', 'Week', 'Month', 'Year'].map((v) => (
+              <CalendarViewButton key={v} v={v} />
+            ))}
+          </div>
+
+          <div className="d-flex align-items-center gap-2">
+            <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
+              <button className="btn btn-sm text-white-50 border-0" onClick={() => shiftRange(-1)}>
+                <FontAwesomeIcon icon={faChevronLeft} />
+              </button>
+              <button className="btn btn-sm text-white px-3 border-0 bg-opacity-10 rounded-pill mx-1" onClick={resetToday}>
+                {t('calendar.today')}
+              </button>
+              <button className="btn btn-sm text-white-50 border-0" onClick={() => shiftRange(1)}>
+                <FontAwesomeIcon icon={faChevronRight} />
+              </button>
+            </div>
+            <span className="ms-2 text-white">{getHeaderLabel()}</span>
+          </div>
+        </div>
       </div>
 
       {loading && <div className="text-white-50 mb-3">{t('calendar.loading')}</div>}

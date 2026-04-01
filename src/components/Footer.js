@@ -21,7 +21,7 @@ const Footer = ({ hasMunicipalAdminRole, hasCitizenRole, user }) => {
             <li><Link to="/news">{t('footer.news')}</Link></li>
             {hasCitizenRole && <li><Link to="/report">{t('footer.report')}</Link></li>}
             {!hasCitizenRole && !hasMunicipalAdminRole && !user && <li><a href="/web/guest/login">{t('footer.admin')}</a></li>}
-            {hasMunicipalAdminRole && <li><a href={sessionStorage.getItem('userLandingPageUrl')}>{t('footer.admin')}</a></li>}
+            {hasMunicipalAdminRole && <li><a href={localStorage.getItem('userLandingPageUrl')}>{t('footer.admin')}</a></li>}
             <li><a href="partnership">{t('header.partnership')}</a></li>
           </ul>
         </div>

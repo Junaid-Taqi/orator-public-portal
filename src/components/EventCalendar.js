@@ -54,10 +54,10 @@ const EventCalendar = () => {
     background: 'linear-gradient(135deg, #112235 0%, #0f2d3e 40%, #155e75 100%)',
     minHeight: '100vh',
     color: 'white',
-    padding: '2rem'
+    padding: '1rem'
   };
 
-  const glassPanel = 'bg-opacity-5 border border-white border-opacity-10 rounded-4 shadow-sm p-3 mb-3';
+  const glassPanel = 'bg-opacity-5 border border-white border-opacity-10 rounded-4 shadow-sm p-2 mb-3';
   const activeBtn = 'btn btn-info text-dark rounded-pill px-3 shadow-sm';
   const inactiveBtn = 'btn text-white-50 rounded-pill px-3 border-0 hover-light';
 
@@ -547,13 +547,13 @@ const EventCalendar = () => {
 
       <div className={glassPanel}>
         <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
+          <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill flex-wrap">
             {['Day', 'Week', 'Month', 'Year'].map((v) => (
               <CalendarViewButton key={v} v={v} />
             ))}
           </div>
 
-          <div className="d-flex align-items-center gap-2">
+          <div className="d-flex align-items-center gap-2 flex-wrap">
             <div className="btn-group bg-dark bg-opacity-25 p-1 rounded-pill">
               <button className="btn btn-sm text-white-50 border-0" onClick={() => shiftRange(-1)}>
                 <FontAwesomeIcon icon={faChevronLeft} />

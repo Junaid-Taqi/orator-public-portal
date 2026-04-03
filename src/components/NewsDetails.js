@@ -730,6 +730,32 @@ const NewsDetails = ({ hasCitizenRole }) => {
                                             {t('newsDetails.eventDates', 'Event Dates')}
                                         </span>
                                     </div>
+
+                                    <div className="mb-3">
+                                        {item.mediaUrl ? (
+                                            <img
+                                                src={item.mediaUrl}
+                                                alt={item.title || "News media"}
+                                                className="news-details-image"
+                                            />
+                                        ) : (
+                                            <div className="news-details-image-placeholder">
+                                                {(item.poolName || "N").slice(0, 1).toUpperCase()}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {item.videoMediaUrl && (
+                                        <div className="news-details-image-wrap">
+                                            <video
+                                                src={item.videoMediaUrl}
+                                                alt={item.title || "News media"}
+                                                className="news-details-image"
+                                                controls
+                                            />
+                                        </div>
+                                    )}
+
                                     <div className="d-flex flex-wrap gap-2">
                                         {formattedEventWindows.map((win, idx) => (
                                             <span

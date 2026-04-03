@@ -893,6 +893,7 @@ input.form-control::placeholder {
   height: 100%;
   object-fit: cover;
   display: block;
+  object-position: top;
 }
 
 .news-details-image-placeholder {

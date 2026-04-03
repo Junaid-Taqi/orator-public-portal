@@ -310,7 +310,7 @@ const EventCalendar = () => {
             const isActive = formatIso(d) === formatIso(new Date(anchorDate));
 
             return (
-              <div key={key} className="col border-end border-white border-opacity-10 p-3" style={{ minHeight: '320px', backgroundColor: isActive ? 'rgba(0,0,0,0.1)' : 'transparent' }}>
+              <div key={key} className="col border-end border-white border-opacity-10 p-2" style={{ minHeight: '320px', backgroundColor: isActive ? 'rgba(0,0,0,0.1)' : 'transparent' }}>
                 <div className={isActive ? 'text-info' : 'text-white'}>{d.toLocaleDateString(currentLang, { weekday: 'short' })}</div>
                 <div className={`fs-3 mb-3 ${isActive ? 'text-info' : 'text-white'}`}>{d.getDate()}</div>
                 {dayEvents.slice(0, 3).map((e) => (

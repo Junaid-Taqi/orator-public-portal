@@ -192,6 +192,7 @@ const NewsDetails = ({ hasCitizenRole }) => {
     const location = useLocation();
     const fallbackItem = location?.state?.item;
     const [item, setItem] = useState(null);
+    console.log("itemitemitemitem", item)
     const [relatedItems, setRelatedItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -731,31 +732,6 @@ const NewsDetails = ({ hasCitizenRole }) => {
                                         </span>
                                     </div>
 
-                                    <div className="mb-3">
-                                        {item.mediaUrl ? (
-                                            <img
-                                                src={item.mediaUrl}
-                                                alt={item.title || "News media"}
-                                                className="news-details-image"
-                                            />
-                                        ) : (
-                                            <div className="news-details-image-placeholder">
-                                                {(item.poolName || "N").slice(0, 1).toUpperCase()}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {item.videoMediaUrl && (
-                                        <div className="news-details-image-wrap">
-                                            <video
-                                                src={item.videoMediaUrl}
-                                                alt={item.title || "News media"}
-                                                className="news-details-image"
-                                                controls
-                                            />
-                                        </div>
-                                    )}
-
                                     <div className="d-flex flex-wrap gap-2">
                                         {formattedEventWindows.map((win, idx) => (
                                             <span
@@ -769,6 +745,35 @@ const NewsDetails = ({ hasCitizenRole }) => {
                                     </div>
                                 </div>
                             )}
+
+                            {
+                                item.slideType == 1 && (
+                                    <>
+                                        <div className="mb-3">
+                                            {item.videoMediaUrl ? (
+                                                <div className="news-details-image-wrap">
+                                                    <video
+                                                        src={item.videoMediaUrl}
+                                                        className="news-details-image"
+                                                        controls
+                                                    />
+                                                </div>
+                                            ) : item.mediaUrl ? (
+                                                <img
+                                                    src={item.mediaUrl}
+                                                    alt={item.title || "News media"}
+                                                    className="news-details-image"
+                                                />
+                                            ) : (
+                                                <div className="news-details-image-placeholder">
+                                                    {(item.poolName || "N").slice(0, 1).toUpperCase()}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </>
+                                )
+                            }
+
                             <div className="news-details-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
                                 {!!item.articleUrl && (
                                     <a

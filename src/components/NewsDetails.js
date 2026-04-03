@@ -66,21 +66,34 @@ const parseDateValue = (value) => {
     return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
 };
 
-const toDateWindow = (startValue, endValue) => {
+const toDateWindow = (startValue, endValue, label) => {
     const start = parseDateValue(startValue);
     const end = parseDateValue(endValue);
     if (!start && !end) return null;
     if (start && end) {
-        if (start <= end) return { start, end };
-        return { start: end, end: start };
+        if (start <= end) return { start, end, label };
+        return { start: end, end: start, label };
     }
     const single = start || end;
-    return { start: single, end: single };
+    return { start: single, end: single, label };
 };
 
 const addDateWindowsFromArray = (arr, windows) => {
     if (!Array.isArray(arr)) return;
     arr.forEach((value) => {
+        // Support both legacy string dates and new objects { date, label } / { startDate, endDate, label }
+        const isObject = value && typeof value === "object";
+        const label = isObject && typeof value.label === "string" ? value.label.trim() : undefined;
+        if (isObject) {
+            const singleDate = value.date;
+            const rangeStart = value.startDate || value.start || value.from;
+            const rangeEnd = value.endDate || value.end || value.to;
+            const window = singleDate
+                ? toDateWindow(singleDate, singleDate, label)
+                : toDateWindow(rangeStart, rangeEnd, label);
+            if (window) windows.push(window);
+            return;
+        }
         const window = toDateWindow(value, value);
         if (window) windows.push(window);
     });
@@ -94,7 +107,8 @@ const collectEventDateWindows = (item, config) => {
             if (!range || typeof range !== "object") return;
             const window = toDateWindow(
                 range.startDate || range.start || range.from,
-                range.endDate || range.end || range.to
+                range.endDate || range.end || range.to,
+                typeof range.label === "string" ? range.label.trim() : undefined
             );
             if (window) windows.push(window);
         });
@@ -244,8 +258,10 @@ const NewsDetails = ({ hasCitizenRole }) => {
             const startText = formatEventDate(window.start);
             const endText = formatEventDate(window.end);
             const isSingleDay = startText === endText;
+            const dateLabel = isSingleDay ? startText : `${startText} \u2013 ${endText}`;
+            const suffix = window.label ? ` \u2022 ${window.label}` : "";
             return {
-                label: isSingleDay ? startText : `${startText} \u2013 ${endText}`,
+                label: `${dateLabel}${suffix}`,
                 isSingleDay
             };
         });

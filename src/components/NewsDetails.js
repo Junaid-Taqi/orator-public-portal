@@ -723,29 +723,6 @@ const NewsDetails = ({ hasCitizenRole }) => {
 
                             <p className="news-details-description">{item.webDescription || item.subtitle || ""}</p>
 
-                            {formattedEventWindows.length > 0 && (
-                                <div className="news-details-event-dates">
-                                    <div className="d-flex align-items-center gap-2 mb-2">
-                                        <i className="far fa-calendar-check text-info"></i>
-                                        <span className="fw-semibold">
-                                            {t('newsDetails.eventDates', 'Event Dates')}
-                                        </span>
-                                    </div>
-
-                                    <div className="d-flex flex-wrap gap-2">
-                                        {formattedEventWindows.map((win, idx) => (
-                                            <span
-                                                key={`${win.label}-${idx}`}
-                                                className="badge bg-info bg-opacity-10 border border-info border-opacity-25 text-info px-3 py-2"
-                                                style={{ fontSize: '0.9rem' }}
-                                            >
-                                                {win.label}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-
                             {
                                 item.slideType == 1 && (
                                     <>
@@ -773,6 +750,29 @@ const NewsDetails = ({ hasCitizenRole }) => {
                                     </>
                                 )
                             }
+                            
+                            {formattedEventWindows.length > 0 && (
+                                <div className="news-details-event-dates">
+                                    <div className="d-flex align-items-center gap-2 mb-2">
+                                        <i className="far fa-calendar-check text-info"></i>
+                                        <span className="fw-semibold">
+                                            {t('newsDetails.eventDates', 'Event Dates')}
+                                        </span>
+                                    </div>
+
+                                    <div className="d-flex flex-wrap gap-2">
+                                        {formattedEventWindows.map((win, idx) => (
+                                            <span
+                                                key={`${win.label}-${idx}`}
+                                                className="badge bg-info bg-opacity-10 border border-info border-opacity-25 text-info px-3 py-2"
+                                                style={{ fontSize: '0.9rem' }}
+                                            >
+                                                {win.label}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="news-details-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
                                 {!!item.articleUrl && (

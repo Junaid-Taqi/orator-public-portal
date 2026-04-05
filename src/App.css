@@ -1081,6 +1081,8 @@ input.form-control::placeholder {
   line-height: 1.8;
   font-size: clamp(16px, 1.45vw, 23px);
   margin: 0;
+  white-space: pre-line;
+  margin-bottom: 15px;
 }
 
 .news-details-sidebar {

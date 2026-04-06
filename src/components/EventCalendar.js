@@ -329,10 +329,10 @@ const EventCalendar = () => {
   };
 
   useEffect(() => {
-  if (window.innerWidth < 768) {
-    setView('Week');
-  }
-}, []);
+    if (window.innerWidth < 768) {
+      setView('Week');
+    }
+  }, []);
 
   const MonthView = () => {
     const year = range.from.getFullYear();
@@ -347,7 +347,7 @@ const EventCalendar = () => {
 
     return (
       <div className={`${glassPanel} p-0 overflow-hidden`}>
-        <div className="row g-0 text-center bg-opacity-5 py-2 border-bottom border-white border-opacity-10">
+        <div className="row g-0 text-center bg-opacity-5 py-2 border-bottom border-white border-opacity-10 calendarHeading">
           {[t('calendar.sun'), t('calendar.mon'), t('calendar.tue'), t('calendar.wed'), t('calendar.thu'), t('calendar.fri'), t('calendar.sat')].map((d) => <div key={d} className="col text-white-50">{d}</div>)}
         </div>
         <div className="row g-0">

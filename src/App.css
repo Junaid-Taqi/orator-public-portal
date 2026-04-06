@@ -2003,4 +2003,7 @@ input.form-control::placeholder {
   .calendar-cell {
     flex: 0 0 50% !important;  /* 2 columns */
   }
+  .calendarHeading {
+      display: none !important;
+  }
 }

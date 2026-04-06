@@ -2007,3 +2007,20 @@ input.form-control::placeholder {
       display: none !important;
   }
 }
+
+
+.calendar-cell {
+  overflow: hidden;
+}
+
+.calendar-day-name {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+}
+
+.calendar-date {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 4px;
+}

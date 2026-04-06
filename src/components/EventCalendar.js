@@ -334,50 +334,127 @@ const EventCalendar = () => {
     }
   }, []);
 
+  // const MonthView = () => {
+  //   const year = range.from.getFullYear();
+  //   const month = range.from.getMonth();
+  //   const first = new Date(year, month, 1);
+  //   const daysInMonth = new Date(year, month + 1, 0).getDate();
+  //   const startWeekday = first.getDay();
+
+  //   const cells = [];
+  //   for (let i = 0; i < startWeekday; i++) cells.push(null);
+  //   for (let day = 1; day <= daysInMonth; day++) cells.push(new Date(year, month, day));
+
+  //   return (
+  //     <div className={`${glassPanel} p-0 overflow-hidden`}>
+  //       <div className="row g-0 text-center bg-opacity-5 py-2 border-bottom border-white border-opacity-10 calendarHeading">
+  //         {[t('calendar.sun'), t('calendar.mon'), t('calendar.tue'), t('calendar.wed'), t('calendar.thu'), t('calendar.fri'), t('calendar.sat')].map((d) => <div key={d} className="col text-white-50">{d}</div>)}
+  //       </div>
+  //       <div className="row g-0">
+  //         {cells.map((d, i) => {
+  //           const key = d ? formatIso(d) : `empty-${i}`;
+  //           const dayEvents = d ? (eventsByDate[key] || []) : [];
+  //           return (
+  //             <div key={key} className="col border-end border-bottom border-white border-opacity-10 p-2 calendar-cell" style={{ flex: '0 0 14.28%', minHeight: '120px' }}>
+  //               {d && <span className="small text-white-50">{d.getDate()}</span>}
+  //               {dayEvents.slice(0, 2).map((e) => (
+  //                 <div
+  //                   className="mt-1 p-1 rounded bg-info bg-opacity-10 text-info text-truncate"
+  //                   style={{
+  //                     fontSize: '0.7rem',
+  //                     whiteSpace: 'nowrap',
+  //                     overflow: 'hidden',
+  //                     textOverflow: 'ellipsis'
+  //                   }}
+  //                 >
+  //                   {e.title || t('calendar.untitled')}
+  //                 </div>
+  //               ))}
+  //               {dayEvents.length > 2 && <div className="small text-white-50 mt-1">+{dayEvents.length - 2}</div>}
+  //             </div>
+  //           );
+  //         })}
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
+
   const MonthView = () => {
-    const year = range.from.getFullYear();
-    const month = range.from.getMonth();
-    const first = new Date(year, month, 1);
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const startWeekday = first.getDay();
+  const year = range.from.getFullYear();
+  const month = range.from.getMonth();
+  const first = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startWeekday = first.getDay();
 
-    const cells = [];
-    for (let i = 0; i < startWeekday; i++) cells.push(null);
-    for (let day = 1; day <= daysInMonth; day++) cells.push(new Date(year, month, day));
+  const cells = [];
+  for (let i = 0; i < startWeekday; i++) cells.push(null);
+  for (let day = 1; day <= daysInMonth; day++) cells.push(new Date(year, month, day));
 
-    return (
-      <div className={`${glassPanel} p-0 overflow-hidden`}>
-        <div className="row g-0 text-center bg-opacity-5 py-2 border-bottom border-white border-opacity-10 calendarHeading">
-          {[t('calendar.sun'), t('calendar.mon'), t('calendar.tue'), t('calendar.wed'), t('calendar.thu'), t('calendar.fri'), t('calendar.sat')].map((d) => <div key={d} className="col text-white-50">{d}</div>)}
-        </div>
-        <div className="row g-0">
-          {cells.map((d, i) => {
-            const key = d ? formatIso(d) : `empty-${i}`;
-            const dayEvents = d ? (eventsByDate[key] || []) : [];
-            return (
-              <div key={key} className="col border-end border-bottom border-white border-opacity-10 p-2 calendar-cell" style={{ flex: '0 0 14.28%', minHeight: '120px' }}>
-                {d && <span className="small text-white-50">{d.getDate()}</span>}
-                {dayEvents.slice(0, 2).map((e) => (
-                  <div
-                    className="mt-1 p-1 rounded bg-info bg-opacity-10 text-info text-truncate"
-                    style={{
-                      fontSize: '0.7rem',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis'
-                    }}
-                  >
-                    {e.title || t('calendar.untitled')}
+  return (
+    <div className={`${glassPanel} p-0 overflow-hidden`}>
+      
+      {/* ❌ REMOVE THIS HEADER (Sun Mon Tue...) */}
+      {/* 
+      <div className="row g-0 text-center calendarHeading">
+        ...
+      </div> 
+      */}
+
+      {/* ✅ GRID */}
+      <div className="row g-0">
+        {cells.map((d, i) => {
+          const key = d ? formatIso(d) : `empty-${i}`;
+          const dayEvents = d ? (eventsByDate[key] || []) : [];
+
+          return (
+            <div
+              key={key}
+              className="col border-end border-bottom border-white border-opacity-10 p-2 calendar-cell"
+              style={{ flex: '0 0 14.28%', minHeight: '120px' }}
+            >
+              {d && (
+                <>
+                  {/* ✅ WEEK DAY NAME */}
+                  <div className="calendar-day-name">
+                    {d.toLocaleDateString(currentLang, { weekday: 'short' })}
                   </div>
-                ))}
-                {dayEvents.length > 2 && <div className="small text-white-50 mt-1">+{dayEvents.length - 2}</div>}
-              </div>
-            );
-          })}
-        </div>
+
+                  {/* ✅ DATE */}
+                  <div className="calendar-date">
+                    {d.getDate()}
+                  </div>
+                </>
+              )}
+
+              {/* ✅ EVENTS */}
+              {dayEvents.slice(0, 2).map((e) => (
+                <div
+                  key={e.eventId}
+                  className="mt-1 p-1 rounded bg-info bg-opacity-10 text-info text-truncate"
+                  style={{
+                    fontSize: '0.7rem',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  {e.title || t('calendar.untitled')}
+                </div>
+              ))}
+
+              {dayEvents.length > 2 && (
+                <div className="small text-white-50 mt-1">
+                  +{dayEvents.length - 2}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
-    );
-  };
+    </div>
+  );
+};
 
   const YearView = () => {
     const months = [

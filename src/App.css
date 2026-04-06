@@ -1977,3 +1977,30 @@ input.form-control::placeholder {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
 }
+
+
+
+.calendar-cell {
+  overflow: hidden;
+  position: relative;
+}
+
+/* Mobile view fix */
+@media (max-width: 768px) {
+  .calendar-cell {
+    flex: 0 0 100% !important;   /* full width */
+    min-height: auto;
+    border-right: none !important;
+  }
+
+  .calendar-cell span {
+    font-size: 14px;
+  }
+}
+
+/* Tablet view */
+@media (max-width: 1024px) {
+  .calendar-cell {
+    flex: 0 0 50% !important;  /* 2 columns */
+  }
+}

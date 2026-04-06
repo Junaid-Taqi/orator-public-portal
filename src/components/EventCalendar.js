@@ -278,8 +278,8 @@ const EventCalendar = () => {
                 <span className="badge rounded-pill bg-info bg-opacity-20 border border-info border-opacity-25 px-3">
                   {e.poolName || t('calendar.events')}
                 </span>
-                <Link 
-                  to={`/news/${e.slideUuid}`} 
+                <Link
+                  to={`/news/${e.slideUuid}`}
                   className="read-more"
                   style={{ fontSize: '0.85rem' }}
                 >
@@ -328,6 +328,12 @@ const EventCalendar = () => {
     );
   };
 
+  useEffect(() => {
+  if (window.innerWidth < 768) {
+    setView('Week');
+  }
+}, []);
+
   const MonthView = () => {
     const year = range.from.getFullYear();
     const month = range.from.getMonth();
@@ -349,10 +355,18 @@ const EventCalendar = () => {
             const key = d ? formatIso(d) : `empty-${i}`;
             const dayEvents = d ? (eventsByDate[key] || []) : [];
             return (
-              <div key={key} className="col border-end border-bottom border-white border-opacity-10 p-2" style={{ flex: '0 0 14.28%', minHeight: '100px' }}>
+              <div key={key} className="col border-end border-bottom border-white border-opacity-10 p-2 calendar-cell" style={{ flex: '0 0 14.28%', minHeight: '120px' }}>
                 {d && <span className="small text-white-50">{d.getDate()}</span>}
                 {dayEvents.slice(0, 2).map((e) => (
-                  <div key={e.eventId} className="mt-1 p-1 rounded bg-info bg-opacity-10 text-info" style={{ fontSize: '0.65rem' }}>
+                  <div
+                    className="mt-1 p-1 rounded bg-info bg-opacity-10 text-info text-truncate"
+                    style={{
+                      fontSize: '0.7rem',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis'
+                    }}
+                  >
                     {e.title || t('calendar.untitled')}
                   </div>
                 ))}
@@ -395,7 +409,7 @@ const EventCalendar = () => {
 
   return (
     <div style={containerStyle}>
-      
+
 
       <div className={glassPanel}>
         <div className="d-flex gap-2 flex-wrap">
@@ -518,28 +532,28 @@ const EventCalendar = () => {
             )}
             <div className="d-flex flex-column gap-2">
               {[{ id: 1, title: t('calendar.singleDate') || 'Single Date Event', desc: t('calendar.singleDateDesc') || 'Events occurring on one specific date' },
-                { id: 2, title: t('calendar.dateRange') || 'From-To Date Range', desc: t('calendar.dateRangeDesc') || 'Events spanning multiple consecutive days' },
-                { id: 3, title: t('calendar.multipleDates') || 'Multiple Dates Event', desc: t('calendar.multipleDatesDesc') || 'Events recurring on multiple separate dates' }].map((mode) => {
-                  const checked = selectedEventModes.includes(mode.id);
-                  return (
-                    <label key={mode.id} className="d-flex align-items-start gap-3 bg-dark bg-opacity-10 rounded-4 p-3 border border-white border-opacity-10">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() =>
-                          setSelectedEventModes((prev) =>
-                            prev.includes(mode.id) ? prev.filter((m) => m !== mode.id) : [...prev, mode.id]
-                          )
-                        }
-                        className="form-check-input mt-1"
-                      />
-                      <div>
-                        <div className="text-white fw-semibold">{mode.title}</div>
-                        <div className="text-white-50 small">{mode.desc}</div>
-                      </div>
-                    </label>
-                  );
-                })}
+              { id: 2, title: t('calendar.dateRange') || 'From-To Date Range', desc: t('calendar.dateRangeDesc') || 'Events spanning multiple consecutive days' },
+              { id: 3, title: t('calendar.multipleDates') || 'Multiple Dates Event', desc: t('calendar.multipleDatesDesc') || 'Events recurring on multiple separate dates' }].map((mode) => {
+                const checked = selectedEventModes.includes(mode.id);
+                return (
+                  <label key={mode.id} className="d-flex align-items-start gap-3 bg-dark bg-opacity-10 rounded-4 p-3 border border-white border-opacity-10">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() =>
+                        setSelectedEventModes((prev) =>
+                          prev.includes(mode.id) ? prev.filter((m) => m !== mode.id) : [...prev, mode.id]
+                        )
+                      }
+                      className="form-check-input mt-1"
+                    />
+                    <div>
+                      <div className="text-white fw-semibold">{mode.title}</div>
+                      <div className="text-white-50 small">{mode.desc}</div>
+                    </div>
+                  </label>
+                );
+              })}
             </div>
           </>
         )}

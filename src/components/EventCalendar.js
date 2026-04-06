@@ -239,6 +239,14 @@ const EventCalendar = () => {
     setAnchorDate(d);
   };
 
+  const goToDayView = (date) => {
+    if (!date) return;
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    setAnchorDate(d);
+    setView('Day');
+  };
+
   const resetToday = () => setAnchorDate(new Date());
 
   const getHeaderLabel = () => {
@@ -310,7 +318,12 @@ const EventCalendar = () => {
             const isActive = formatIso(d) === formatIso(new Date(anchorDate));
 
             return (
-              <div key={key} className="col border-end border-white border-opacity-10 p-2" style={{ minHeight: '320px', backgroundColor: isActive ? 'rgba(0,0,0,0.1)' : 'transparent' }}>
+              <div
+                key={key}
+                className="col border-end border-white border-opacity-10 p-2"
+                style={{ minHeight: '320px', backgroundColor: isActive ? 'rgba(0,0,0,0.1)' : 'transparent', cursor: 'pointer' }}
+                onClick={() => goToDayView(d)}
+              >
                 <div className={isActive ? 'text-info' : 'text-white'}>{d.toLocaleDateString(currentLang, { weekday: 'short' })}</div>
                 <div className={`fs-3 mb-3 ${isActive ? 'text-info' : 'text-white'}`}>{d.getDate()}</div>
                 {dayEvents.slice(0, 3).map((e) => (
@@ -411,7 +424,8 @@ const EventCalendar = () => {
             <div
               key={key}
               className="col border-end border-bottom border-white border-opacity-10 p-2 calendar-cell"
-              style={{ flex: '0 0 14.28%', minHeight: '120px' }}
+              style={{ flex: '0 0 14.28%', minHeight: '120px', cursor: d ? 'pointer' : 'default' }}
+              onClick={() => d && goToDayView(d)}
             >
               {d && (
                 <>
@@ -471,7 +485,15 @@ const EventCalendar = () => {
       <div className="row g-3">
         {months.map((m) => (
           <div key={m} className="col-12 col-md-6 col-lg-3">
-            <div className={`${glassPanel} h-100 p-4 d-flex flex-column justify-content-between`} style={{ minHeight: '150px' }}>
+            <div
+              className={`${glassPanel} h-100 p-4 d-flex flex-column justify-content-between`}
+              style={{ minHeight: '150px', cursor: 'pointer' }}
+              onClick={() => {
+                const monthIndex = months.indexOf(m);
+                setAnchorDate(new Date(range.from.getFullYear(), monthIndex, 1));
+                setView('Month');
+              }}
+            >
               <div>
                 <h5 className="mb-3">{t(`calendar.${m.substring(0, 3).toLowerCase()}`)}</h5>
                 <h2 className={`mb-1 ${monthMap[m] > 0 ? 'text-info' : 'text-white'}`}>{monthMap[m] || 0}</h2>
